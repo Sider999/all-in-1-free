@@ -1,363 +1,397 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-950 text-slate-100">
+<html lang="en" class="h-full bg-slate-100 text-slate-800">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniTools Pro - Ultimate Zero-Maintenance Portal</title>
+    <title>OmniTools Pro - Executive Multi-Utility Portal</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Client-side Conversion Libraries -->
-    <!-- 1. jsPDF for Image to PDF -->
+    <!-- Client-side Document Conversion Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <!-- 2. html2pdf for Word to PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- 3. Mammoth.js for Word (.docx) to HTML -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <!-- 4. PDF.js for PDF to Word text extraction -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <!-- 5. Tesseract.js for Image OCR to Word -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     
     <script>
-        // Set worker src for PDF.js
         if (window.pdfjsLib) {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
     </script>
 </head>
-<body class="h-full flex flex-col font-sans antialiased bg-slate-950 text-slate-100">
-    <!-- Header -->
-    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
+<body class="h-full flex flex-col font-sans antialiased bg-slate-100 text-slate-800">
+    <!-- Top Executive Navigation Bar -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50 shadow-sm">
         <div class="flex items-center space-x-3">
-            <div class="bg-gradient-to-tr from-indigo-600 to-cyan-500 p-2.5 rounded-xl text-white font-bold text-xl shadow-lg shadow-indigo-500/20">
+            <div class="bg-gradient-to-tr from-indigo-600 to-sky-500 p-2.5 rounded-xl text-white font-bold text-xl shadow-md shadow-indigo-500/20">
                 <i class="fa-solid fa-layer-group"></i>
             </div>
             <div>
-                <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">OmniTools Pro</span>
-                <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">v2.0 Pro</span>
+                <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-indigo-700 via-sky-600 to-teal-600 bg-clip-text text-transparent">OmniTools Executive</span>
+                <span class="hidden sm:inline-block ml-2 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">v3.0 Ultra</span>
             </div>
         </div>
-        <div class="text-xs text-slate-400 hidden lg:block bg-slate-800/60 px-3 py-1.5 rounded-full border border-slate-700/50">
-            <i class="fa-solid fa-bolt text-amber-400 mr-1.5"></i>100% Browser Executed • Zero Server • GitHub Pages Ready
+        <div class="text-xs text-slate-500 hidden lg:flex items-center space-x-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+            <i class="fa-solid fa-shield-halved text-emerald-500"></i>
+            <span>100% Secure • Client-Side Processing • GitHub Ready</span>
         </div>
     </header>
 
-    <!-- Main Layout -->
+    <!-- Main Container Layout -->
     <div class="flex-1 flex overflow-hidden">
-        <!-- Sidebar Navigation -->
-        <nav class="w-72 bg-slate-900/60 border-r border-slate-800/80 p-4 space-y-1.5 hidden md:block overflow-y-auto">
-            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Calculators & Converters</div>
-            <button onclick="switchTab('calc')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium transition shadow-lg shadow-indigo-600/20 text-left" data-tab="calc">
-                <i class="fa-solid fa-calculator w-5 text-center"></i><span>Calculators (Simple/Sci)</span>
-            </button>
-            <button onclick="switchTab('unit')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="unit">
-                <i class="fa-solid fa-ruler-combined w-5 text-center"></i><span>Unit Converters</span>
-            </button>
-            <button onclick="switchTab('currency')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="currency">
-                <i class="fa-solid fa-coins w-5 text-center"></i><span>Live Currency Converter</span>
+        <!-- Sidebar Navigation (30-Day Reminder at top) -->
+        <nav class="w-72 bg-white border-r border-slate-200 p-4 space-y-1.5 hidden md:block overflow-y-auto">
+            <div class="text-[11px] font-bold text-indigo-600 uppercase tracking-wider px-3 mb-2">Priority Productivity</div>
+            <button onclick="switchTab('reminder')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600 font-semibold transition text-left" data-tab="reminder">
+                <i class="fa-solid fa-calendar-check w-5 text-center text-indigo-600"></i><span>30-Day Reminder Generator</span>
             </button>
 
-            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-4 mb-2">Document & File Tools</div>
-            <button onclick="switchTab('img2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="img2pdf">
-                <i class="fa-solid fa-file-pdf w-5 text-center text-rose-400"></i><span>Image to PDF</span>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 pt-4 mb-2">High-Precision Converters</div>
+            <button onclick="switchTab('pdf2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="pdf2word">
+                <i class="fa-solid fa-file-word w-5 text-center text-blue-600"></i><span>PDF to Editable Word</span>
             </button>
-            <button onclick="switchTab('img2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="img2word">
-                <i class="fa-solid fa-file-word w-5 text-center text-blue-400"></i><span>Image to Word (OCR)</span>
+            <button onclick="switchTab('img2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="img2word">
+                <i class="fa-solid fa-font w-5 text-center text-teal-600"></i><span>Image to Word (AI OCR)</span>
             </button>
-            <button onclick="switchTab('word2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="word2pdf">
-                <i class="fa-solid fa-file-arrow-down w-5 text-center text-emerald-400"></i><span>Word to PDF</span>
+            <button onclick="switchTab('word2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="word2pdf">
+                <i class="fa-solid fa-file-pdf w-5 text-center text-rose-600"></i><span>Word (.docx) to PDF</span>
             </button>
-            <button onclick="switchTab('pdf2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="pdf2word">
-                <i class="fa-solid fa-file-arrow-up w-5 text-center text-cyan-400"></i><span>PDF to Word</span>
+            <button onclick="switchTab('img2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="img2pdf">
+                <i class="fa-solid fa-images w-5 text-center text-purple-600"></i><span>Image to PDF (Multi-Page)</span>
+            </button>
+            <button onclick="switchTab('pdf2img')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="pdf2img">
+                <i class="fa-solid fa-file-image w-5 text-center text-amber-600"></i><span>PDF to Images (PNG)</span>
             </button>
 
-            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 pt-4 mb-2">Productivity</div>
-            <button onclick="switchTab('reminder')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left" data-tab="reminder">
-                <i class="fa-solid fa-calendar-check w-5 text-center text-amber-400"></i><span>30-Day Reminder Generator</span>
+            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 pt-4 mb-2">Calculators & Global Data</div>
+            <button onclick="switchTab('unit')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="unit">
+                <i class="fa-solid fa-ruler-combined w-5 text-center text-sky-600"></i><span>Universal Unit Converter</span>
+            </button>
+            <button onclick="switchTab('currency')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="currency">
+                <i class="fa-solid fa-earth-americas w-5 text-center text-emerald-600"></i><span>Global Live Currencies</span>
+            </button>
+            <button onclick="switchTab('calc')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left" data-tab="calc">
+                <i class="fa-solid fa-calculator w-5 text-center text-indigo-600"></i><span>Scientific Calculator</span>
             </button>
         </nav>
 
-        <!-- Content Area -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-950">
-            <!-- Mobile Navigation Bar -->
-            <div class="flex md:hidden space-x-2 overflow-x-auto pb-3 mb-6 border-b border-slate-800 no-scrollbar">
-                <button onclick="switchTab('calc')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-medium whitespace-nowrap" data-tab="calc">Calc</button>
-                <button onclick="switchTab('unit')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="unit">Units</button>
-                <button onclick="switchTab('currency')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="currency">Currency</button>
-                <button onclick="switchTab('img2pdf')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="img2pdf">Img->PDF</button>
-                <button onclick="switchTab('img2word')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="img2word">Img->Word</button>
-                <button onclick="switchTab('word2pdf')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="word2pdf">Word->PDF</button>
-                <button onclick="switchTab('pdf2word')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="pdf2word">PDF->Word</button>
-                <button onclick="switchTab('reminder')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap" data-tab="reminder">Reminders</button>
+        <!-- Main Workspace Area -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-slate-100">
+            <!-- Mobile Horizontal Navigation Bar -->
+            <div class="flex md:hidden space-x-2 overflow-x-auto pb-3 mb-6 border-b border-slate-200">
+                <button onclick="switchTab('reminder')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold whitespace-nowrap" data-tab="reminder">Reminders</button>
+                <button onclick="switchTab('pdf2word')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="pdf2word">PDF->Word</button>
+                <button onclick="switchTab('img2word')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="img2word">Img->Word</button>
+                <button onclick="switchTab('word2pdf')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="word2pdf">Word->PDF</button>
+                <button onclick="switchTab('img2pdf')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="img2pdf">Img->PDF</button>
+                <button onclick="switchTab('pdf2img')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="pdf2img">PDF->Img</button>
+                <button onclick="switchTab('unit')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="unit">Units</button>
+                <button onclick="switchTab('currency')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="currency">Currency</button>
+                <button onclick="switchTab('calc')" class="tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200" data-tab="calc">Calc</button>
             </div>
 
-            <!-- 1. Calculator Tab (Simple & Scientific Toggle) -->
-            <div id="tab-calc" class="tab-content max-w-lg mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
+            <!-- 1. 30-Day Reminder Generator (TOP PRIORITY TOOL) -->
+            <div id="tab-reminder" class="tab-content max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-amber-50 text-amber-600 rounded-xl"><i class="fa-solid fa-calendar-check text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">30-Day Automated Task Reminder</h2>
+                        <p class="text-xs text-slate-500">Generates universal .ICS calendar schedule files for Google Calendar, Outlook, and Apple iPhone.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Task / Project Title</label>
+                        <input type="text" id="rem-title" placeholder="e.g., Daily Molecular Biology Protocol Review" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Start Date & Alarm Time</label>
+                        <input type="datetime-local" id="rem-date" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600">
+                    </div>
+                    <button onclick="generateICS()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-indigo-600/20 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-calendar-plus"></i><span>Download 30-Day Calendar File (.ics)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Advanced PDF to Editable Word -->
+            <div id="tab-pdf2word" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i class="fa-solid fa-file-word text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">High-Precision PDF to Editable Word</h2>
+                        <p class="text-xs text-slate-500">Spatial text clustering maintains paragraph flow, page structure, and clean formatting.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div class="border-2 border-dashed border-slate-200 hover:border-blue-400 rounded-2xl p-6 text-center transition bg-slate-50">
+                        <i class="fa-solid fa-file-pdf text-4xl text-blue-500 mb-3"></i>
+                        <p class="text-sm font-semibold text-slate-700">Select PDF File</p>
+                        <p class="text-xs text-slate-400 mt-1">Extracts clean editable text with paragraph preservation</p>
+                        <input type="file" id="pdf-input" accept=".pdf" class="mt-4 w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+                    </div>
+                    <div id="pdf2word-status" class="hidden text-xs text-center text-blue-600 bg-blue-50 p-3 rounded-xl border border-blue-200">
+                        <i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Analyzing line spacing and extracting structured text...</span>
+                    </div>
+                    <button onclick="convertPDFToWord()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-blue-600/20 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-download"></i><span>Convert & Download Editable Word (.doc)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. Image to Word (AI OCR Engine) -->
+            <div id="tab-img2word" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-teal-50 text-teal-600 rounded-xl"><i class="fa-solid fa-font text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Image to Word (AI Browser OCR)</h2>
+                        <p class="text-xs text-slate-500">Extracts text from scanned documents or photos directly into an editable Word document.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div class="border-2 border-dashed border-slate-200 hover:border-teal-400 rounded-2xl p-6 text-center transition bg-slate-50">
+                        <i class="fa-solid fa-file-image text-4xl text-teal-500 mb-3"></i>
+                        <p class="text-sm font-semibold text-slate-700">Upload Image File (PNG, JPG, WEBP)</p>
+                        <input type="file" id="ocr-image-input" accept="image/*" class="mt-4 w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-600 file:text-white hover:file:bg-teal-700">
+                    </div>
+                    <div id="ocr-status" class="hidden text-xs text-center text-teal-700 bg-teal-50 p-3 rounded-xl border border-teal-200">
+                        <i class="fa-solid fa-spinner fa-spin mr-2"></i><span id="ocr-status-text">Processing image with Neural OCR Engine...</span>
+                    </div>
+                    <button onclick="convertImageToWord()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-teal-600/20 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-file-export"></i><span>Perform OCR & Download Word (.doc)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Word to PDF Converter -->
+            <div id="tab-word2pdf" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-rose-50 text-rose-600 rounded-xl"><i class="fa-solid fa-file-pdf text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Word (.docx) to PDF Converter</h2>
+                        <p class="text-xs text-slate-500">Converts Microsoft Word files into pixel-perfect PDF documents.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div class="border-2 border-dashed border-slate-200 hover:border-rose-400 rounded-2xl p-6 text-center transition bg-slate-50">
+                        <i class="fa-solid fa-file-word text-4xl text-rose-500 mb-3"></i>
+                        <p class="text-sm font-semibold text-slate-700">Select Word Document (.docx)</p>
+                        <input type="file" id="word-input" accept=".docx" class="mt-4 w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-rose-600 file:text-white hover:file:bg-rose-700">
+                    </div>
+                    <button onclick="convertWordToPDF()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-rose-600/20 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-file-arrow-down"></i><span>Convert & Download PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 5. Image to PDF (Multi-Page A4) -->
+            <div id="tab-img2pdf" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-purple-50 text-purple-600 rounded-xl"><i class="fa-solid fa-images text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Image to PDF (Multi-Page Auto Fit)</h2>
+                        <p class="text-xs text-slate-500">Combines multiple JPG/PNG images into a single structured PDF document.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div class="border-2 border-dashed border-slate-200 hover:border-purple-400 rounded-2xl p-6 text-center transition bg-slate-50">
+                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-purple-500 mb-3"></i>
+                        <p class="text-sm font-semibold text-slate-700">Select Multiple Images</p>
+                        <input type="file" id="image-input" multiple accept="image/*" class="mt-4 w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-700">
+                    </div>
+                    <button onclick="convertToPDF()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-purple-600/20 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-download"></i><span>Generate Multi-Page PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 6. PDF to Images Extractor (PNG) -->
+            <div id="tab-pdf2img" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-amber-50 text-amber-600 rounded-xl"><i class="fa-solid fa-file-image text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">PDF to High-Res Images Converter</h2>
+                        <p class="text-xs text-slate-500">Renders PDF pages into clear PNG images for presentation or web use.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div class="border-2 border-dashed border-slate-200 hover:border-amber-400 rounded-2xl p-6 text-center transition bg-slate-50">
+                        <i class="fa-solid fa-file-pdf text-4xl text-amber-500 mb-3"></i>
+                        <p class="text-sm font-semibold text-slate-700">Select PDF File</p>
+                        <input type="file" id="pdf2img-input" accept=".pdf" class="mt-4 w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-xs text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white hover:file:bg-amber-700">
+                    </div>
+                    <div id="pdf2img-status" class="hidden text-xs text-center text-amber-700 bg-amber-50 p-3 rounded-xl border border-amber-200">
+                        <i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Rendering high-resolution PNG pages...</span>
+                    </div>
+                    <button onclick="convertPDFToImages()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-amber-600/20 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-images"></i><span>Extract & Download PNG Pages</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 7. Universal Unit Converter (10 Categories) -->
+            <div id="tab-unit" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-sky-50 text-sky-600 rounded-xl"><i class="fa-solid fa-ruler-combined text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Universal Unit Converter</h2>
+                        <p class="text-xs text-slate-500">Multi-category scientific and standard measurement transformations.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Conversion Category</label>
+                        <select id="unit-type" onchange="updateUnitOptions()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-semibold focus:outline-none focus:border-indigo-600">
+                            <option value="length">Length & Distance (m, km, cm, mm, ft, in, miles, yards)</option>
+                            <option value="weight">Weight & Mass (kg, grams, mg, lbs, oz, tons)</option>
+                            <option value="volume">Volume & Capacity (liters, mL, gallons, cups, m³)</option>
+                            <option value="temp">Temperature (Celsius, Fahrenheit, Kelvin)</option>
+                            <option value="area">Surface Area (sq meters, sq feet, acres, hectares)</option>
+                            <option value="speed">Speed & Velocity (km/h, mph, m/s, knots)</option>
+                            <option value="digital">Digital Data Storage (Bytes, KB, MB, GB, TB)</option>
+                            <option value="time">Time Intervals (sec, min, hours, days, weeks, years)</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">From Value</label>
+                            <input type="number" id="unit-input" value="1" oninput="convertUnits()" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 focus:outline-none text-lg font-bold">
+                            <select id="unit-from" onchange="convertUnits()" class="mt-2.5 w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none"></select>
+                        </div>
+                        <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100">
+                            <label class="block text-xs font-semibold text-indigo-600 mb-1">Converted Value</label>
+                            <input type="text" id="unit-output" readonly class="w-full bg-white border border-indigo-200 rounded-xl px-3 py-2.5 text-indigo-700 font-bold text-lg focus:outline-none">
+                            <select id="unit-to" onchange="convertUnits()" class="mt-2.5 w-full bg-white border border-indigo-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Global Live Currency Converter (160+ Currencies) -->
+            <div id="tab-currency" class="tab-content hidden max-w-xl mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div class="flex items-center space-x-3 mb-2">
+                    <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl"><i class="fa-solid fa-earth-americas text-xl"></i></div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Global Live Currency Exchange</h2>
+                        <p class="text-xs text-slate-500">Linked to real-time central bank exchange rate feeds for 160+ world currencies.</p>
+                    </div>
+                </div>
+                <hr class="my-4 border-slate-100">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">Amount</label>
+                        <input type="number" id="curr-amount" value="100" oninput="convertCurrency()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 font-bold text-lg focus:outline-none focus:border-emerald-600">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">From Currency</label>
+                            <select id="curr-from" onchange="convertCurrency()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-xs font-semibold text-slate-800 focus:outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1.5 uppercase tracking-wider">To Currency</label>
+                            <select id="curr-to" onchange="convertCurrency()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-3 text-xs font-semibold text-slate-800 focus:outline-none"></select>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50/60 p-5 rounded-xl border border-emerald-100 text-center">
+                        <span class="text-xs text-emerald-700 font-semibold uppercase tracking-widest block mb-1">Live Exchange Result</span>
+                        <div id="curr-result" class="text-3xl font-extrabold text-emerald-700">0.00</div>
+                        <span id="curr-status" class="text-[11px] text-emerald-600 mt-2 block"><i class="fa-solid fa-circle-check text-emerald-500 mr-1"></i>Connected live to global exchange rates</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Scientific Calculator -->
+            <div id="tab-calc" class="tab-content hidden max-w-lg mx-auto bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg font-bold flex items-center space-x-2">
-                        <i class="fa-solid fa-calculator text-indigo-400"></i>
+                    <h2 class="text-lg font-bold text-slate-800 flex items-center space-x-2">
+                        <i class="fa-solid fa-calculator text-indigo-600"></i>
                         <span>Smart Calculator</span>
                     </h2>
-                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-                        <button id="mode-simple-btn" onclick="setCalcMode('simple')" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold transition">Simple</button>
-                        <button id="mode-sci-btn" onclick="setCalcMode('scientific')" class="px-3 py-1 rounded-lg text-slate-400 hover:text-white transition">Scientific</button>
+                    <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+                        <button id="mode-simple-btn" onclick="setCalcMode('simple')" class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm">Simple</button>
+                        <button id="mode-sci-btn" onclick="setCalcMode('scientific')" class="px-3 py-1 rounded-lg text-slate-600 hover:text-indigo-600 transition">Scientific</button>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <input type="text" id="calc-screen" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-4 text-right text-3xl font-mono text-white focus:outline-none shadow-inner" value="0">
+                    <input type="text" id="calc-screen" readonly class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-4 text-right text-3xl font-mono text-slate-900 focus:outline-none" value="0">
                 </div>
 
-                <!-- Simple Grid -->
                 <div id="calc-grid-simple" class="grid grid-cols-4 gap-2.5">
-                    <button onclick="calcClear()" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 p-4 rounded-xl font-bold transition text-lg">C</button>
-                    <button onclick="calcBackspace()" class="bg-slate-800 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-lg text-amber-400"><i class="fa-solid fa-backspace"></i></button>
-                    <button onclick="calcAppend('%')" class="bg-slate-800 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-lg">%</button>
-                    <button onclick="calcAppend('/')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-4 rounded-xl font-bold transition text-xl">÷</button>
+                    <button onclick="calcClear()" class="bg-rose-50 text-rose-600 hover:bg-rose-100 p-4 rounded-xl font-bold transition text-lg border border-rose-100">C</button>
+                    <button onclick="calcBackspace()" class="bg-slate-100 hover:bg-slate-200 p-4 rounded-xl font-bold transition text-lg text-amber-600"><i class="fa-solid fa-backspace"></i></button>
+                    <button onclick="calcAppend('%')" class="bg-slate-100 hover:bg-slate-200 p-4 rounded-xl font-bold transition text-lg text-slate-700">%</button>
+                    <button onclick="calcAppend('/')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-4 rounded-xl font-bold transition text-xl">÷</button>
 
-                    <button onclick="calcAppend('7')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">7</button>
-                    <button onclick="calcAppend('8')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">8</button>
-                    <button onclick="calcAppend('9')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">9</button>
-                    <button onclick="calcAppend('*')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-4 rounded-xl font-bold transition text-xl">×</button>
+                    <button onclick="calcAppend('7')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">7</button>
+                    <button onclick="calcAppend('8')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">8</button>
+                    <button onclick="calcAppend('9')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">9</button>
+                    <button onclick="calcAppend('*')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-4 rounded-xl font-bold transition text-xl">×</button>
 
-                    <button onclick="calcAppend('4')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">4</button>
-                    <button onclick="calcAppend('5')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">5</button>
-                    <button onclick="calcAppend('6')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">6</button>
-                    <button onclick="calcAppend('-')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-4 rounded-xl font-bold transition text-xl">-</button>
+                    <button onclick="calcAppend('4')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">4</button>
+                    <button onclick="calcAppend('5')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">5</button>
+                    <button onclick="calcAppend('6')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">6</button>
+                    <button onclick="calcAppend('-')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-4 rounded-xl font-bold transition text-xl">-</button>
 
-                    <button onclick="calcAppend('1')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">1</button>
-                    <button onclick="calcAppend('2')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">2</button>
-                    <button onclick="calcAppend('3')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">3</button>
-                    <button onclick="calcAppend('+')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-4 rounded-xl font-bold transition text-xl">+</button>
+                    <button onclick="calcAppend('1')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">1</button>
+                    <button onclick="calcAppend('2')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">2</button>
+                    <button onclick="calcAppend('3')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">3</button>
+                    <button onclick="calcAppend('+')" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 p-4 rounded-xl font-bold transition text-xl">+</button>
 
-                    <button onclick="calcAppend('0')" class="col-span-2 bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">0</button>
-                    <button onclick="calcAppend('.')" class="bg-slate-800/80 hover:bg-slate-700 p-4 rounded-xl font-bold transition text-xl">.</button>
-                    <button onclick="calcCalculate()" class="bg-indigo-600 hover:bg-indigo-500 text-white p-4 rounded-xl font-bold transition text-xl shadow-lg shadow-indigo-600/30">=</button>
+                    <button onclick="calcAppend('0')" class="col-span-2 bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">0</button>
+                    <button onclick="calcAppend('.')" class="bg-slate-50 hover:bg-slate-100 p-4 rounded-xl font-bold transition text-xl text-slate-800 border border-slate-100">.</button>
+                    <button onclick="calcCalculate()" class="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-xl font-bold transition text-xl shadow-md shadow-indigo-600/20">=</button>
                 </div>
 
-                <!-- Scientific Extension Grid -->
                 <div id="calc-grid-sci" class="grid grid-cols-4 gap-2 hidden">
-                    <button onclick="calcClear()" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 p-3 rounded-xl font-bold transition">C</button>
-                    <button onclick="calcBackspace()" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition text-amber-400"><i class="fa-solid fa-backspace"></i></button>
-                    <button onclick="calcAppend('(')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">(</button>
-                    <button onclick="calcAppend(')')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">)</button>
+                    <button onclick="calcClear()" class="bg-rose-50 text-rose-600 p-3 rounded-xl font-bold border border-rose-100">C</button>
+                    <button onclick="calcBackspace()" class="bg-slate-100 text-amber-600 p-3 rounded-xl font-bold"><i class="fa-solid fa-backspace"></i></button>
+                    <button onclick="calcAppend('(')" class="bg-slate-100 text-slate-700 p-3 rounded-xl font-bold">(</button>
+                    <button onclick="calcAppend(')')" class="bg-slate-100 text-slate-700 p-3 rounded-xl font-bold">)</button>
 
-                    <button onclick="calcAppend('Math.sin(')" class="bg-slate-800/60 text-cyan-400 hover:bg-slate-700 p-3 rounded-xl text-sm font-semibold transition">sin</button>
-                    <button onclick="calcAppend('Math.cos(')" class="bg-slate-800/60 text-cyan-400 hover:bg-slate-700 p-3 rounded-xl text-sm font-semibold transition">cos</button>
-                    <button onclick="calcAppend('Math.tan(')" class="bg-slate-800/60 text-cyan-400 hover:bg-slate-700 p-3 rounded-xl text-sm font-semibold transition">tan</button>
-                    <button onclick="calcAppend('/')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-3 rounded-xl font-bold transition">÷</button>
+                    <button onclick="calcAppend('Math.sin(')" class="bg-sky-50 text-sky-700 p-3 rounded-xl text-xs font-bold">sin</button>
+                    <button onclick="calcAppend('Math.cos(')" class="bg-sky-50 text-sky-700 p-3 rounded-xl text-xs font-bold">cos</button>
+                    <button onclick="calcAppend('Math.tan(')" class="bg-sky-50 text-sky-700 p-3 rounded-xl text-xs font-bold">tan</button>
+                    <button onclick="calcAppend('/')" class="bg-indigo-50 text-indigo-600 p-3 rounded-xl font-bold">÷</button>
 
-                    <button onclick="calcAppend('Math.sqrt(')" class="bg-slate-800/60 text-emerald-400 hover:bg-slate-700 p-3 rounded-xl text-sm font-semibold transition">√</button>
-                    <button onclick="calcAppend('Math.log10(')" class="bg-slate-800/60 text-emerald-400 hover:bg-slate-700 p-3 rounded-xl text-sm font-semibold transition">log</button>
-                    <button onclick="calcAppend('**')" class="bg-slate-800/60 text-emerald-400 hover:bg-slate-700 p-3 rounded-xl text-sm font-semibold transition">xⁿ</button>
-                    <button onclick="calcAppend('*')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-3 rounded-xl font-bold transition">×</button>
+                    <button onclick="calcAppend('Math.sqrt(')" class="bg-emerald-50 text-emerald-700 p-3 rounded-xl text-xs font-bold">√</button>
+                    <button onclick="calcAppend('Math.log10(')" class="bg-emerald-50 text-emerald-700 p-3 rounded-xl text-xs font-bold">log</button>
+                    <button onclick="calcAppend('**')" class="bg-emerald-50 text-emerald-700 p-3 rounded-xl text-xs font-bold">xⁿ</button>
+                    <button onclick="calcAppend('*')" class="bg-indigo-50 text-indigo-600 p-3 rounded-xl font-bold">×</button>
 
-                    <button onclick="calcAppend('7')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">7</button>
-                    <button onclick="calcAppend('8')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">8</button>
-                    <button onclick="calcAppend('9')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">9</button>
-                    <button onclick="calcAppend('-')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-3 rounded-xl font-bold transition">-</button>
+                    <button onclick="calcAppend('7')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">7</button>
+                    <button onclick="calcAppend('8')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">8</button>
+                    <button onclick="calcAppend('9')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">9</button>
+                    <button onclick="calcAppend('-')" class="bg-indigo-50 text-indigo-600 p-3 rounded-xl font-bold">-</button>
 
-                    <button onclick="calcAppend('4')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">4</button>
-                    <button onclick="calcAppend('5')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">5</button>
-                    <button onclick="calcAppend('6')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">6</button>
-                    <button onclick="calcAppend('+')" class="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600/30 p-3 rounded-xl font-bold transition">+</button>
+                    <button onclick="calcAppend('4')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">4</button>
+                    <button onclick="calcAppend('5')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">5</button>
+                    <button onclick="calcAppend('6')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">6</button>
+                    <button onclick="calcAppend('+')" class="bg-indigo-50 text-indigo-600 p-3 rounded-xl font-bold">+</button>
 
-                    <button onclick="calcAppend('1')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">1</button>
-                    <button onclick="calcAppend('2')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">2</button>
-                    <button onclick="calcAppend('3')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">3</button>
-                    <button onclick="calcCalculate()" class="row-span-2 bg-indigo-600 hover:bg-indigo-500 text-white p-3 rounded-xl font-bold transition flex items-center justify-center text-xl">=</button>
+                    <button onclick="calcAppend('1')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">1</button>
+                    <button onclick="calcAppend('2')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">2</button>
+                    <button onclick="calcAppend('3')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">3</button>
+                    <button onclick="calcCalculate()" class="row-span-2 bg-indigo-600 text-white p-3 rounded-xl font-bold flex items-center justify-center text-xl">=</button>
 
-                    <button onclick="calcAppend('0')" class="col-span-2 bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">0</button>
-                    <button onclick="calcAppend('.')" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition">.</button>
-                </div>
-            </div>
-
-            <!-- 2. Unit Converter Tab -->
-            <div id="tab-unit" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-ruler-combined text-indigo-400"></i>
-                    <span>All-in-One Unit Converter</span>
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Conversion Category</label>
-                        <select id="unit-type" onchange="updateUnitOptions()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
-                            <option value="length">Length & Height (Meters, Feet, Inches, CM, KM, Miles)</option>
-                            <option value="weight">Weight & Mass (KG, Grams, Pounds, Ounces, Tons)</option>
-                            <option value="volume">Volume & Liquids (Liters, Milliliters, Gallons, Cups)</option>
-                        </select>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">From Value</label>
-                            <input type="number" id="unit-input" value="1" oninput="convertUnits()" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-white focus:outline-none focus:border-indigo-500 text-lg font-semibold">
-                            <select id="unit-from" onchange="convertUnits()" class="mt-2 w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none"></select>
-                        </div>
-                        <div class="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Converted Value</label>
-                            <input type="text" id="unit-output" readonly class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-indigo-400 font-bold text-lg focus:outline-none">
-                            <select id="unit-to" onchange="convertUnits()" class="mt-2 w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-300 focus:outline-none"></select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 3. Currency Converter Tab -->
-            <div id="tab-currency" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-coins text-amber-400"></i>
-                    <span>Live Global Currency Converter</span>
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Amount</label>
-                        <input type="number" id="curr-amount" value="100" oninput="convertCurrency()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500 text-lg font-semibold">
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">From Currency</label>
-                            <select id="curr-from" onchange="convertCurrency()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none">
-                                <option value="USD">USD - US Dollar</option>
-                                <option value="EUR">EUR - Euro</option>
-                                <option value="PKR" selected>PKR - Pakistani Rupee</option>
-                                <option value="INR">INR - Indian Rupee</option>
-                                <option value="GBP">GBP - British Pound</option>
-                                <option value="AED">AED - UAE Dirham</option>
-                                <option value="SAR">SAR - Saudi Riyal</option>
-                                <option value="CAD">CAD - Canadian Dollar</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">To Currency</label>
-                            <select id="curr-to" onchange="convertCurrency()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none">
-                                <option value="USD" selected>USD - US Dollar</option>
-                                <option value="EUR">EUR - Euro</option>
-                                <option value="PKR">PKR - Pakistani Rupee</option>
-                                <option value="INR">INR - Indian Rupee</option>
-                                <option value="GBP">GBP - British Pound</option>
-                                <option value="AED">AED - UAE Dirham</option>
-                                <option value="SAR">SAR - Saudi Riyal</option>
-                                <option value="CAD">CAD - Canadian Dollar</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 text-center">
-                        <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Converted Value</span>
-                        <div id="curr-result" class="text-3xl font-extrabold text-indigo-400">0.00</div>
-                        <span id="curr-status" class="text-xs text-slate-500 mt-2 block"><i class="fa-solid fa-sync text-emerald-400 mr-1"></i>Auto-updated live API rates</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. Image to PDF Tab -->
-            <div id="tab-img2pdf" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-file-pdf text-rose-400"></i>
-                    <span>Image to PDF Converter</span>
-                </h2>
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-800 hover:border-indigo-500/50 rounded-2xl p-6 text-center transition bg-slate-950/40">
-                        <i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-400 mb-3"></i>
-                        <p class="text-sm font-medium text-slate-300">Select Image Files (PNG, JPG, WEBP)</p>
-                        <p class="text-xs text-slate-500 mt-1">Files process 100% locally on your browser</p>
-                        <input type="file" id="image-input" multiple accept="image/*" class="mt-4 w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500">
-                    </div>
-                    <button onclick="convertToPDF()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-download"></i><span>Convert & Download PDF</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 5. Image to Word Tab (OCR) -->
-            <div id="tab-img2word" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-file-word text-blue-400"></i>
-                    <span>Image to Word Converter (Browser OCR)</span>
-                </h2>
-                <p class="text-xs text-slate-400 mb-4">Extracts typed or handwritten text directly from image files and packages it into an editable Word document (.doc).</p>
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-800 hover:border-blue-500/50 rounded-2xl p-6 text-center transition bg-slate-950/40">
-                        <i class="fa-solid fa-file-image text-4xl text-blue-400 mb-3"></i>
-                        <p class="text-sm font-medium text-slate-300">Upload Image File (PNG/JPG)</p>
-                        <input type="file" id="ocr-image-input" accept="image/*" class="mt-4 w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500">
-                    </div>
-                    <div id="ocr-status" class="hidden text-xs text-center text-cyan-400 bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <i class="fa-solid fa-spinner fa-spin mr-2"></i><span id="ocr-status-text">Processing Image with Browser OCR...</span>
-                    </div>
-                    <button onclick="convertImageToWord()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-blue-600/20 flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-file-export"></i><span>Extract Text & Download Word (.doc)</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 6. Word to PDF Tab -->
-            <div id="tab-word2pdf" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-file-arrow-down text-emerald-400"></i>
-                    <span>Word (.docx) to PDF Converter</span>
-                </h2>
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-800 hover:border-emerald-500/50 rounded-2xl p-6 text-center transition bg-slate-950/40">
-                        <i class="fa-solid fa-file-word text-4xl text-emerald-400 mb-3"></i>
-                        <p class="text-sm font-medium text-slate-300">Select Word Document (.docx)</p>
-                        <input type="file" id="word-input" accept=".docx" class="mt-4 w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500">
-                    </div>
-                    <button onclick="convertWordToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-file-pdf"></i><span>Convert Word to PDF & Download</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 7. PDF to Word Tab -->
-            <div id="tab-pdf2word" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-file-arrow-up text-cyan-400"></i>
-                    <span>PDF to Word (.doc) Converter</span>
-                </h2>
-                <p class="text-xs text-slate-400 mb-4">Parses text content from PDF documents page by page and exports directly to editable Word format.</p>
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-800 hover:border-cyan-500/50 rounded-2xl p-6 text-center transition bg-slate-950/40">
-                        <i class="fa-solid fa-file-pdf text-4xl text-cyan-400 mb-3"></i>
-                        <p class="text-sm font-medium text-slate-300">Select PDF Document</p>
-                        <input type="file" id="pdf-input" accept=".pdf" class="mt-4 w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500">
-                    </div>
-                    <div id="pdf2word-status" class="hidden text-xs text-center text-cyan-400 bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <i class="fa-solid fa-spinner fa-spin mr-2"></i><span>Reading PDF text...</span>
-                    </div>
-                    <button onclick="convertPDFToWord()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-600/20 flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-file-word"></i><span>Extract PDF Text & Download Word</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 8. 30-Day Reminder Tab -->
-            <div id="tab-reminder" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
-                <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
-                    <i class="fa-solid fa-calendar-check text-amber-400"></i>
-                    <span>Automated 30-Day Reminder Generator</span>
-                </h2>
-                <p class="text-xs text-slate-400 mb-4">Generates standard 30-day ICS Calendar event files. Syncs with Google Calendar, iPhone, or Outlook for zero-maintenance automated notifications.</p>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Task / Goal Title</label>
-                        <input type="text" id="rem-title" placeholder="e.g., Daily Practice / Project Goal" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1.5 uppercase tracking-wider">Start Date & Daily Time</label>
-                        <input type="datetime-local" id="rem-date" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500">
-                    </div>
-                    <button onclick="generateICS()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-amber-600/20 flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-calendar-plus"></i><span>Generate 30-Day Calendar (.ics)</span>
-                    </button>
+                    <button onclick="calcAppend('0')" class="col-span-2 bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">0</button>
+                    <button onclick="calcAppend('.')" class="bg-slate-50 p-3 rounded-xl font-bold border border-slate-100">.</button>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- JavaScript Core Logic -->
+    <!-- JavaScript Core Script -->
     <script>
         // Tab Switcher Logic
         function switchTab(tabId) {
@@ -367,313 +401,24 @@
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 if(btn.dataset.tab === tabId) {
-                    btn.className = "tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-medium transition shadow-lg shadow-indigo-600/20 text-left";
+                    btn.className = "tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-indigo-50 text-indigo-700 border-l-4 border-indigo-600 font-semibold transition text-left";
                 } else {
-                    btn.className = "tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white font-medium transition text-left";
+                    btn.className = "tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-indigo-600 font-medium transition text-left";
                 }
             });
 
             document.querySelectorAll('.tab-btn-m').forEach(btn => {
                 if(btn.dataset.tab === tabId) {
-                    btn.className = "tab-btn-m px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-medium whitespace-nowrap";
+                    btn.className = "tab-btn-m px-3.5 py-2 rounded-xl bg-indigo-600 text-white text-xs font-semibold whitespace-nowrap";
                 } else {
-                    btn.className = "tab-btn-m px-3.5 py-2 rounded-xl bg-slate-800 text-slate-400 text-xs font-medium whitespace-nowrap";
+                    btn.className = "tab-btn-m px-3.5 py-2 rounded-xl bg-white text-slate-700 text-xs font-semibold whitespace-nowrap border border-slate-200";
                 }
             });
         }
 
-        // Calculator Toggle & Operations
-        let calcScreenVal = "0";
-        function setCalcMode(mode) {
-            const simpleGrid = document.getElementById('calc-grid-simple');
-            const sciGrid = document.getElementById('calc-grid-sci');
-            const btnSimple = document.getElementById('mode-simple-btn');
-            const btnSci = document.getElementById('mode-sci-btn');
-
-            if(mode === 'simple') {
-                simpleGrid.classList.remove('hidden');
-                sciGrid.classList.add('hidden');
-                btnSimple.className = "px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold transition";
-                btnSci.className = "px-3 py-1 rounded-lg text-slate-400 hover:text-white transition";
-            } else {
-                simpleGrid.classList.add('hidden');
-                sciGrid.classList.remove('hidden');
-                btnSci.className = "px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold transition";
-                btnSimple.className = "px-3 py-1 rounded-lg text-slate-400 hover:text-white transition";
-            }
-        }
-
-        function calcAppend(val) {
-            if (calcScreenVal === "0" && val !== '.') {
-                calcScreenVal = val;
-            } else {
-                calcScreenVal += val;
-            }
-            document.getElementById('calc-screen').value = calcScreenVal;
-        }
-
-        function calcClear() {
-            calcScreenVal = "0";
-            document.getElementById('calc-screen').value = calcScreenVal;
-        }
-
-        function calcBackspace() {
-            if (calcScreenVal.length > 1) {
-                calcScreenVal = calcScreenVal.slice(0, -1);
-            } else {
-                calcScreenVal = "0";
-            }
-            document.getElementById('calc-screen').value = calcScreenVal;
-        }
-
-        function calcCalculate() {
-            try {
-                let result = Function('"use strict";return (' + calcScreenVal + ')')();
-                calcScreenVal = String(result);
-                document.getElementById('calc-screen').value = calcScreenVal;
-            } catch (e) {
-                document.getElementById('calc-screen').value = "Error";
-                calcScreenVal = "0";
-            }
-        }
-
-        // Unit Converter Logic
-        const unitsData = {
-            length: { meters: 1, kilometers: 1000, centimeters: 0.01, inches: 0.0254, feet: 0.3048, miles: 1609.34 },
-            weight: { kilograms: 1, grams: 0.001, pounds: 0.453592, ounces: 0.0283495, tons: 1000 },
-            volume: { liters: 1, milliliters: 0.001, gallons: 3.78541, cups: 0.24 }
-        };
-
-        function updateUnitOptions() {
-            const type = document.getElementById('unit-type').value;
-            const fromSelect = document.getElementById('unit-from');
-            const toSelect = document.getElementById('unit-to');
-            fromSelect.innerHTML = '';
-            toSelect.innerHTML = '';
-            Object.keys(unitsData[type]).forEach(unit => {
-                fromSelect.innerHTML += `<option value="${unit}">${unit.toUpperCase()}</option>`;
-                toSelect.innerHTML += `<option value="${unit}">${unit.toUpperCase()}</option>`;
-            });
-            if (toSelect.options.length > 1) toSelect.selectedIndex = 1;
-            convertUnits();
-        }
-
-        function convertUnits() {
-            const type = document.getElementById('unit-type').value;
-            const val = parseFloat(document.getElementById('unit-input').value) || 0;
-            const from = document.getElementById('unit-from').value;
-            const to = document.getElementById('unit-to').value;
-
-            if (unitsData[type] && unitsData[type][from] && unitsData[type][to]) {
-                const baseValue = val * unitsData[type][from];
-                const convertedValue = baseValue / unitsData[type][to];
-                document.getElementById('unit-output').value = convertedValue.toFixed(4);
-            }
-        }
-        updateUnitOptions();
-
-        // Currency Converter Logic
-        async function convertCurrency() {
-            const amount = parseFloat(document.getElementById('curr-amount').value) || 0;
-            const from = document.getElementById('curr-from').value;
-            const to = document.getElementById('curr-to').value;
-
-            let rates = JSON.parse(localStorage.getItem('omni_rates') || '{}');
-            let lastFetch = localStorage.getItem('omni_rate_time') || 0;
-            const now = new Date().getTime();
-
-            if (!rates[from] || (now - lastFetch > 86400000)) {
-                try {
-                    const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
-                    const data = await res.json();
-                    if(data && data.rates) {
-                        rates[from] = data.rates;
-                        localStorage.setItem('omni_rates', JSON.stringify(rates));
-                        localStorage.setItem('omni_rate_time', now);
-                    }
-                } catch (e) {
-                    console.log("Using cached rates");
-                }
-            }
-
-            const rate = rates[from] && rates[from][to] ? rates[from][to] : 1;
-            const result = amount * rate;
-            document.getElementById('curr-result').innerText = `${result.toFixed(2)} ${to}`;
-        }
-        setTimeout(convertCurrency, 300);
-
-        // Image to PDF Logic
-        async function convertToPDF() {
-            const fileInput = document.getElementById('image-input');
-            if (!fileInput.files || fileInput.files.length === 0) {
-                alert('Please select at least one image file!');
-                return;
-            }
-
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-
-            for (let i = 0; i < fileInput.files.length; i++) {
-                const file = fileInput.files[i];
-                const dataUrl = await readFileAsDataURL(file);
-                
-                if (i > 0) pdf.addPage();
-                
-                const img = new Image();
-                img.src = dataUrl;
-                await new Promise(resolve => img.onload = resolve);
-                
-                const imgWidth = 190;
-                const imgHeight = (img.height * imgWidth) / img.width;
-                pdf.addImage(dataUrl, 'JPEG', 10, 10, imgWidth, imgHeight);
-            }
-
-            pdf.save('converted-images.pdf');
-        }
-
-        // Image to Word (Browser OCR via Tesseract.js)
-        async function convertImageToWord() {
-            const input = document.getElementById('ocr-image-input');
-            const statusDiv = document.getElementById('ocr-status');
-            const statusText = document.getElementById('ocr-status-text');
-
-            if (!input.files || input.files.length === 0) {
-                alert('Please select an image file first!');
-                return;
-            }
-
-            statusDiv.classList.remove('hidden');
-            statusText.innerText = "Initializing Browser OCR Engine...";
-
-            try {
-                const file = input.files[0];
-                const worker = await Tesseract.createWorker('eng');
-                statusText.innerText = "Recognizing text from image...";
-                const ret = await worker.recognize(file);
-                await worker.terminate();
-
-                const extractedText = ret.data.text;
-                statusDiv.classList.add('hidden');
-
-                if (!extractedText.trim()) {
-                    alert('No clear text could be recognized in this image.');
-                    return;
-                }
-
-                downloadWordDocument(extractedText, 'extracted-image-text.doc');
-            } catch (e) {
-                statusDiv.classList.add('hidden');
-                alert('OCR Error: ' + e.message);
-            }
-        }
-
-        // Word to PDF Logic (Mammoth.js + html2pdf)
-        function convertWordToPDF() {
-            const input = document.getElementById('word-input');
-            if (!input.files || input.files.length === 0) {
-                alert('Please select a .docx file first!');
-                return;
-            }
-
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(event) {
-                const arrayBuffer = event.target.result;
-                mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-                    .then(function(result) {
-                        const htmlContent = result.value;
-                        const element = document.createElement('div');
-                        element.style.padding = '20px';
-                        element.style.color = '#000';
-                        element.style.background = '#fff';
-                        element.innerHTML = htmlContent;
-
-                        const opt = {
-                            margin:       1,
-                            filename:     'converted-document.pdf',
-                            image:        { type: 'jpeg', quality: 0.98 },
-                            html2canvas:  { scale: 2 },
-                            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                        };
-
-                        html2pdf().set(opt).from(element).save();
-                    })
-                    .catch(function(err) {
-                        alert('Error reading DOCX: ' + err.message);
-                    });
-            };
-
-            reader.readAsArrayBuffer(file);
-        }
-
-        // PDF to Word Logic (PDF.js)
-        async function convertPDFToWord() {
-            const input = document.getElementById('pdf-input');
-            const statusDiv = document.getElementById('pdf2word-status');
-
-            if (!input.files || input.files.length === 0) {
-                alert('Please select a PDF file first!');
-                return;
-            }
-
-            statusDiv.classList.remove('hidden');
-
-            try {
-                const file = input.files[0];
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-
-                let fullText = "";
-                for (let i = 1; i <= pdf.numPages; i++) {
-                    const page = await pdf.getPage(i);
-                    const textContent = await page.getTextContent();
-                    const pageText = textContent.items.map(item => item.str).join(' ');
-                    fullText += `<h3>Page ${i}</h3><p>${pageText}</p><br/>`;
-                }
-
-                statusDiv.classList.add('hidden');
-                downloadWordDocument(fullText, 'converted-pdf.doc');
-            } catch (e) {
-                statusDiv.classList.add('hidden');
-                alert('Error parsing PDF: ' + e.message);
-            }
-        }
-
-        // Helper Function: Download Word .doc File
-        function downloadWordDocument(htmlContent, filename) {
-            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
-                "xmlns:w='urn:schemas-microsoft-com:office:word' "+
-                "xmlns='http://www.w3.org/TR/REC-html40'>"+
-                "<head><meta charset='utf-8'><title>Exported Doc</title></head><body>";
-            const footer = "</body></html>";
-            const sourceHTML = header + htmlContent + footer;
-
-            const blob = new Blob(['\ufeff', sourceHTML], {
-                type: 'application/msword'
-            });
-
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        // Helper Function: File Reader
-        function readFileAsDataURL(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // 30-Day ICS Reminder Generator Logic (Fixed Syntax)
+        // 1. 30-Day ICS Reminder Generator
         function generateICS() {
-            const title = document.getElementById('rem-title').value || 'OmniTools Goal Task';
+            const title = document.getElementById('rem-title').value || 'Executive Reminder Goal';
             const dateVal = document.getElementById('rem-date').value;
             if (!dateVal) {
                 alert('Please select a start date and time.');
@@ -681,7 +426,7 @@
             }
 
             const startDate = new Date(dateVal);
-            let icsContent = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//OmniTools Pro//30-Day Reminder//EN\r\n";
+            let icsContent = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//OmniTools Pro//Executive Reminder//EN\r\n";
 
             for (let i = 0; i < 30; i++) {
                 let d = new Date(startDate);
@@ -704,6 +449,377 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // 2. High-Precision PDF to Editable Word (Spatial Y-Line Clustering Algorithm)
+        async function convertPDFToWord() {
+            const input = document.getElementById('pdf-input');
+            const statusDiv = document.getElementById('pdf2word-status');
+
+            if (!input.files || input.files.length === 0) {
+                alert('Please select a PDF file first.');
+                return;
+            }
+
+            statusDiv.classList.remove('hidden');
+
+            try {
+                const file = input.files[0];
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                let fullHtml = "";
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const items = textContent.items;
+
+                    // Group items by vertical Y-coordinate to preserve real lines & paragraphs
+                    let lines = [];
+                    items.forEach(item => {
+                        const y = Math.round(item.transform[5]);
+                        const x = Math.round(item.transform[4]);
+                        const str = item.str;
+                        if (!str.trim() && str !== ' ') return;
+
+                        let line = lines.find(l => Math.abs(l.y - y) < 4);
+                        if (line) {
+                            line.items.push({ x, str });
+                        } else {
+                            lines.push({ y, items: [{ x, str }] });
+                        }
+                    });
+
+                    // Sort lines from top to bottom
+                    lines.sort((a, b) => b.y - a.y);
+
+                    let pageHtml = `<div style="page-break-after: always; font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.6; color: #1e293b; padding: 20px;">`;
+                    pageHtml += `<h4 style="color: #475569; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; margin-top: 15px;">Page ${i}</h4>`;
+
+                    lines.forEach(line => {
+                        line.items.sort((a, b) => a.x - b.x);
+                        let lineText = line.items.map(it => it.str).join(' ').replace(/\s+/g, ' ');
+                        if (lineText.trim()) {
+                            pageHtml += `<p style="margin: 0 0 8px 0; font-size: 11pt; text-align: left;">${escapeHtml(lineText)}</p>`;
+                        }
+                    });
+
+                    pageHtml += `</div>`;
+                    fullHtml += pageHtml;
+                }
+
+                statusDiv.classList.add('hidden');
+                downloadWordDocument(fullHtml, `${file.name.replace('.pdf', '')}_converted.doc`);
+            } catch (e) {
+                statusDiv.classList.add('hidden');
+                alert('PDF Parsing Error: ' + e.message);
+            }
+        }
+
+        // Helper: Escape HTML
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // 3. Image to Word (AI OCR Engine)
+        async function convertImageToWord() {
+            const input = document.getElementById('ocr-image-input');
+            const statusDiv = document.getElementById('ocr-status');
+            const statusText = document.getElementById('ocr-status-text');
+
+            if (!input.files || input.files.length === 0) {
+                alert('Please upload an image file first.');
+                return;
+            }
+
+            statusDiv.classList.remove('hidden');
+            statusText.innerText = "Initializing OCR Engine...";
+
+            try {
+                const file = input.files[0];
+                const worker = await Tesseract.createWorker('eng');
+                statusText.innerText = "Extracting text and formatting...";
+                const ret = await worker.recognize(file);
+                await worker.terminate();
+
+                statusDiv.classList.add('hidden');
+                const paragraphs = ret.data.text.split('\n\n').map(p => `<p style="margin-bottom:10px; font-family:Arial, sans-serif;">${escapeHtml(p)}</p>`).join('');
+                downloadWordDocument(paragraphs, 'ocr_extracted_text.doc');
+            } catch (e) {
+                statusDiv.classList.add('hidden');
+                alert('OCR Error: ' + e.message);
+            }
+        }
+
+        // 4. Word (.docx) to PDF Converter
+        function convertWordToPDF() {
+            const input = document.getElementById('word-input');
+            if (!input.files || input.files.length === 0) {
+                alert('Please select a .docx file.');
+                return;
+            }
+
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                mammoth.convertToHtml({ arrayBuffer: event.target.result })
+                    .then(function(result) {
+                        const wrapper = document.createElement('div');
+                        wrapper.style.padding = '30px';
+                        wrapper.style.color = '#000';
+                        wrapper.style.fontFamily = 'Arial, sans-serif';
+                        wrapper.innerHTML = result.value;
+
+                        const opt = {
+                            margin:       0.5,
+                            filename:     `${file.name.replace('.docx', '')}.pdf`,
+                            image:        { type: 'jpeg', quality: 0.98 },
+                            html2canvas:  { scale: 2 },
+                            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+
+                        html2pdf().set(opt).from(wrapper).save();
+                    })
+                    .catch(err => alert('Error converting Word document: ' + err.message));
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        // 5. Image to PDF Converter
+        async function convertToPDF() {
+            const fileInput = document.getElementById('image-input');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('Please select image files.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const dataUrl = await readFileAsDataURL(fileInput.files[i]);
+                if (i > 0) pdf.addPage();
+                
+                const img = new Image();
+                img.src = dataUrl;
+                await new Promise(r => img.onload = r);
+
+                const imgWidth = 190;
+                const imgHeight = (img.height * imgWidth) / img.width;
+                pdf.addImage(dataUrl, 'JPEG', 10, 10, imgWidth, imgHeight);
+            }
+
+            pdf.save('combined_images.pdf');
+        }
+
+        // 6. PDF to PNG Images Extractor
+        async function convertPDFToImages() {
+            const input = document.getElementById('pdf2img-input');
+            const statusDiv = document.getElementById('pdf2img-status');
+
+            if (!input.files || input.files.length === 0) {
+                alert('Please select a PDF file first.');
+                return;
+            }
+
+            statusDiv.classList.remove('hidden');
+
+            try {
+                const file = input.files[0];
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const viewport = page.getViewport({ scale: 2 });
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+
+                    const a = document.createElement('a');
+                    a.href = canvas.toDataURL('image/png');
+                    a.download = `page_${i}.png`;
+                    a.click();
+                }
+
+                statusDiv.classList.add('hidden');
+            } catch (e) {
+                statusDiv.classList.add('hidden');
+                alert('Error extracting images: ' + e.message);
+            }
+        }
+
+        // Helper: Word File Generator
+        function downloadWordDocument(htmlContent, filename) {
+            const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Exported Document</title></head><body>";
+            const footer = "</body></html>";
+            const blob = new Blob(['\ufeff', header + htmlContent + footer], { type: 'application/msword' });
+
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Helper: Data URL Reader
+        function readFileAsDataURL(file) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // 7. Universal Unit Converter Data
+        const unitRatios = {
+            length: { meter: 1, kilometer: 1000, centimeter: 0.01, millimeter: 0.001, foot: 0.3048, inch: 0.0254, mile: 1609.34, yard: 0.9144 },
+            weight: { kilogram: 1, gram: 0.001, milligram: 0.000001, pound: 0.453592, ounce: 0.0283495, ton: 1000 },
+            volume: { liter: 1, milliliter: 0.001, gallon: 3.78541, cup: 0.24, cubic_meter: 1000 },
+            temp: { celsius: 'C', fahrenheit: 'F', kelvin: 'K' },
+            area: { sq_meter: 1, sq_feet: 0.092903, acre: 4046.86, hectare: 10000 },
+            speed: { kmh: 1, mph: 1.60934, ms: 3.6, knot: 1.852 },
+            digital: { byte: 1, kb: 1024, mb: 1048576, gb: 1073741824, tb: 1099511627776 },
+            time: { second: 1, minute: 60, hour: 3600, day: 86400, week: 604800, year: 31536000 }
+        };
+
+        function updateUnitOptions() {
+            const type = document.getElementById('unit-type').value;
+            const fromSelect = document.getElementById('unit-from');
+            const toSelect = document.getElementById('unit-to');
+            fromSelect.innerHTML = '';
+            toSelect.innerHTML = '';
+
+            Object.keys(unitRatios[type]).forEach(unit => {
+                const label = unit.replace('_', ' ').toUpperCase();
+                fromSelect.innerHTML += `<option value="${unit}">${label}</option>`;
+                toSelect.innerHTML += `<option value="${unit}">${label}</option>`;
+            });
+
+            if (toSelect.options.length > 1) toSelect.selectedIndex = 1;
+            convertUnits();
+        }
+
+        function convertUnits() {
+            const type = document.getElementById('unit-type').value;
+            const val = parseFloat(document.getElementById('unit-input').value) || 0;
+            const from = document.getElementById('unit-from').value;
+            const to = document.getElementById('unit-to').value;
+
+            if (type === 'temp') {
+                let celsius = val;
+                if (from === 'fahrenheit') celsius = (val - 32) * (5/9);
+                if (from === 'kelvin') celsius = val - 273.15;
+
+                let res = celsius;
+                if (to === 'fahrenheit') res = (celsius * (9/5)) + 32;
+                if (to === 'kelvin') res = celsius + 273.15;
+                document.getElementById('unit-output').value = res.toFixed(2);
+                return;
+            }
+
+            const baseValue = val * unitRatios[type][from];
+            const result = baseValue / unitRatios[type][to];
+            document.getElementById('unit-output').value = result.toFixed(4);
+        }
+        updateUnitOptions();
+
+        // 8. Global Live Currency Converter (Dynamic All World Currencies)
+        async function loadAllCurrencies() {
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await res.json();
+                if (data && data.rates) {
+                    const currencies = Object.keys(data.rates).sort();
+                    const fromSel = document.getElementById('curr-from');
+                    const toSel = document.getElementById('curr-to');
+
+                    fromSel.innerHTML = '';
+                    toSel.innerHTML = '';
+
+                    currencies.forEach(c => {
+                        fromSel.innerHTML += `<option value="${c}">${c}</option>`;
+                        toSel.innerHTML += `<option value="${c}">${c}</option>`;
+                    });
+
+                    fromSel.value = 'USD';
+                    toSel.value = 'PKR';
+                    window.globalRates = data.rates;
+                    convertCurrency();
+                }
+            } catch (e) {
+                console.log("Currency API Error", e);
+            }
+        }
+
+        function convertCurrency() {
+            if (!window.globalRates) return;
+            const amount = parseFloat(document.getElementById('curr-amount').value) || 0;
+            const from = document.getElementById('curr-from').value;
+            const to = document.getElementById('curr-to').value;
+
+            const fromRate = window.globalRates[from] || 1;
+            const toRate = window.globalRates[to] || 1;
+
+            const converted = (amount / fromRate) * toRate;
+            document.getElementById('curr-result').innerText = `${converted.toFixed(2)} ${to}`;
+        }
+        loadAllCurrencies();
+
+        // 9. Calculator Engine
+        let calcScreenVal = "0";
+        function setCalcMode(mode) {
+            const simpleGrid = document.getElementById('calc-grid-simple');
+            const sciGrid = document.getElementById('calc-grid-sci');
+            const btnSimple = document.getElementById('mode-simple-btn');
+            const btnSci = document.getElementById('mode-sci-btn');
+
+            if (mode === 'simple') {
+                simpleGrid.classList.remove('hidden');
+                sciGrid.classList.add('hidden');
+                btnSimple.className = "px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm";
+                btnSci.className = "px-3 py-1 rounded-lg text-slate-600 hover:text-indigo-600 transition";
+            } else {
+                simpleGrid.classList.add('hidden');
+                sciGrid.classList.remove('hidden');
+                btnSci.className = "px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold shadow-sm";
+                btnSimple.className = "px-3 py-1 rounded-lg text-slate-600 hover:text-indigo-600 transition";
+            }
+        }
+
+        function calcAppend(val) {
+            if (calcScreenVal === "0" && val !== '.') calcScreenVal = val;
+            else calcScreenVal += val;
+            document.getElementById('calc-screen').value = calcScreenVal;
+        }
+
+        function calcClear() {
+            calcScreenVal = "0";
+            document.getElementById('calc-screen').value = calcScreenVal;
+        }
+
+        function calcBackspace() {
+            calcScreenVal = calcScreenVal.length > 1 ? calcScreenVal.slice(0, -1) : "0";
+            document.getElementById('calc-screen').value = calcScreenVal;
+        }
+
+        function calcCalculate() {
+            try {
+                let res = Function('"use strict";return (' + calcScreenVal + ')')();
+                calcScreenVal = String(res);
+                document.getElementById('calc-screen').value = calcScreenVal;
+            } catch (e) {
+                document.getElementById('calc-screen').value = "Error";
+                calcScreenVal = "0";
+            }
         }
     </script>
 </body>
