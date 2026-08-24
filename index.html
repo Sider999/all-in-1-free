@@ -138,7 +138,7 @@
                     <button onclick="calcCalculate()" class="bg-indigo-600 hover:bg-indigo-500 text-white p-4 rounded-xl font-bold transition text-xl shadow-lg shadow-indigo-600/30">=</button>
                 </div>
 
-                <!-- Scientific Extension Grid (hidden initially) -->
+                <!-- Scientific Extension Grid -->
                 <div id="calc-grid-sci" class="grid grid-cols-4 gap-2 hidden">
                     <button onclick="calcClear()" class="bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 p-3 rounded-xl font-bold transition">C</button>
                     <button onclick="calcBackspace()" class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl font-bold transition text-amber-400"><i class="fa-solid fa-backspace"></i></button>
@@ -175,7 +175,7 @@
                 </div>
             </div>
 
-            <!-- 2. Unit Converter Tab (Length, Height, Weight, Volume) -->
+            <!-- 2. Unit Converter Tab -->
             <div id="tab-unit" class="tab-content hidden max-w-xl mx-auto bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl backdrop-blur-xl">
                 <h2 class="text-lg font-bold mb-4 flex items-center space-x-2">
                     <i class="fa-solid fa-ruler-combined text-indigo-400"></i>
@@ -247,7 +247,7 @@
                     <div class="bg-slate-950 p-5 rounded-xl border border-slate-800 text-center">
                         <span class="text-xs text-slate-400 uppercase tracking-widest block mb-1">Converted Value</span>
                         <div id="curr-result" class="text-3xl font-extrabold text-indigo-400">0.00</div>
-                        <span id="curr-status" class="text-xs text-slate-500 mt-2 block"><i class="fa-solid fa-sync text-emerald-400 mr-1"></i>Auto-updated rate cached in browser</span>
+                        <span id="curr-status" class="text-xs text-slate-500 mt-2 block"><i class="fa-solid fa-sync text-emerald-400 mr-1"></i>Auto-updated live API rates</span>
                     </div>
                 </div>
             </div>
@@ -305,7 +305,6 @@
                         <p class="text-sm font-medium text-slate-300">Select Word Document (.docx)</p>
                         <input type="file" id="word-input" accept=".docx" class="mt-4 w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-400 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white hover:file:bg-emerald-500">
                     </div>
-                    <div id="word2pdf-preview" class="hidden bg-white text-slate-900 p-4 rounded-xl text-xs max-h-48 overflow-y-auto border border-slate-700"></div>
                     <button onclick="convertWordToPDF()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2">
                         <i class="fa-solid fa-file-pdf"></i><span>Convert Word to PDF & Download</span>
                     </button>
@@ -358,9 +357,9 @@
         </main>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Core Logic -->
     <script>
-        // Tab Switcher
+        // Tab Switcher Logic
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             const activeTab = document.getElementById('tab-' + tabId);
@@ -429,7 +428,6 @@
 
         function calcCalculate() {
             try {
-                // Safe browser expression evaluation
                 let result = Function('"use strict";return (' + calcScreenVal + ')')();
                 calcScreenVal = String(result);
                 document.getElementById('calc-screen').value = calcScreenVal;
@@ -439,7 +437,7 @@
             }
         }
 
-        // Unit Converter Logic (Length, Height, Weight, Volume)
+        // Unit Converter Logic
         const unitsData = {
             length: { meters: 1, kilometers: 1000, centimeters: 0.01, inches: 0.0254, feet: 0.3048, miles: 1609.34 },
             weight: { kilograms: 1, grams: 0.001, pounds: 0.453592, ounces: 0.0283495, tons: 1000 },
@@ -474,7 +472,7 @@
         }
         updateUnitOptions();
 
-        // Currency Converter Logic (with caching)
+        // Currency Converter Logic
         async function convertCurrency() {
             const amount = parseFloat(document.getElementById('curr-amount').value) || 0;
             const from = document.getElementById('curr-from').value;
@@ -494,7 +492,7 @@
                         localStorage.setItem('omni_rate_time', now);
                     }
                 } catch (e) {
-                    console.log("Using cached offline rates");
+                    console.log("Using cached rates");
                 }
             }
 
@@ -533,7 +531,7 @@
             pdf.save('converted-images.pdf');
         }
 
-        // Image to Word (OCR via Tesseract.js)
+        // Image to Word (Browser OCR via Tesseract.js)
         async function convertImageToWord() {
             const input = document.getElementById('ocr-image-input');
             const statusDiv = document.getElementById('ocr-status');
@@ -609,7 +607,7 @@
             reader.readAsArrayBuffer(file);
         }
 
-        // PDF to Word Logic (PDF.js -> .doc)
+        // PDF to Word Logic (PDF.js)
         async function convertPDFToWord() {
             const input = document.getElementById('pdf-input');
             const statusDiv = document.getElementById('pdf2word-status');
@@ -642,7 +640,7 @@
             }
         }
 
-        // Helper: Download text/html content as Word .doc Blob
+        // Helper Function: Download Word .doc File
         function downloadWordDocument(htmlContent, filename) {
             const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
                 "xmlns:w='urn:schemas-microsoft-com:office:word' "+
@@ -651,7 +649,7 @@
             const footer = "</body></html>";
             const sourceHTML = header + htmlContent + footer;
 
-            const blob = new Blob(['﻿', sourceHTML], {
+            const blob = new Blob(['\ufeff', sourceHTML], {
                 type: 'application/msword'
             });
 
@@ -664,7 +662,7 @@
             document.body.removeChild(a);
         }
 
-        // Helper FileReader
+        // Helper Function: File Reader
         function readFileAsDataURL(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -673,7 +671,7 @@
             });
         }
 
-        // 30-Day ICS Reminder Generator
+        // 30-Day ICS Reminder Generator Logic (Fixed Syntax)
         function generateICS() {
             const title = document.getElementById('rem-title').value || 'OmniTools Goal Task';
             const dateVal = document.getElementById('rem-date').value;
@@ -683,26 +681,18 @@
             }
 
             const startDate = new Date(dateVal);
-            let icsContent = "BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//OmniTools Pro//30-Day Reminder//EN
-";
+            let icsContent = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//OmniTools Pro//30-Day Reminder//EN\r\n";
 
             for (let i = 0; i < 30; i++) {
                 let d = new Date(startDate);
                 d.setDate(d.getDate() + i);
                 let dStr = d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
-                icsContent += "BEGIN:VEVENT
-";
-                icsContent += `SUMMARY:${title} (Day ${i+1}/30)
-`;
-                icsContent += `DTSTART:${dStr}
-`;
-                icsContent += `DESCRIPTION:30-Day Automated Task Reminder generated by OmniTools Pro.
-`;
-                icsContent += "END:VEVENT
-";
+                icsContent += "BEGIN:VEVENT\r\n";
+                icsContent += `SUMMARY:${title} (Day ${i+1}/30)\r\n`;
+                icsContent += `DTSTART:${dStr}\r\n`;
+                icsContent += `DESCRIPTION:30-Day Automated Task Reminder generated by OmniTools Pro.\r\n`;
+                icsContent += "END:VEVENT\r\n";
             }
 
             icsContent += "END:VCALENDAR";
