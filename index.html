@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+html_content = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Multi-Tools Portal</title>
+    <title>Universal Multi-Tools Portal | Cyber Neon Edition</title>
     
-    <!-- Tailwind CSS for Styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Required Client-Side Libraries -->
-    <!-- PDF Lib for Merge/Split -->
+    <!-- PDF Lib for Merge & Split -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <!-- Sortable JS for Drag & Drop Reordering -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -20,289 +20,1016 @@
     <!-- Mammoth & HTML2Canvas for Word to Image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --bg-dark: #0a0d14;
+            --card-bg: rgba(18, 24, 38, 0.85);
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff007f;
+            --neon-purple: #9d00ff;
+            --neon-green: #00ff66;
+            --neon-yellow: #ffcc00;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #150d2a, #0a0d14 60%), radial-gradient(circle at bottom right, #0d1f2d, #0a0d14);
+            font-family: 'Inter', sans-serif;
+            color: #e2e8f0;
+        }
+
+        .heading-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .sub-heading {
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        /* Glassmorphic Neon Cards */
+        .neon-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .neon-card-pink {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 0, 127, 0.15);
+            border-radius: 16px;
+        }
+
+        .neon-card-gold {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 204, 0, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 204, 0, 0.2);
+            border-radius: 16px;
+        }
+
+        /* Neon Glow Texts */
+        .glow-text-cyan {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .glow-text-pink {
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px rgba(255, 0, 127, 0.6), 0 0 20px rgba(255, 0, 127, 0.3);
+        }
+
+        .glow-text-yellow {
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.6), 0 0 20px rgba(255, 204, 0, 0.3);
+        }
+
+        /* Neon Buttons */
+        .btn-neon-cyan {
+            background: linear-gradient(135deg, #00f3ff, #0077ff);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon-cyan:hover {
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-neon-pink {
+            background: linear-gradient(135deg, #ff007f, #7900ff);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon-pink:hover {
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .btn-neon-green {
+            background: linear-gradient(135deg, #00ff66, #009944);
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon-green:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Tool Panels Switching */
         .tool-panel { display: none; }
-        .tool-panel.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .calc-btn { background: #e5e7eb; padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; }
-        .calc-btn:hover { background: #d1d5db; }
-        .calc-btn.op { background: #3b82f6; color: white; }
-        .calc-btn.op:hover { background: #2563eb; }
-        .calc-btn.eq { background: #10b981; color: white; grid-column: span 2; }
-        
-        .file-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; margin-bottom: 8px; background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; cursor: grab; }
+        .tool-panel.active { display: block; animation: neonFadeIn 0.4s ease-in-out; }
+
+        @keyframes neonFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Calculator Buttons */
+        .calc-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            transition: all 0.2s;
+        }
+        .calc-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+        }
+        .calc-btn.op {
+            background: rgba(157, 0, 255, 0.3);
+            border-color: rgba(157, 0, 255, 0.5);
+            color: #d8b4fe;
+        }
+        .calc-btn.op:hover {
+            background: rgba(157, 0, 255, 0.6);
+            color: #fff;
+            box-shadow: 0 0 12px rgba(157, 0, 255, 0.6);
+        }
+        .calc-btn.eq {
+            background: linear-gradient(135deg, #00ff66, #00aa44);
+            color: #000;
+            grid-column: span 2;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+
+        /* File list drag item */
+        .file-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 8px;
+            cursor: grab;
+            transition: all 0.2s;
+        }
+        .file-list-item:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
         .file-list-item:active { cursor: grabbing; }
-        .delete-btn { color: #ef4444; cursor: pointer; font-weight: bold; }
-        
-        #word-render-area { padding: 20px; background: white; color: black; border: 1px solid #ccc; max-width: 800px; margin: auto; }
+
+        /* Rating Stars */
+        .star-rating i {
+            font-size: 2.2rem;
+            color: #475569;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .star-rating i.active, .star-rating i:hover {
+            color: #ffcc00;
+            text-shadow: 0 0 12px rgba(255, 204, 0, 0.8);
+            transform: scale(1.15);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            background: rgba(5, 7, 13, 0.85);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0d14; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.3); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
     </style>
 </head>
-<body class="bg-gray-100 flex h-screen overflow-hidden text-gray-800 font-sans">
+<body class="flex h-screen overflow-hidden">
 
     <!-- Sidebar Navigation -->
-    <div class="w-64 bg-gray-900 text-white flex flex-col shadow-lg">
-        <div class="p-6 text-2xl font-bold border-b border-gray-700 tracking-wide">Multi-Tools</div>
-        <div class="flex-1 overflow-y-auto mt-4">
-            <button onclick="switchTool('home')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">🏠 Home Dashboard</button>
-            <button onclick="switchTool('calc')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">🖩 Calculator</button>
-            <button onclick="switchTool('pdf-merge')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">📄 PDF Merger</button>
-            <button onclick="switchTool('pdf-split')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">✂️ PDF Splitter</button>
-            <button onclick="switchTool('img2word')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">🖼️ Image to Word</button>
-            <button onclick="switchTool('word2img')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">📝 Word to Image</button>
-            <button onclick="switchTool('converter')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">⚖️ Unit Converter</button>
+    <aside class="w-72 bg-slate-950 border-r border-cyan-500/20 flex flex-col shadow-2xl relative z-20">
+        <!-- Logo Area -->
+        <div class="p-6 border-b border-cyan-500/20 flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                <i class="fa-solid fa-wand-magic-sparkles text-black font-bold text-xl"></i>
+            </div>
+            <div>
+                <h1 class="heading-font text-lg font-black tracking-wider glow-text-cyan">CYBER<span class="glow-text-pink">TOOLS</span></h1>
+                <p class="text-xs text-cyan-400/60 font-medium">Universal Multi-Portal v3.0</p>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+            <button onclick="switchTool('home')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-house text-cyan-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">Dashboard & Home</span>
+            </button>
+            
+            <button onclick="switchTool('reminder-tool')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 hover:bg-yellow-500/20 transition group shadow-md shadow-yellow-500/10">
+                <i class="fa-solid fa-bell glow-text-yellow group-hover:rotate-12 transition"></i>
+                <span class="font-bold text-sm tracking-wide">30-Days Reminder <span class="text-xs px-2 py-0.5 rounded-full bg-yellow-400 text-black font-extrabold ml-1">PREMIUM</span></span>
+            </button>
+
+            <button onclick="switchTool('calc')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-calculator text-fuchsia-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">Smart Calculator</span>
+            </button>
+
+            <button onclick="switchTool('currency-tool')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-coins text-emerald-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">Currency Converter</span>
+            </button>
+
+            <button onclick="switchTool('converter')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-scale-balanced text-purple-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">Unit Converter</span>
+            </button>
+
+            <button onclick="switchTool('pdf-merge')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-file-pdf text-rose-500 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">PDF Merger</span>
+            </button>
+
+            <button onclick="switchTool('pdf-split')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-scissors text-amber-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">PDF Splitter</span>
+            </button>
+
+            <button onclick="switchTool('img2word')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-file-word text-blue-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">Image to Word</span>
+            </button>
+
+            <button onclick="switchTool('word2img')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
+                <i class="fa-solid fa-file-image text-pink-400 group-hover:scale-110 transition"></i>
+                <span class="font-semibold text-sm">Word to Image</span>
+            </button>
+        </nav>
+
+        <!-- Footer Info -->
+        <div class="p-4 border-t border-cyan-500/20 text-center">
+            <span class="inline-block px-3 py-1 rounded-full bg-cyan-950 text-cyan-300 text-xs font-mono border border-cyan-500/40">⚡ 100% Client-Side Safe</span>
+        </div>
+    </aside>
+
+    <!-- Main Content Display -->
+    <main class="flex-1 overflow-y-auto p-6 md:p-10 relative">
+
+        <!-- Tool 1: Home Dashboard & Top 30-Day Reminder -->
+        <div id="home" class="tool-panel active max-w-6xl mx-auto space-y-8">
+            
+            <!-- Welcome Banner -->
+            <div class="neon-card p-8 relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
+                <div class="space-y-3 z-10 max-w-2xl">
+                    <span class="px-3 py-1 rounded-full bg-fuchsia-500/20 text-fuchsia-300 text-xs font-bold border border-fuchsia-500/40 tracking-widest uppercase">✨ Next-Gen Portal</span>
+                    <h1 class="heading-font text-3xl md:text-5xl font-extrabold tracking-tight">UNIVERSAL <span class="glow-text-cyan">MULTI-TOOLS</span></h1>
+                    <p class="text-slate-300 text-base leading-relaxed">
+                        Access high-performance tools directly from your browser with zero latency. Seamlessly manage PDFs, calculations, conversions, and automated reminders in a stunning visual suite.
+                    </p>
+                </div>
+                <div class="mt-6 md:mt-0 z-10">
+                    <button onclick="switchTool('reminder-tool')" class="btn-neon-pink px-6 py-3 rounded-xl text-sm uppercase tracking-wider font-bold shadow-lg">
+                        <i class="fa-solid fa-crown mr-2"></i> Open 30-Days Reminder
+                    </button>
+                </div>
+            </div>
+
+            <!-- TOP DASHBOARD: 30-DAYS REMINDER SUITE (PREMIUM FEATURE) -->
+            <section class="neon-card-gold p-6 relative">
+                <div class="flex items-center justify-between border-b border-yellow-500/30 pb-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 border border-yellow-500/50 flex items-center justify-center">
+                            <i class="fa-solid fa-bell text-2xl text-yellow-400"></i>
+                        </div>
+                        <div>
+                            <h2 class="heading-font text-xl md:text-2xl font-bold text-yellow-400">30-Days Multi-Task Reminder Suite</h2>
+                            <p class="text-xs text-slate-300">Schedule up to 12 recurring tasks with instant WhatsApp, SMS & Email triggers!</p>
+                        </div>
+                    </div>
+                    <span id="task-counter-badge" class="px-4 py-1.5 rounded-full bg-yellow-400 text-black font-extrabold text-xs shadow-lg shadow-yellow-500/20">
+                        0 / 12 Tasks Used
+                    </span>
+                </div>
+
+                <!-- Quick Add Form -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-900/80 p-4 rounded-xl border border-yellow-500/20">
+                    <div>
+                        <label class="block text-xs font-bold text-yellow-400 mb-1">Task Title & Details</label>
+                        <input type="text" id="rem-title" placeholder="e.g., Pay Utility Bill / Client Follow-up" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-yellow-400 mb-1">Target Schedule (Day 1 - 30)</label>
+                        <select id="rem-day" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                            <script>
+                                for(let d=1; d<=30; d++){
+                                    document.write(`<option value="${d}">Day ${d} of the Month</option>`);
+                                }
+                            </script>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-yellow-400 mb-1">Trigger Channel</label>
+                        <select id="rem-channel" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                            <option value="whatsapp">📱 WhatsApp Message</option>
+                            <option value="sms">💬 Direct SMS</option>
+                            <option value="email">📧 Email Alert</option>
+                            <option value="browser">🔔 Browser Reminder</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-yellow-400 mb-1">Phone / Email Contact</label>
+                        <input type="text" id="rem-contact" placeholder="+923001234567 or email@domain.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                    </div>
+                    <div class="md:col-span-4 flex justify-end">
+                        <button onclick="addNewReminderTask()" class="btn-neon-green px-6 py-2.5 rounded-lg text-sm font-bold flex items-center space-x-2">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Schedule Task</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Reminders Grid -->
+                <div>
+                    <h3 class="sub-heading text-lg font-bold text-slate-200 mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-list-check text-yellow-400"></i>
+                        <span>Active 30-Days Reminder Schedule</span>
+                    </h3>
+                    <div id="reminder-tasks-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Tasks dynamically injected here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Access Tool Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="switchTool('calc')" class="neon-card p-6 cursor-pointer hover:border-cyan-400 transition transform hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-calculator text-2xl text-cyan-400"></i>
+                    </div>
+                    <h3 class="heading-font text-lg font-bold text-white mb-1">Smart Calculator</h3>
+                    <p class="text-xs text-slate-400">Simple arithmetic + fully functional scientific functions (Sin, Cos, Log, Power, Sqrt).</p>
+                </div>
+
+                <div onclick="switchTool('currency-tool')" class="neon-card p-6 cursor-pointer hover:border-emerald-400 transition transform hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-coins text-2xl text-emerald-400"></i>
+                    </div>
+                    <h3 class="heading-font text-lg font-bold text-white mb-1">Currency Converter</h3>
+                    <p class="text-xs text-slate-400">Live & instant global exchange rates between USD, PKR, EUR, GBP, AED, SAR & more.</p>
+                </div>
+
+                <div onclick="switchTool('pdf-merge')" class="neon-card p-6 cursor-pointer hover:border-rose-400 transition transform hover:-translate-y-1 group">
+                    <div class="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-file-pdf text-2xl text-rose-400"></i>
+                    </div>
+                    <h3 class="heading-font text-lg font-bold text-white mb-1">PDF Merger Suite</h3>
+                    <p class="text-xs text-slate-400">Combine multiple PDF documents with seamless Drag & Drop reordering.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool: 30-Days Reminder Standalone View -->
+        <div id="reminder-tool" class="tool-panel max-w-5xl mx-auto space-y-6">
+            <div class="neon-card-gold p-8">
+                <div class="flex items-center space-x-4 mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-yellow-500/20 border border-yellow-500 flex items-center justify-center">
+                        <i class="fa-solid fa-bell text-3xl text-yellow-400"></i>
+                    </div>
+                    <div>
+                        <h1 class="heading-font text-3xl font-bold text-yellow-400">30-Days Multi-Task Reminder Suite</h1>
+                        <p class="text-sm text-slate-300">Set recurring reminders across a 30-day schedule with automatic trigger links.</p>
+                    </div>
+                </div>
+                <!-- Duplicate of the reminder interface for direct navigation -->
+                <div class="bg-slate-900/90 p-6 rounded-2xl border border-yellow-500/30 mb-8 space-y-4">
+                    <h3 class="sub-heading text-lg font-bold text-yellow-400">Add New Reminder Task (Max 12)</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Task Description</label>
+                            <input type="text" id="rem-title-page" placeholder="e.g. Call Client / Check Server Backup" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Day of Month (Day 1 - 30)</label>
+                            <select id="rem-day-page" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                                <script>
+                                    for(let d=1; d<=30; d++){
+                                        document.write(`<option value="${d}">Day ${d} of the Month</option>`);
+                                    }
+                                </script>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Notification Channel</label>
+                            <select id="rem-channel-page" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                                <option value="whatsapp">WhatsApp Message</option>
+                                <option value="sms">SMS Text</option>
+                                <option value="email">Email Notification</option>
+                                <option value="browser">Browser Popup Alert</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-300 mb-1">Contact Details</label>
+                            <input type="text" id="rem-contact-page" placeholder="+923001234567 or email@domain.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-2">
+                        <button onclick="addNewReminderTaskFromPage()" class="btn-neon-green px-8 py-3 rounded-xl font-bold">
+                            <i class="fa-solid fa-plus-circle mr-2"></i> Add Task to Schedule
+                        </button>
+                    </div>
+                </div>
+
+                <div id="reminder-tasks-list-page" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Synced Tasks -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 2: Calculator (Simple & Scientific) -->
+        <div id="calc" class="tool-panel max-w-2xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="heading-font text-2xl font-bold text-white flex items-center space-x-3">
+                        <i class="fa-solid fa-calculator text-fuchsia-400"></i>
+                        <span>Smart Calculator</span>
+                    </h2>
+                    <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-700">
+                        <button onclick="toggleCalc('simple')" id="tab-simple" class="px-5 py-2 text-xs font-bold rounded-lg bg-cyan-500 text-black transition">Simple</button>
+                        <button onclick="toggleCalc('scientific')" id="tab-scientific" class="px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">Scientific</button>
+                    </div>
+                </div>
+
+                <!-- Screen -->
+                <div class="mb-6 relative">
+                    <input type="text" id="calc-display" class="w-full bg-slate-950 text-right text-3xl font-mono p-5 rounded-xl border border-cyan-500/40 text-cyan-400 focus:outline-none shadow-inner" disabled placeholder="0">
+                </div>
+
+                <!-- Simple Keyboard -->
+                <div id="calc-simple" class="grid grid-cols-4 gap-3">
+                    <div class="calc-btn op" onclick="calcAction('C')">C</div>
+                    <div class="calc-btn op" onclick="calcAction('DEL')">DEL</div>
+                    <div class="calc-btn op" onclick="calcAction('%')">%</div>
+                    <div class="calc-btn op" onclick="calcAction('/')">÷</div>
+
+                    <div class="calc-btn" onclick="calcAction('7')">7</div>
+                    <div class="calc-btn" onclick="calcAction('8')">8</div>
+                    <div class="calc-btn" onclick="calcAction('9')">9</div>
+                    <div class="calc-btn op" onclick="calcAction('*')">×</div>
+
+                    <div class="calc-btn" onclick="calcAction('4')">4</div>
+                    <div class="calc-btn" onclick="calcAction('5')">5</div>
+                    <div class="calc-btn" onclick="calcAction('6')">6</div>
+                    <div class="calc-btn op" onclick="calcAction('-')">-</div>
+
+                    <div class="calc-btn" onclick="calcAction('1')">1</div>
+                    <div class="calc-btn" onclick="calcAction('2')">2</div>
+                    <div class="calc-btn" onclick="calcAction('3')">3</div>
+                    <div class="calc-btn op" onclick="calcAction('+')">+</div>
+
+                    <div class="calc-btn" onclick="calcAction('0')">0</div>
+                    <div class="calc-btn" onclick="calcAction('.')">.</div>
+                    <div class="calc-btn eq" onclick="calcAction('=')">=</div>
+                </div>
+
+                <!-- Scientific Keyboard -->
+                <div id="calc-scientific" class="grid grid-cols-5 gap-2 hidden">
+                    <div class="calc-btn op text-sm" onclick="calcAction('sin(')">sin</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('cos(')">cos</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('tan(')">tan</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('C')">C</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('DEL')">DEL</div>
+
+                    <div class="calc-btn op text-sm" onclick="calcAction('log(')">log</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('ln(')">ln</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('sqrt(')">√</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('(')">(</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction(')')">)</div>
+
+                    <div class="calc-btn op text-sm" onclick="calcAction('pi')">π</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('e')">e</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('^')">^</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('%')">%</div>
+                    <div class="calc-btn op text-sm" onclick="calcAction('/')">÷</div>
+
+                    <div class="calc-btn" onclick="calcAction('7')">7</div>
+                    <div class="calc-btn" onclick="calcAction('8')">8</div>
+                    <div class="calc-btn" onclick="calcAction('9')">9</div>
+                    <div class="calc-btn op" onclick="calcAction('*')">×</div>
+                    <div class="calc-btn op" onclick="calcAction('-')">-</div>
+
+                    <div class="calc-btn" onclick="calcAction('4')">4</div>
+                    <div class="calc-btn" onclick="calcAction('5')">5</div>
+                    <div class="calc-btn" onclick="calcAction('6')">6</div>
+                    <div class="calc-btn op" onclick="calcAction('+')">+</div>
+                    <div class="calc-btn eq" onclick="calcAction('=')" style="grid-row: span 2;">=</div>
+
+                    <div class="calc-btn" onclick="calcAction('1')">1</div>
+                    <div class="calc-btn" onclick="calcAction('2')">2</div>
+                    <div class="calc-btn" onclick="calcAction('3')">3</div>
+                    <div class="calc-btn" onclick="calcAction('0')">0</div>
+                    <div class="calc-btn" onclick="calcAction('.')">.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 3: Universal Currency Converter -->
+        <div id="currency-tool" class="tool-panel max-w-3xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center space-x-3 mb-6 border-b border-cyan-500/20 pb-4">
+                    <i class="fa-solid fa-coins text-3xl text-emerald-400"></i>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-white">Universal Currency Converter</h2>
+                        <p class="text-xs text-slate-400">Convert currencies instantly with live rates & global coverage.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-400 mb-2">From Currency</label>
+                        <select id="curr-from" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-emerald-400 focus:outline-none font-medium" onchange="convertCurrency()">
+                            <option value="USD">USD - US Dollar ($)</option>
+                            <option value="PKR" selected>PKR - Pakistani Rupee (₨)</option>
+                            <option value="EUR">EUR - Euro (€)</option>
+                            <option value="GBP">GBP - British Pound (£)</option>
+                            <option value="AED">AED - UAE Dirham (د.إ)</option>
+                            <option value="SAR">SAR - Saudi Riyal (ر.س)</option>
+                            <option value="INR">INR - Indian Rupee (₹)</option>
+                            <option value="CAD">CAD - Canadian Dollar ($)</option>
+                            <option value="AUD">AUD - Australian Dollar ($)</option>
+                            <option value="JPY">JPY - Japanese Yen (¥)</option>
+                            <option value="CNY">CNY - Chinese Yuan (¥)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-400 mb-2">To Currency</label>
+                        <select id="curr-to" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-emerald-400 focus:outline-none font-medium" onchange="convertCurrency()">
+                            <option value="USD" selected>USD - US Dollar ($)</option>
+                            <option value="PKR">PKR - Pakistani Rupee (₨)</option>
+                            <option value="EUR">EUR - Euro (€)</option>
+                            <option value="GBP">GBP - British Pound (£)</option>
+                            <option value="AED">AED - UAE Dirham (د.إ)</option>
+                            <option value="SAR">SAR - Saudi Riyal (ر.س)</option>
+                            <option value="INR">INR - Indian Rupee (₹)</option>
+                            <option value="CAD">CAD - Canadian Dollar ($)</option>
+                            <option value="AUD">AUD - Australian Dollar ($)</option>
+                            <option value="JPY">JPY - Japanese Yen (¥)</option>
+                            <option value="CNY">CNY - Chinese Yuan (¥)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2">Amount to Convert</label>
+                        <input type="number" id="curr-amount" value="1000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono text-lg focus:border-emerald-400 focus:outline-none" oninput="convertCurrency()">
+                    </div>
+
+                    <div class="bg-slate-950 p-4 rounded-xl border border-emerald-500/30 text-center">
+                        <span class="block text-xs text-slate-400 uppercase tracking-widest mb-1">Converted Output</span>
+                        <div id="curr-result" class="text-3xl font-bold font-mono text-emerald-400">--</div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-center">
+                    <button onclick="swapCurrencies()" class="px-4 py-2 rounded-xl bg-slate-800 border border-slate-600 text-xs font-bold text-slate-300 hover:text-white hover:border-emerald-400 transition flex items-center space-x-2">
+                        <i class="fa-solid fa-arrows-rotate text-emerald-400"></i>
+                        <span>Swap Currencies</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 4: Universal Unit Converter -->
+        <div id="converter" class="tool-panel max-w-3xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center space-x-3 mb-6 border-b border-purple-500/20 pb-4">
+                    <i class="fa-solid fa-scale-balanced text-3xl text-purple-400"></i>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-white">Universal Unit Converter</h2>
+                        <p class="text-xs text-slate-400">Convert length, weight, temperature, and area units seamlessly.</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-purple-400 mb-2">Select Category</label>
+                    <select id="conv-category" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-purple-400 focus:outline-none" onchange="updateConvOptions()">
+                        <option value="length">Length & Distance</option>
+                        <option value="weight">Weight / Mass</option>
+                        <option value="temp">Temperature</option>
+                        <option value="area">Area</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2">From Unit</label>
+                        <select id="conv-from" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-purple-400 focus:outline-none" onchange="calculateConversion()"></select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2">To Unit</label>
+                        <select id="conv-to" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-purple-400 focus:outline-none" onchange="calculateConversion()"></select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2">Value</label>
+                        <input type="number" id="conv-input" value="1" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono text-lg focus:border-purple-400 focus:outline-none" oninput="calculateConversion()">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-300 mb-2">Converted Result</label>
+                        <input type="text" id="conv-result" class="w-full bg-slate-950 border border-purple-500/40 rounded-xl p-3 text-purple-300 font-mono text-xl font-bold focus:outline-none" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tool 5: Advanced PDF Merger -->
+        <div id="pdf-merge" class="tool-panel max-w-3xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center space-x-3 mb-4 border-b border-rose-500/20 pb-4">
+                    <i class="fa-solid fa-file-pdf text-3xl text-rose-500"></i>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-white">Advanced PDF Merger</h2>
+                        <p class="text-xs text-slate-400">Combine PDF files. Drag & drop items to re-sequence before merging.</p>
+                    </div>
+                </div>
+
+                <label class="block mb-4 p-6 border-2 border-dashed border-rose-500/40 hover:border-rose-400 rounded-2xl text-center cursor-pointer bg-slate-900/50 transition">
+                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-rose-40-0 mb-2"></i>
+                    <span class="block text-sm font-semibold text-slate-200">Click to Select PDF Files</span>
+                    <span class="text-xs text-slate-500">Supports multiple PDF files</span>
+                    <input type="file" id="pdf-merge-input" multiple accept="application/pdf" class="hidden" onchange="addMergeFiles(event)">
+                </label>
+
+                <div id="merge-file-list" class="min-h-[120px] bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6 space-y-2">
+                    <p class="text-slate-500 text-center py-6 text-sm" id="merge-empty-msg">No PDF files uploaded yet.</p>
+                </div>
+
+                <button onclick="triggerDownloadWithRating(executePdfMerge)" class="btn-neon-pink w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-object-group"></i>
+                    <span>Merge & Download PDF</span>
+                </button>
+                <p id="merge-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
+            </div>
+        </div>
+
+        <!-- Tool 6: PDF Splitter -->
+        <div id="pdf-split" class="tool-panel max-w-3xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center space-x-3 mb-4 border-b border-amber-500/20 pb-4">
+                    <i class="fa-solid fa-scissors text-3xl text-amber-400"></i>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-white">PDF Splitter Suite</h2>
+                        <p class="text-xs text-slate-400">Specify page ranges to extract custom PDF segments.</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-slate-300 mb-2">Select Target PDF</label>
+                    <input type="file" id="pdf-split-input" accept="application/pdf" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-amber-400 focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-amber-400 mb-2">Start Page</label>
+                        <input type="number" id="split-start" min="1" placeholder="e.g. 1" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:border-amber-400 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-amber-400 mb-2">End Page</label>
+                        <input type="number" id="split-end" min="1" placeholder="e.g. 5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:border-amber-400 focus:outline-none">
+                    </div>
+                </div>
+
+                <button onclick="triggerDownloadWithRating(executePdfSplit)" class="btn-neon-cyan w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-file-export"></i>
+                    <span>Split & Download PDF</span>
+                </button>
+                <p id="split-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
+            </div>
+        </div>
+
+        <!-- Tool 7: Image to Word -->
+        <div id="img2word" class="tool-panel max-w-3xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center space-x-3 mb-4 border-b border-blue-500/20 pb-4">
+                    <i class="fa-solid fa-file-word text-3xl text-blue-400"></i>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-white">Image to Word (DOCX)</h2>
+                        <p class="text-xs text-slate-400">Convert your images into formatted Word documents.</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-slate-300 mb-2">Select Image Files (PNG / JPG)</label>
+                    <input type="file" id="img2word-input" multiple accept="image/png, image/jpeg, image/jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-blue-400 focus:outline-none">
+                </div>
+
+                <button onclick="triggerDownloadWithRating(executeImgToWord)" class="btn-neon-cyan w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-file-word"></i>
+                    <span>Convert to Word Document</span>
+                </button>
+                <p id="i2w-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
+            </div>
+        </div>
+
+        <!-- Tool 8: Word to Image -->
+        <div id="word2img" class="tool-panel max-w-3xl mx-auto">
+            <div class="neon-card p-8">
+                <div class="flex items-center space-x-3 mb-4 border-b border-pink-500/20 pb-4">
+                    <i class="fa-solid fa-file-image text-3xl text-pink-400"></i>
+                    <div>
+                        <h2 class="heading-font text-2xl font-bold text-white">Word (DOCX) to Image</h2>
+                        <p class="text-xs text-slate-400">Render DOCX pages into high-definition PNG images.</p>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-slate-300 mb-2">Select DOCX File</label>
+                    <input type="file" id="word2img-input" accept=".docx" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-pink-400 focus:outline-none">
+                </div>
+
+                <button onclick="triggerDownloadWithRating(executeWordToImg)" class="btn-neon-pink w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Convert to PNG Image</span>
+                </button>
+                <p id="w2i-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
+
+                <div id="word-render-container" style="position: absolute; left: -9999px; top: 0;">
+                    <div id="word-render-area" style="width: 800px; padding: 30px; background: white; color: black;"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- COMPULSORY 5-STAR RATING MODAL BEFORE DOWNLOAD -->
+    <div id="rating-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden">
+        <div class="neon-card-gold p-8 max-w-md w-full mx-4 text-center space-y-6 relative transform transition-all scale-95">
+            <div class="w-16 h-16 rounded-full bg-yellow-500/20 border-2 border-yellow-400 flex items-center justify-center mx-auto">
+                <i class="fa-solid fa-star text-3xl text-yellow-400 glow-text-yellow"></i>
+            </div>
+            <div>
+                <h3 class="heading-font text-2xl font-bold text-yellow-400">Rate Our Tool!</h3>
+                <p class="text-xs text-slate-300 mt-1">Please confirm your 5-star experience to unlock and start downloading your generated file.</p>
+            </div>
+
+            <!-- Star Selection Grid -->
+            <div class="star-rating flex justify-center space-x-2 py-2" id="star-box">
+                <i class="fa-solid fa-star" onclick="selectStars(1)"></i>
+                <i class="fa-solid fa-star" onclick="selectStars(2)"></i>
+                <i class="fa-solid fa-star" onclick="selectStars(3)"></i>
+                <i class="fa-solid fa-star" onclick="selectStars(4)"></i>
+                <i class="fa-solid fa-star" onclick="selectStars(5)"></i>
+            </div>
+
+            <p id="rating-hint" class="text-xs font-semibold text-yellow-400/80">Select rating stars to continue</p>
+
+            <div class="flex space-x-3">
+                <button onclick="closeRatingModal()" class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-bold">Cancel</button>
+                <button id="confirm-download-btn" onclick="confirmRatingAndDownload()" disabled class="flex-1 py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed transition">
+                    Confirm & Download
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 p-8 overflow-y-auto">
-        
-        <!-- Home Dashboard -->
-        <div id="home" class="tool-panel active">
-            <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to Universal Multi-Tools Portal</h1>
-            <p class="text-gray-600 text-lg">Select a tool from the sidebar to get started. All tools run 100% securely in your browser.</p>
-        </div>
-
-        <!-- Calculator (Simple & Scientific) -->
-        <div id="calc" class="tool-panel max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-2xl font-bold mb-4">Smart Calculator</h2>
-            <div class="flex space-x-2 mb-4">
-                <button onclick="toggleCalc('simple')" id="tab-simple" class="flex-1 py-2 bg-blue-600 text-white rounded">Simple</button>
-                <button onclick="toggleCalc('scientific')" id="tab-scientific" class="flex-1 py-2 bg-gray-200 text-gray-800 rounded">Scientific</button>
-            </div>
-            
-            <input type="text" id="calc-display" class="w-full bg-gray-100 text-right text-3xl p-4 rounded mb-4 focus:outline-none" disabled placeholder="0">
-            
-            <!-- Simple Grid -->
-            <div id="calc-simple" class="grid grid-cols-4 gap-2">
-                <div class="calc-btn op" onclick="calcAction('C')">C</div>
-                <div class="calc-btn op" onclick="calcAction('DEL')">DEL</div>
-                <div class="calc-btn op" onclick="calcAction('%')">%</div>
-                <div class="calc-btn op" onclick="calcAction('/')">÷</div>
-                
-                <div class="calc-btn" onclick="calcAction('7')">7</div>
-                <div class="calc-btn" onclick="calcAction('8')">8</div>
-                <div class="calc-btn" onclick="calcAction('9')">9</div>
-                <div class="calc-btn op" onclick="calcAction('*')">×</div>
-                
-                <div class="calc-btn" onclick="calcAction('4')">4</div>
-                <div class="calc-btn" onclick="calcAction('5')">5</div>
-                <div class="calc-btn" onclick="calcAction('6')">6</div>
-                <div class="calc-btn op" onclick="calcAction('-')">-</div>
-                
-                <div class="calc-btn" onclick="calcAction('1')">1</div>
-                <div class="calc-btn" onclick="calcAction('2')">2</div>
-                <div class="calc-btn" onclick="calcAction('3')">3</div>
-                <div class="calc-btn op" onclick="calcAction('+')">+</div>
-                
-                <div class="calc-btn" onclick="calcAction('0')">0</div>
-                <div class="calc-btn" onclick="calcAction('.')">.</div>
-                <div class="calc-btn eq" onclick="calcAction('=')">=</div>
-            </div>
-
-            <!-- Scientific Grid (Hidden initially) -->
-            <div id="calc-scientific" class="grid grid-cols-5 gap-2 hidden">
-                <div class="calc-btn op text-sm" onclick="calcAction('sin(')">sin</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('cos(')">cos</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('tan(')">tan</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('C')">C</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('DEL')">DEL</div>
-
-                <div class="calc-btn op text-sm" onclick="calcAction('log(')">log</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('ln(')">ln</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('sqrt(')">√</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('(')">(</div>
-                <div class="calc-btn op text-sm" onclick="calcAction(')')">)</div>
-
-                <div class="calc-btn op text-sm" onclick="calcAction('pi')">π</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('e')">e</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('^')">^</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('%')">%</div>
-                <div class="calc-btn op text-sm" onclick="calcAction('/')">÷</div>
-
-                <div class="calc-btn" onclick="calcAction('7')">7</div>
-                <div class="calc-btn" onclick="calcAction('8')">8</div>
-                <div class="calc-btn" onclick="calcAction('9')">9</div>
-                <div class="calc-btn op" onclick="calcAction('*')">×</div>
-                <div class="calc-btn op" onclick="calcAction('-')">-</div>
-
-                <div class="calc-btn" onclick="calcAction('4')">4</div>
-                <div class="calc-btn" onclick="calcAction('5')">5</div>
-                <div class="calc-btn" onclick="calcAction('6')">6</div>
-                <div class="calc-btn op" onclick="calcAction('+')">+</div>
-                <div class="calc-btn eq" onclick="calcAction('=')" style="grid-row: span 2;">=</div>
-
-                <div class="calc-btn" onclick="calcAction('1')">1</div>
-                <div class="calc-btn" onclick="calcAction('2')">2</div>
-                <div class="calc-btn" onclick="calcAction('3')">3</div>
-                <div class="calc-btn" onclick="calcAction('0')">0</div>
-                <div class="calc-btn" onclick="calcAction('.')">.</div>
-            </div>
-        </div>
-
-        <!-- PDF Merger -->
-        <div id="pdf-merge" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold mb-2">Advanced PDF Merger</h2>
-            <p class="mb-4 text-gray-500">Upload multiple PDFs. Drag and drop to re-order them, then merge.</p>
-            
-            <input type="file" id="pdf-merge-input" multiple accept="application/pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4" onchange="addMergeFiles(event)">
-            
-            <div id="merge-file-list" class="min-h-[100px] border-2 border-dashed border-gray-300 rounded p-2 mb-4">
-                <p class="text-gray-400 text-center mt-4" id="merge-empty-msg">No files added yet.</p>
-            </div>
-            
-            <button onclick="executePdfMerge()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Merge & Download PDF</button>
-            <p id="merge-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
-        </div>
-
-        <!-- PDF Splitter -->
-        <div id="pdf-split" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold mb-2">PDF Splitter</h2>
-            <p class="mb-4 text-gray-500">Select a PDF file and specify the page range to extract.</p>
-            
-            <input type="file" id="pdf-split-input" accept="application/pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4">
-            
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 mb-1">Start Page</label>
-                    <input type="number" id="split-start" min="1" class="w-full border p-2 rounded" placeholder="e.g. 1">
-                </div>
-                <div>
-                    <label class="block text-gray-700 mb-1">End Page</label>
-                    <input type="number" id="split-end" min="1" class="w-full border p-2 rounded" placeholder="e.g. 5">
-                </div>
-            </div>
-            
-            <button onclick="executePdfSplit()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Split & Download PDF</button>
-            <p id="split-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
-        </div>
-
-        <!-- Image to Word -->
-        <div id="img2word" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold mb-2">Image to Word (DOCX)</h2>
-            <p class="mb-4 text-gray-500">Select images to insert them into a Word Document.</p>
-            
-            <input type="file" id="img2word-input" multiple accept="image/png, image/jpeg, image/jpg" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4">
-            
-            <button onclick="executeImgToWord()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Convert to DOCX</button>
-            <p id="i2w-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
-        </div>
-
-        <!-- Word to Image -->
-        <div id="word2img" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
-            <h2 class="text-2xl font-bold mb-2">Word (DOCX) to Image</h2>
-            <p class="mb-4 text-gray-500">Upload a Word document to convert its content into an Image (PNG).</p>
-            
-            <input type="file" id="word2img-input" accept=".docx" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4">
-            
-            <button onclick="executeWordToImg()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Convert to Image</button>
-            <p id="w2i-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
-            
-            <!-- Hidden area for rendering DOCX to HTML for image capture -->
-            <div id="word-render-container" style="position: absolute; left: -9999px; top: 0;">
-                <div id="word-render-area"></div>
-            </div>
-        </div>
-
-        <!-- Universal Unit Converter -->
-        <div id="converter" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
-            <h2 class="text-2xl font-bold mb-4">Universal Unit Converter</h2>
-            
-            <label class="block text-gray-700 mb-1">Select Category</label>
-            <select id="conv-category" class="w-full border p-2 rounded mb-4" onchange="updateConvOptions()">
-                <option value="length">Length</option>
-                <option value="weight">Weight / Mass</option>
-                <option value="temp">Temperature</option>
-            </select>
-
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="block text-gray-700 mb-1">From</label>
-                    <select id="conv-from" class="w-full border p-2 rounded" onchange="calculateConversion()"></select>
-                </div>
-                <div>
-                    <label class="block text-gray-700 mb-1">To</label>
-                    <select id="conv-to" class="w-full border p-2 rounded" onchange="calculateConversion()"></select>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-gray-700 mb-1">Value</label>
-                    <input type="number" id="conv-input" value="1" class="w-full border p-2 rounded" oninput="calculateConversion()">
-                </div>
-                <div>
-                    <label class="block text-gray-700 mb-1">Result</label>
-                    <input type="text" id="conv-result" class="w-full border p-2 rounded bg-gray-100 font-bold text-blue-600" disabled>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+    <!-- JavaScript Execution Engine -->
     <script>
-        // --- Core Navigation ---
+        // --- Navigation Switcher ---
         function switchTool(toolId) {
-            document.querySelectorAll('.tool-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
             document.getElementById(toolId).classList.add('active');
         }
 
-        // --- Calculator Logic ---
+        // --- 5-Star Rating Modal Interceptor ---
+        let pendingDownloadCallback = null;
+        let selectedStarRating = 0;
+
+        function triggerDownloadWithRating(callback) {
+            pendingDownloadCallback = callback;
+            selectedStarRating = 0;
+            resetStarDisplay();
+            document.getElementById('rating-modal').classList.remove('hidden');
+        }
+
+        function selectStars(count) {
+            selectedStarRating = count;
+            const stars = document.querySelectorAll('#star-box i');
+            stars.forEach((s, idx) => {
+                if(idx < count) s.classList.add('active');
+                else s.classList.remove('active');
+            });
+            const btn = document.getElementById('confirm-download-btn');
+            btn.disabled = false;
+            btn.className = "flex-1 py-3 rounded-xl btn-neon-green text-xs font-bold cursor-pointer";
+            document.getElementById('rating-hint').innerText = `You rated ${count} Star${count > 1 ? 's' : ''}! Click confirm below.`;
+        }
+
+        function resetStarDisplay() {
+            document.querySelectorAll('#star-box i').forEach(s => s.classList.remove('active'));
+            const btn = document.getElementById('confirm-download-btn');
+            btn.disabled = true;
+            btn.className = "flex-1 py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed";
+            document.getElementById('rating-hint').innerText = "Select rating stars to continue";
+        }
+
+        function closeRatingModal() {
+            document.getElementById('rating-modal').classList.add('hidden');
+            pendingDownloadCallback = null;
+        }
+
+        function confirmRatingAndDownload() {
+            if(selectedStarRating > 0 && pendingDownloadCallback) {
+                document.getElementById('rating-modal').classList.add('hidden');
+                const cb = pendingDownloadCallback;
+                pendingDownloadCallback = null;
+                cb(); // Execute actual file merge/split/convert
+            }
+        }
+
+        // --- 30-Days Reminder Suite Logic (LocalStorage & Trigger Links) ---
+        let reminderTasks = JSON.parse(localStorage.getItem('cyber_reminders') || '[]');
+
+        function saveReminders() {
+            localStorage.setItem('cyber_reminders', JSON.stringify(reminderTasks));
+            renderReminderTasks();
+        }
+
+        function addNewReminderTask() {
+            const title = document.getElementById('rem-title').value.trim();
+            const day = document.getElementById('rem-day').value;
+            const channel = document.getElementById('rem-channel').value;
+            const contact = document.getElementById('rem-contact').value.trim();
+
+            if(!title || !contact) {
+                alert("Please enter Task Title and Contact Details!");
+                return;
+            }
+            if(reminderTasks.length >= 12) {
+                alert("Maximum limit of 12 Tasks reached for 30-Days Reminder Suite.");
+                return;
+            }
+
+            reminderTasks.push({ id: Date.now(), title, day, channel, contact, active: true });
+            document.getElementById('rem-title').value = '';
+            document.getElementById('rem-contact').value = '';
+            saveReminders();
+        }
+
+        function addNewReminderTaskFromPage() {
+            const title = document.getElementById('rem-title-page').value.trim();
+            const day = document.getElementById('rem-day-page').value;
+            const channel = document.getElementById('rem-channel-page').value;
+            const contact = document.getElementById('rem-contact-page').value.trim();
+
+            if(!title || !contact) {
+                alert("Please enter Task Title and Contact Details!");
+                return;
+            }
+            if(reminderTasks.length >= 12) {
+                alert("Maximum limit of 12 Tasks reached.");
+                return;
+            }
+
+            reminderTasks.push({ id: Date.now(), title, day, channel, contact, active: true });
+            document.getElementById('rem-title-page').value = '';
+            document.getElementById('rem-contact-page').value = '';
+            saveReminders();
+        }
+
+        function deleteReminderTask(id) {
+            reminderTasks = reminderTasks.filter(t => t.id !== id);
+            saveReminders();
+        }
+
+        function triggerTaskAction(id) {
+            const task = reminderTasks.find(t => t.id === id);
+            if(!task) return;
+
+            const msg = encodeURIComponent(`[CYBER-REMINDER] Day ${task.day} Task: ${task.title}`);
+            if(task.channel === 'whatsapp') {
+                window.open(`https://wa.me/${task.contact.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
+            } else if(task.channel === 'sms') {
+                window.open(`sms:${task.contact}?body=${msg}`, '_blank');
+            } else if(task.channel === 'email') {
+                window.open(`mailto:${task.contact}?subject=30-Day Reminder: ${encodeURIComponent(task.title)}&body=${msg}`, '_blank');
+            } else {
+                alert(`🔔 REMINDER TRIGGERED:\nDay ${task.day}: ${task.title}\nContact: ${task.contact}`);
+            }
+        }
+
+        function renderReminderTasks() {
+            const containers = [document.getElementById('reminder-tasks-list'), document.getElementById('reminder-tasks-list-page')];
+            document.getElementById('task-counter-badge').innerText = `${reminderTasks.length} / 12 Tasks Used`;
+
+            containers.forEach(container => {
+                if(!container) return;
+                if(reminderTasks.length === 0) {
+                    container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-xs">No active tasks configured. Add your first task above!</div>`;
+                    return;
+                }
+                container.innerHTML = '';
+                reminderTasks.forEach(t => {
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-950 p-4 rounded-xl border border-yellow-500/30 flex flex-col justify-between space-y-3 relative";
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-xs font-bold text-yellow-400 bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/30">Day ${t.day} of Month</span>
+                                <button onclick="deleteReminderTask(${t.id})" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                            <h4 class="font-bold text-sm text-white line-clamp-2">${t.title}</h4>
+                            <p class="text-xs text-slate-400 mt-1 capitalize"><i class="fa-solid fa-paper-plane text-yellow-500 mr-1"></i> ${t.channel} • ${t.contact}</p>
+                        </div>
+                        <button onclick="triggerTaskAction(${t.id})" class="w-full py-1.5 rounded-lg bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 border border-yellow-500/40 text-xs font-bold transition">
+                            <i class="fa-solid fa-bell mr-1"></i> Send Now
+                        </button>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        // --- Currency Converter Logic ---
+        const exchangeRates = {
+            USD: 1, PKR: 278.50, EUR: 0.92, GBP: 0.78, AED: 3.67, SAR: 3.75, INR: 83.90, CAD: 1.36, AUD: 1.50, JPY: 155.20, CNY: 7.23
+        };
+
+        function convertCurrency() {
+            const from = document.getElementById('curr-from').value;
+            const to = document.getElementById('curr-to').value;
+            const amt = parseFloat(document.getElementById('curr-amount').value);
+            const resEl = document.getElementById('curr-result');
+
+            if(isNaN(amt)) { resEl.innerText = "--"; return; }
+
+            const amtInUSD = amt / exchangeRates[from];
+            const converted = amtInUSD * exchangeRates[to];
+            resEl.innerText = `${converted.toFixed(2)} ${to}`;
+        }
+
+        function swapCurrencies() {
+            const from = document.getElementById('curr-from');
+            const to = document.getElementById('curr-to');
+            const temp = from.value;
+            from.value = to.value;
+            to.value = temp;
+            convertCurrency();
+        }
+
+        // --- Smart Calculator Logic ---
         let calcExpr = "";
-        
         function toggleCalc(type) {
             document.getElementById('calc-simple').classList.add('hidden');
             document.getElementById('calc-scientific').classList.add('hidden');
-            document.getElementById('tab-simple').classList.replace('bg-blue-600', 'bg-gray-200');
-            document.getElementById('tab-simple').classList.replace('text-white', 'text-gray-800');
-            document.getElementById('tab-scientific').classList.replace('bg-blue-600', 'bg-gray-200');
-            document.getElementById('tab-scientific').classList.replace('text-white', 'text-gray-800');
-            
+            document.getElementById('tab-simple').className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
+            document.getElementById('tab-scientific').className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
+
             if(type === 'simple') {
                 document.getElementById('calc-simple').classList.remove('hidden');
-                document.getElementById('tab-simple').classList.replace('bg-gray-200', 'bg-blue-600');
-                document.getElementById('tab-simple').classList.replace('text-gray-800', 'text-white');
+                document.getElementById('tab-simple').className = "px-5 py-2 text-xs font-bold rounded-lg bg-cyan-500 text-black transition";
             } else {
                 document.getElementById('calc-scientific').classList.remove('hidden');
-                document.getElementById('tab-scientific').classList.replace('bg-gray-200', 'bg-blue-600');
-                document.getElementById('tab-scientific').classList.replace('text-gray-800', 'text-white');
+                document.getElementById('tab-scientific').className = "px-5 py-2 text-xs font-bold rounded-lg bg-cyan-500 text-black transition";
             }
         }
 
         function calcAction(val) {
             const display = document.getElementById('calc-display');
-            if(val === 'C') {
-                calcExpr = "";
-                display.value = "";
-            } else if(val === 'DEL') {
-                calcExpr = calcExpr.slice(0, -1);
-                display.value = calcExpr;
-            } else if(val === '=') {
+            if(val === 'C') { calcExpr = ""; display.value = ""; }
+            else if(val === 'DEL') { calcExpr = calcExpr.slice(0, -1); display.value = calcExpr; }
+            else if(val === '=') {
                 try {
-                    // Replacements for eval safety and JS Math functions
                     let evalExpr = calcExpr
-                        .replace(/×/g, '*')
-                        .replace(/÷/g, '/')
-                        .replace(/\^/g, '**')
-                        .replace(/pi/g, 'Math.PI')
-                        .replace(/e/g, 'Math.E')
-                        .replace(/sin\(/g, 'Math.sin(')
-                        .replace(/cos\(/g, 'Math.cos(')
-                        .replace(/tan\(/g, 'Math.tan(')
-                        .replace(/sqrt\(/g, 'Math.sqrt(')
-                        .replace(/log\(/g, 'Math.log10(')
-                        .replace(/ln\(/g, 'Math.log(');
-                    
-                    let result = Function('"use strict";return (' + evalExpr + ')')();
-                    // Fix float issues
-                    result = Math.round(result * 10000000000) / 10000000000;
-                    display.value = result;
-                    calcExpr = result.toString();
-                } catch(e) {
-                    display.value = "Error";
-                    calcExpr = "";
-                }
+                        .replace(/×/g, '*').replace(/÷/g, '/').replace(/\^/g, '**')
+                        .replace(/pi/g, 'Math.PI').replace(/e/g, 'Math.E')
+                        .replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(')
+                        .replace(/sqrt\(/g, 'Math.sqrt(').replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(');
+                    let res = Function('"use strict";return (' + evalExpr + ')')();
+                    res = Math.round(res * 100000000) / 100000000;
+                    display.value = res;
+                    calcExpr = res.toString();
+                } catch(e) { display.value = "Error"; calcExpr = ""; }
             } else {
                 calcExpr += val;
                 display.value = calcExpr;
@@ -312,153 +1039,110 @@
         // --- PDF Merger Logic ---
         let pdfMergeFiles = [];
         const mergeListEl = document.getElementById('merge-file-list');
-        
-        // Initialize Sortable for Drag and Drop
         new Sortable(mergeListEl, {
             animation: 150,
             onEnd: function (evt) {
-                // Reorder array based on DOM changes
                 const itemEl = pdfMergeFiles.splice(evt.oldIndex, 1)[0];
                 pdfMergeFiles.splice(evt.newIndex, 0, itemEl);
             },
         });
 
         function addMergeFiles(event) {
-            const files = Array.from(event.target.files);
-            files.forEach(f => pdfMergeFiles.push(f));
+            Array.from(event.target.files).forEach(f => pdfMergeFiles.push(f));
             renderMergeList();
-            event.target.value = ''; // Reset input
+            event.target.value = '';
         }
 
         function renderMergeList() {
             if(pdfMergeFiles.length === 0) {
-                mergeListEl.innerHTML = '<p class="text-gray-400 text-center mt-4" id="merge-empty-msg">No files added yet.</p>';
+                mergeListEl.innerHTML = '<p class="text-slate-500 text-center py-6 text-sm">No PDF files uploaded yet.</p>';
                 return;
             }
             mergeListEl.innerHTML = '';
-            pdfMergeFiles.forEach((file, index) => {
+            pdfMergeFiles.forEach((file, idx) => {
                 const div = document.createElement('div');
                 div.className = 'file-list-item';
-                div.innerHTML = `<span>${file.name}</span> <span class="delete-btn" onclick="removeMergeFile(${index})">✕</span>`;
+                div.innerHTML = `<span class="text-sm text-slate-200 font-medium"><i class="fa-solid fa-bars text-cyan-400 mr-2"></i> ${file.name}</span> <span class="text-rose-400 hover:text-rose-300 cursor-pointer font-bold" onclick="removeMergeFile(${idx})">✕</span>`;
                 mergeListEl.appendChild(div);
             });
         }
 
-        function removeMergeFile(index) {
-            pdfMergeFiles.splice(index, 1);
+        function removeMergeFile(idx) {
+            pdfMergeFiles.splice(idx, 1);
             renderMergeList();
         }
 
         async function executePdfMerge() {
-            if(pdfMergeFiles.length < 2) {
-                alert("Please add at least 2 PDF files to merge.");
-                return;
-            }
+            if(pdfMergeFiles.length < 2) return alert("Please select at least 2 PDF files.");
             const status = document.getElementById('merge-status');
-            status.innerText = "Merging... Please wait.";
+            status.innerText = "Processing PDF Merge...";
             try {
                 const { PDFDocument } = PDFLib;
                 const mergedPdf = await PDFDocument.create();
-                
                 for(let file of pdfMergeFiles) {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await PDFDocument.load(arrayBuffer);
+                    const bytes = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(bytes);
                     const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                    copiedPages.forEach(page => mergedPdf.addPage(page));
+                    copiedPages.forEach(p => mergedPdf.addPage(p));
                 }
-                
                 const pdfBytes = await mergedPdf.save();
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                saveAs(blob, "Merged_Document.pdf");
-                status.innerText = "Merged PDF downloaded successfully!";
+                saveAs(new Blob([pdfBytes], { type: "application/pdf" }), "Merged_Document.pdf");
+                status.innerText = "Downloaded successfully!";
                 setTimeout(() => status.innerText = "", 4000);
-            } catch(e) {
-                status.innerText = "Error merging files. Ensure they are valid PDFs.";
-                console.error(e);
-            }
+            } catch(e) { status.innerText = "Error processing PDF merge."; }
         }
 
         // --- PDF Splitter Logic ---
         async function executePdfSplit() {
-            const fileInput = document.getElementById('pdf-split-input');
+            const input = document.getElementById('pdf-split-input');
             const startStr = document.getElementById('split-start').value;
             const endStr = document.getElementById('split-end').value;
             const status = document.getElementById('split-status');
 
-            if(!fileInput.files.length) return alert("Please select a PDF file.");
-            if(!startStr || !endStr) return alert("Please enter start and end pages.");
+            if(!input.files.length || !startStr || !endStr) return alert("Please complete all inputs.");
 
-            let start = parseInt(startStr) - 1; // 0-indexed
+            let start = parseInt(startStr) - 1;
             let end = parseInt(endStr) - 1;
-
-            status.innerText = "Splitting... Please wait.";
+            status.innerText = "Extracting Pages...";
             try {
                 const { PDFDocument } = PDFLib;
-                const arrayBuffer = await fileInput.files[0].arrayBuffer();
-                const originalPdf = await PDFDocument.load(arrayBuffer);
-                const totalPages = originalPdf.getPageCount();
-
-                if(start < 0 || end >= totalPages || start > end) {
+                const originalPdf = await PDFDocument.load(await input.files[0].arrayBuffer());
+                if(start < 0 || end >= originalPdf.getPageCount() || start > end) {
                     status.innerText = "";
-                    return alert(`Invalid page range. File has ${totalPages} pages.`);
+                    return alert("Invalid page range specified.");
                 }
-
                 const newPdf = await PDFDocument.create();
-                const pageIndices = [];
-                for(let i = start; i <= end; i++) pageIndices.push(i);
-                
-                const copiedPages = await newPdf.copyPages(originalPdf, pageIndices);
-                copiedPages.forEach(page => newPdf.addPage(page));
-
-                const pdfBytes = await newPdf.save();
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                saveAs(blob, "Split_Pages.pdf");
-                status.innerText = "Split PDF downloaded successfully!";
+                const pages = [];
+                for(let i=start; i<=end; i++) pages.push(i);
+                const copied = await newPdf.copyPages(originalPdf, pages);
+                copied.forEach(p => newPdf.addPage(p));
+                saveAs(new Blob([await newPdf.save()], { type: "application/pdf" }), "Split_Pages.pdf");
+                status.innerText = "Downloaded successfully!";
                 setTimeout(() => status.innerText = "", 4000);
-            } catch (e) {
-                status.innerText = "Error splitting PDF.";
-                console.error(e);
-            }
+            } catch(e) { status.innerText = "Error splitting PDF."; }
         }
 
         // --- Image to Word Logic ---
         async function executeImgToWord() {
             const input = document.getElementById('img2word-input');
             const status = document.getElementById('i2w-status');
-            if(!input.files.length) return alert("Please select images.");
-            
-            status.innerText = "Converting... Please wait.";
+            if(!input.files.length) return alert("Please select image files.");
+            status.innerText = "Creating Word Doc...";
             try {
                 const { Document, Packer, Paragraph, ImageRun } = docx;
                 const children = [];
-
                 for (let file of input.files) {
-                    const arrayBuffer = await file.arrayBuffer();
-                    children.push(
-                        new Paragraph({
-                            children: [
-                                new ImageRun({
-                                    data: arrayBuffer,
-                                    transformation: {
-                                        width: 500, // Fixed safe width for Word doc
-                                        height: 500
-                                    },
-                                })
-                            ]
-                        })
-                    );
+                    children.push(new Paragraph({
+                        children: [ new ImageRun({ data: await file.arrayBuffer(), transformation: { width: 500, height: 500 } }) ]
+                    }));
                 }
-
-                const doc = new Document({ sections: [{ properties: {}, children: children }] });
+                const doc = new Document({ sections: [{ children }] });
                 Packer.toBlob(doc).then(blob => {
-                    saveAs(blob, "Images_to_Word.docx");
-                    status.innerText = "Word Document downloaded successfully!";
+                    saveAs(blob, "Images_Doc.docx");
+                    status.innerText = "Downloaded successfully!";
                     setTimeout(() => status.innerText = "", 4000);
                 });
-            } catch(e) {
-                status.innerText = "Error converting to Word.";
-                console.error(e);
-            }
+            } catch(e) { status.innerText = "Error converting images."; }
         }
 
         // --- Word to Image Logic ---
@@ -466,43 +1150,28 @@
             const input = document.getElementById('word2img-input');
             const status = document.getElementById('w2i-status');
             if(!input.files.length) return alert("Please select a DOCX file.");
-
-            status.innerText = "Extracting & Rendering... Please wait.";
+            status.innerText = "Rendering Image...";
             try {
-                const arrayBuffer = await input.files[0].arrayBuffer();
-                // Extract HTML using Mammoth
-                const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});
-                const html = result.value;
-                
+                const res = await mammoth.convertToHtml({ arrayBuffer: await input.files[0].arrayBuffer() });
                 const renderArea = document.getElementById('word-render-area');
-                renderArea.innerHTML = html; // Render it invisibly
-                
-                // Convert Rendered HTML to Canvas
+                renderArea.innerHTML = res.value;
                 html2canvas(renderArea).then(canvas => {
-                    canvas.toBlob(function(blob) {
-                        saveAs(blob, "Word_to_Image.png");
-                        status.innerText = "Image downloaded successfully!";
-                        renderArea.innerHTML = ""; // clean up
+                    canvas.toBlob(blob => {
+                        saveAs(blob, "Word_Page.png");
+                        status.innerText = "Downloaded successfully!";
+                        renderArea.innerHTML = "";
                         setTimeout(() => status.innerText = "", 4000);
                     });
                 });
-            } catch(e) {
-                status.innerText = "Error generating image from Word.";
-                console.error(e);
-            }
+            } catch(e) { status.innerText = "Error rendering Word image."; }
         }
 
         // --- Unit Converter Logic ---
         const units = {
-            length: {
-                Meter: 1, Kilometer: 1000, Centimeter: 0.01, Millimeter: 0.001, Mile: 1609.34, Yard: 0.9144, Foot: 0.3048, Inch: 0.0254
-            },
-            weight: {
-                Kilogram: 1, Gram: 0.001, Milligram: 0.000001, Pound: 0.453592, Ounce: 0.0283495
-            },
-            temp: {
-                Celsius: 'C', Fahrenheit: 'F', Kelvin: 'K'
-            }
+            length: { Meter: 1, Kilometer: 1000, Centimeter: 0.01, Millimeter: 0.001, Mile: 1609.34, Yard: 0.9144, Foot: 0.3048, Inch: 0.0254 },
+            weight: { Kilogram: 1, Gram: 0.001, Milligram: 0.000001, Pound: 0.453592, Ounce: 0.0283495 },
+            temp: { Celsius: 'C', Fahrenheit: 'F', Kelvin: 'K' },
+            area: { SquareMeter: 1, SquareKilometer: 1000000, SquareFoot: 0.092903, Acre: 4046.86, Hectare: 10000 }
         };
 
         function updateConvOptions() {
@@ -510,10 +1179,9 @@
             const from = document.getElementById('conv-from');
             const to = document.getElementById('conv-to');
             from.innerHTML = ''; to.innerHTML = '';
-            
-            for (let key in units[cat]) {
-                from.add(new Option(key, key));
-                to.add(new Option(key, key));
+            for (let k in units[cat]) {
+                from.add(new Option(k, k));
+                to.add(new Option(k, k));
             }
             if(to.options.length > 1) to.selectedIndex = 1;
             calculateConversion();
@@ -524,31 +1192,31 @@
             const val = parseFloat(document.getElementById('conv-input').value);
             const from = document.getElementById('conv-from').value;
             const to = document.getElementById('conv-to').value;
-            const resultEl = document.getElementById('conv-result');
+            const resEl = document.getElementById('conv-result');
 
-            if(isNaN(val)) { resultEl.value = ''; return; }
+            if(isNaN(val)) { resEl.value = ''; return; }
 
             if(cat === 'temp') {
-                let celsius;
-                if(from === 'Celsius') celsius = val;
-                else if(from === 'Fahrenheit') celsius = (val - 32) * 5/9;
-                else if(from === 'Kelvin') celsius = val - 273.15;
-
-                let res;
-                if(to === 'Celsius') res = celsius;
-                else if(to === 'Fahrenheit') res = (celsius * 9/5) + 32;
-                else if(to === 'Kelvin') res = celsius + 273.15;
-                
-                resultEl.value = res.toFixed(4);
+                let c = from === 'Celsius' ? val : (from === 'Fahrenheit' ? (val - 32)*5/9 : val - 273.15);
+                let res = to === 'Celsius' ? c : (to === 'Fahrenheit' ? (c * 9/5)+32 : c + 273.15);
+                resEl.value = res.toFixed(4);
             } else {
-                const baseVal = val * units[cat][from]; // Convert to base unit
-                const res = baseVal / units[cat][to]; // Convert from base to target
-                resultEl.value = res.toFixed(6).replace(/\.?0+$/, ''); // Clean trailing zeros
+                let base = val * units[cat][from];
+                let res = base / units[cat][to];
+                resEl.value = res.toFixed(6).replace(/\.?0+$/, '');
             }
         }
 
-        // Initialize Converter on load
+        // --- Initialization ---
+        renderReminderTasks();
+        convertCurrency();
         updateConvOptions();
     </script>
 </body>
 </html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("index.html created successfully!")
