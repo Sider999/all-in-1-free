@@ -1,457 +1,929 @@
-/* ==========================================================================
-   PORTAL CORE JS - Multi-Tool Engine with 5-Star Rating & Download Interceptor
-   ========================================================================== */
-
-let pendingDownloadAction = null;
-
-// Initialize Star Rating System
-document.addEventListener('DOMContentLoaded', () => {
-    initRatingModal();
-});
-
-function initRatingModal() {
-    const modalHTML = `
-    <div id="ratingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl transform transition-all border border-slate-200 dark:border-slate-700">
-            <div class="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">★</div>
-            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Rate Your Experience</h3>
-            <p class="text-slate-600 dark:text-slate-300 text-sm mb-4">File download ke liye please feedback dein (5-Star Rating):</p>
-            
-            <div class="flex justify-center space-x-2 mb-6" id="starContainer">
-                <button onclick="setRating(1)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
-                <button onclick="setRating(2)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
-                <button onclick="setRating(3)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
-                <button onclick="setRating(4)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
-                <button onclick="setRating(5)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
-            </div>
-
-            <div class="flex space-x-3">
-                <button onclick="skipAndDownload()" class="w-1/2 py-2.5 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 font-medium text-sm transition">Skip & Save</button>
-                <button onclick="submitRatingAndDownload()" id="submitRatingBtn" disabled class="w-1/2 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-medium text-sm transition disabled:opacity-50">Confirm & Download</button>
-            </div>
-        </div>
-    </div>`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTools Ultra Pro - Universal Utility Suite</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-}
+    <!-- Client-Side Heavy Engine Libraries -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-let selectedRating = 0;
-
-function setRating(rating) {
-    selectedRating = rating;
-    const stars = document.querySelectorAll('.star-btn');
-    stars.forEach((star, index) => {
-        if (index < rating) {
-            star.classList.remove('text-slate-300');
-            star.classList.add('text-amber-400');
-        } else {
-            star.classList.remove('text-amber-400');
-            star.classList.add('text-slate-300');
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            --primary-grad: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --accent-glow: rgba(168, 85, 247, 0.35);
+            --card-bg: rgba(255, 255, 255, 0.96);
+            --sidebar-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius-xl: 20px;
+            --radius-lg: 14px;
+            --radius-md: 10px;
+            --shadow-glow: 0 10px 30px -5px rgba(99, 102, 241, 0.25);
         }
-    });
-    document.getElementById('submitRatingBtn').removeAttribute('disabled');
-}
 
-// Intercepts file downloads to show 5-Star Rating Modal
-function saveFileWithRating(blob, fileName) {
-    pendingDownloadAction = () => {
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; background-attachment: fixed; }
+
+        /* Navigation Header */
+        header { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); position: sticky; top: 0; z-index: 100; }
+        .header-container { max-width: 1440px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; height: 76px; }
+        .logo-brand { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 1.45rem; color: #ffffff; text-decoration: none; }
+        .logo-icon { width: 44px; height: 44px; background: var(--primary-grad); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #fff; box-shadow: var(--shadow-glow); }
+        .header-badge { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4); color: #f0abfc; padding: 6px 14px; border-radius: 30px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.03em; }
+
+        /* Main Workspace Layout */
+        .app-layout { max-width: 1440px; margin: 28px auto; display: grid; grid-template-columns: 290px 1fr; gap: 28px; padding: 0 28px; flex: 1; width: 100%; }
+
+        /* Navigation Sidebar */
+        .sidebar-card { background: var(--sidebar-bg); border-radius: var(--radius-xl); padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); height: fit-content; }
+        .sidebar-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin: 18px 0 8px 10px; letter-spacing: 0.1em; }
+        .sidebar-title.top-title { margin-top: 0; }
+        
+        .nav-btn { width: 100%; text-align: left; padding: 12px 16px; border: none; background: transparent; border-radius: var(--radius-lg); font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 12px; margin-bottom: 6px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .nav-btn:hover { background: #f1f5f9; color: #4f46e5; transform: translateX(3px); }
+        .nav-btn.active { background: var(--primary-grad); color: #ffffff; box-shadow: var(--shadow-glow); }
+        .nav-btn i { font-size: 1.1rem; width: 22px; text-align: center; }
+
+        /* Main Content Panel */
+        .workspace-card { background: var(--card-bg); border-radius: var(--radius-xl); padding: 36px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); backdrop-filter: blur(8px); }
+        .tool-panel { display: none; }
+        .tool-panel.active { display: block; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        .tool-header { margin-bottom: 28px; padding-bottom: 18px; border-bottom: 2px solid #f1f5f9; }
+        .tool-header h2 { font-size: 1.75rem; font-weight: 800; color: #0f172a; display: flex; align-items: center; gap: 14px; }
+        .tool-header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
+
+        /* UI Forms & Action Controls */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 20px; align-items: flex-end; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; color: #1e293b; }
+        input, select, textarea { width: 100%; padding: 14px 18px; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); font-size: 0.95rem; font-weight: 500; outline: none; background: #ffffff; transition: 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: #8b5cf6; box-shadow: 0 0 0 4px var(--accent-glow); }
+        
+        .btn-action { background: var(--primary-grad); color: #ffffff; border: none; padding: 14px 28px; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s ease; box-shadow: var(--shadow-glow); }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.45); }
+        .btn-secondary { background: #e2e8f0; color: #1e293b; border: none; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+        .btn-secondary:hover { background: #cbd5e1; }
+        .btn-swap { background: #6366f1; color: #ffffff; border: none; height: 50px; width: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto; transition: 0.2s; box-shadow: var(--shadow-glow); }
+        .btn-swap:hover { transform: rotate(180deg) scale(1.1); }
+
+        /* PDF Merge File List Item Styling */
+        .file-list-box { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; min-height: 100px; }
+        .file-item { background: #ffffff; border: 1px solid var(--border-color); padding: 12px 16px; border-radius: var(--radius-md); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .file-item-name { font-weight: 700; font-size: 0.9rem; color: #0f172a; display: flex; align-items: center; gap: 10px; word-break: break-all; }
+
+        /* Scientific / Simple Dual Calculator */
+        .calc-wrapper { max-width: 480px; margin: 0 auto; background: #090d16; padding: 26px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+        .calc-display { background: #172033; color: #38bdf8; font-size: 2.2rem; font-family: monospace; text-align: right; padding: 20px; border-radius: 14px; margin-bottom: 22px; min-height: 80px; overflow-x: auto; word-break: break-all; border: 1px solid rgba(255,255,255,0.05); }
+        .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .c-btn { padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 12px; background: #26334d; color: #fff; cursor: pointer; transition: all 0.15s ease; }
+        .c-btn:hover { background: #3b4f75; transform: scale(1.02); }
+        .c-btn.op { background: #6366f1; }
+        .c-btn.sci { background: #0284c7; font-size: 0.85rem; }
+        .c-btn.trig { background: #8b5cf6; font-size: 0.85rem; }
+        .c-btn.danger { background: #ef4444; }
+
+        /* 30-Days Task Reminders Cards */
+        .task-card { background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); padding: 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+        .task-badge { background: #e0e7ff; color: #4338ca; font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
+
+        /* Universal 5-Star Rating Modal */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-card { background: #ffffff; padding: 40px; border-radius: 28px; width: 90%; max-width: 480px; text-align: center; box-shadow: 0 30px 60px -12px rgba(0,0,0,0.3); animation: popModal 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popModal { from { transform: scale(0.85); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .star-box { display: flex; justify-content: center; gap: 12px; font-size: 2.5rem; color: #cbd5e1; margin: 24px 0; cursor: pointer; }
+        .star-box .fa-star.active { color: #f59e0b; text-shadow: 0 0 12px rgba(245, 158, 11, 0.4); }
+
+        /* Status Alerts */
+        .status-msg { padding: 14px 18px; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.92rem; margin-top: 18px; display: flex; align-items: center; gap: 12px; }
+        .status-msg.info { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .status-msg.success { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+    </style>
+</head>
+<body>
+
+    <!-- TOP HEADER NAV -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo-brand">
+                <div class="logo-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <span>SmartTools Pro</span>
+            </a>
+            <div class="header-badge"><i class="fa-solid fa-shield-halved"></i> 100% Secure Client-Side Engine</div>
+        </div>
+    </header>
+
+    <!-- APP MAIN LAYOUT -->
+    <div class="app-layout">
+        
+        <!-- SIDEBAR DIRECTORY (REMINDERS TOP SHIFTED) -->
+        <aside class="sidebar-card">
+            <div class="sidebar-title top-title">Smart Workflows</div>
+            <button class="nav-btn active" id="btn-reminders-30days" onclick="switchTab('reminders-30days')"><i class="fa-solid fa-bell"></i> 1 to 30 Days Reminders</button>
+
+            <div class="sidebar-title">PDF & Document Suite</div>
+            <button class="nav-btn" id="btn-merge-pdf" onclick="switchTab('merge-pdf')"><i class="fa-solid fa-object-group"></i> Merge PDF (Multi-Add)</button>
+            <button class="nav-btn" id="btn-split-pdf" onclick="switchTab('split-pdf')"><i class="fa-solid fa-scissors"></i> Split PDF</button>
+            <button class="nav-btn" id="btn-ocr-tool" onclick="switchTab('ocr-tool')"><i class="fa-solid fa-file-lines"></i> OCR Text Extractor</button>
+            <button class="nav-btn" id="btn-doc-converters" onclick="switchTab('doc-converters')"><i class="fa-solid fa-file-export"></i> Document Converters</button>
+
+            <div class="sidebar-title">Calculators & Math</div>
+            <button class="nav-btn" id="btn-calculators" onclick="switchTab('calculators')"><i class="fa-solid fa-calculator"></i> Simple & Scientific Calc</button>
+
+            <div class="sidebar-title">Universal Converters</div>
+            <button class="nav-btn" id="btn-unit-converter" onclick="switchTab('unit-converter')"><i class="fa-solid fa-ruler-combined"></i> Unit Converter</button>
+            <button class="nav-btn" id="btn-currency-converter" onclick="switchTab('currency-converter')"><i class="fa-solid fa-coins"></i> Currency Converter</button>
+        </aside>
+
+        <!-- MAIN WORKSPACE -->
+        <main class="workspace-card">
+
+            <!-- 1. 1 TO 30 DAYS TASK REMINDERS ENGINE (NOW TOP) -->
+            <div id="reminders-30days" class="tool-panel active">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-bell" style="color:#6366f1"></i> 1 to 30 Days Task Reminders</h2>
+                    <p>Schedule active tasks (1 to 30 Days selector) with direct automated triggers via WhatsApp, SMS, and Email.</p>
+                </div>
+
+                <div style="background:#f8fafc; padding:22px; border-radius:16px; border:1px solid var(--border-color); margin-bottom:24px;">
+                    <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-plus-circle" style="color:#6366f1"></i> Schedule New Task Reminder</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Task Message / Title:</label>
+                            <input type="text" id="remTaskTitle" placeholder="e.g. Manuscript Proofreading Due">
+                        </div>
+                        <div class="form-group">
+                            <label>Select Duration (1 to 30 Days):</label>
+                            <select id="remDaysSelect"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Alert Delivery Channel:</label>
+                            <select id="remChannel">
+                                <option value="whatsapp">WhatsApp Direct Message</option>
+                                <option value="sms">SMS Text Message</option>
+                                <option value="email">Email Notification</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact (Phone / Email):</label>
+                            <input type="text" id="remContact" placeholder="923001234567 or email@domain.com">
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="saveTaskReminder()"><i class="fa-solid fa-clock"></i> Schedule Task</button>
+                </div>
+
+                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:14px;">Active Scheduled Reminders (<span id="remCount">0</span>/12 Slots Used)</h3>
+                <div id="remTaskList"></div>
+            </div>
+
+            <!-- 2. MERGE PDF (MULTI-ADD SUPPORT) -->
+            <div id="merge-pdf" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-object-group" style="color:#6366f1"></i> Merge PDF Documents</h2>
+                    <p>Add PDF files sequentially, reorder pages, and merge them into a single PDF document.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Select & Add PDF Files (Multiple Allowed):</label>
+                    <input type="file" id="mergeInput" multiple accept="application/pdf" onchange="addMergeFiles(event)">
+                </div>
+
+                <div class="file-list-box" id="mergeFileList">
+                    <div style="text-align:center; color:#94a3b8; font-weight:600; padding:20px;">No PDF files added yet. Click above to add files.</div>
+                </div>
+
+                <button class="btn-action" onclick="triggerRatingAndExecute(processPDFMerge)"><i class="fa-solid fa-file-pdf"></i> Merge & Download PDF</button>
+                <div id="mergeStatus"></div>
+            </div>
+
+            <!-- 3. SPLIT PDF -->
+            <div id="split-pdf" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-scissors" style="color:#6366f1"></i> Split PDF Pages</h2>
+                    <p>Extract exact page selections or custom ranges from any PDF document.</p>
+                </div>
+                <div class="form-group">
+                    <label>Upload PDF Document:</label>
+                    <input type="file" id="splitInput" accept="application/pdf">
+                </div>
+                <div class="form-group">
+                    <label>Enter Page Numbers or Ranges (e.g. 1-3, 5, 8-10):</label>
+                    <input type="text" id="splitPagesRange" placeholder="e.g. 1-2, 4">
+                </div>
+                <button class="btn-action" onclick="triggerRatingAndExecute(processPDFSplit)"><i class="fa-solid fa-download"></i> Split & Download PDF</button>
+                <div id="splitStatus"></div>
+            </div>
+
+            <!-- 4. OCR TEXT EXTRACTOR -->
+            <div id="ocr-tool" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-file-lines" style="color:#6366f1"></i> OCR Text Extractor</h2>
+                    <p>Scan images or document photos to extract clean, editable plain text.</p>
+                </div>
+                <div class="form-group">
+                    <label>Upload Image File (PNG, JPG, WEBP, TIFF):</label>
+                    <input type="file" id="ocrInputFile" accept="image/png, image/jpeg, image/webp, image/tiff">
+                </div>
+                <button class="btn-action" onclick="processOCR()"><i class="fa-solid fa-wand-magic-sparkles"></i> Extract Text</button>
+                <div id="ocrStatus"></div>
+                
+                <div class="form-group" style="margin-top:24px;">
+                    <label>Extracted Plain Text Output:</label>
+                    <textarea id="ocrOutput" rows="8" placeholder="Extracted text will be generated here..."></textarea>
+                </div>
+                <button class="btn-action" style="background:#059669;" onclick="triggerRatingAndExecute(downloadOCRText)"><i class="fa-solid fa-file-arrow-down"></i> Save Text File</button>
+            </div>
+
+            <!-- 5. MULTI-FORMAT DOCUMENT & IMAGE CONVERTERS -->
+            <div id="doc-converters" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-file-export" style="color:#6366f1"></i> Multi-Format Document & Image Converters</h2>
+                    <p>Seamlessly convert Word, PDF, PNG, JPG, WEBP, and TIFF formats client-side.</p>
+                </div>
+                <div class="form-group">
+                    <label>Select Conversion Type:</label>
+                    <select id="docConvType" onchange="updateDocConvAccept()">
+                        <option value="word2pdf">Word (.docx) to PDF</option>
+                        <option value="pdf2word">PDF to Word (.doc)</option>
+                        <option value="img2pdf">Image (PNG/JPG/WEBP/TIFF) to PDF</option>
+                        <option value="img2word">Image (PNG/JPG/WEBP/TIFF) to Word (.doc)</option>
+                        <option value="pdf2img">PDF to Image (PNG / JPG / WEBP)</option>
+                        <option value="word2img">Word (.docx) to Image (PNG)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Choose File:</label>
+                    <input type="file" id="docConvInput">
+                </div>
+                <button class="btn-action" onclick="triggerRatingAndExecute(processDocConversion)"><i class="fa-solid fa-sync"></i> Convert & Download</button>
+                <div id="docConvStatus"></div>
+            </div>
+
+            <!-- 6. CALCULATORS (WITH SIN, COS, TAN OPERATIONAL FUNCTIONS) -->
+            <div id="calculators" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-calculator" style="color:#6366f1"></i> Simple & Scientific Calculator</h2>
+                    <p>Precision calculator featuring standard arithmetic, logs, square root, and sin, cos, tan functions.</p>
+                </div>
+                <div style="text-align:center; margin-bottom:18px;">
+                    <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; margin-right:24px;">
+                        <input type="radio" name="calcMode" value="simple" checked onclick="toggleCalcMode()"> Simple Mode
+                    </label>
+                    <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="calcMode" value="sci" onclick="toggleCalcMode()"> Scientific Mode
+                    </label>
+                </div>
+
+                <div class="calc-wrapper">
+                    <div class="calc-display" id="calcDisplay">0</div>
+                    <div class="calc-buttons">
+                        <!-- Trigonometric Operational Functions -->
+                        <button class="c-btn trig sci-btn" onclick="calcTrig('sin')">sin</button>
+                        <button class="c-btn trig sci-btn" onclick="calcTrig('cos')">cos</button>
+                        <button class="c-btn trig sci-btn" onclick="calcTrig('tan')">tan</button>
+                        <button class="c-btn sci sci-btn" onclick="pushCalc('**')">x^y</button>
+
+                        <button class="c-btn sci sci-btn" onclick="calcMath('sqrt')">√x</button>
+                        <button class="c-btn sci sci-btn" onclick="calcMath('log')">log₁₀</button>
+                        <button class="c-btn sci sci-btn" onclick="calcMath('ln')">ln</button>
+                        <button class="c-btn op" onclick="pushCalc('/')">/</button>
+
+                        <button class="c-btn danger" onclick="clearCalc()">C</button>
+                        <button class="c-btn danger" onclick="delCalc()">DEL</button>
+                        <button class="c-btn op" onclick="pushCalc('%')">%</button>
+                        <button class="c-btn op" onclick="pushCalc('*')">×</button>
+
+                        <button class="c-btn" onclick="pushCalc('7')">7</button>
+                        <button class="c-btn" onclick="pushCalc('8')">8</button>
+                        <button class="c-btn" onclick="pushCalc('9')">9</button>
+                        <button class="c-btn op" onclick="pushCalc('-')">-</button>
+
+                        <button class="c-btn" onclick="pushCalc('4')">4</button>
+                        <button class="c-btn" onclick="pushCalc('5')">5</button>
+                        <button class="c-btn" onclick="pushCalc('6')">6</button>
+                        <button class="c-btn op" onclick="pushCalc('+')">+</button>
+
+                        <button class="c-btn" onclick="pushCalc('1')">1</button>
+                        <button class="c-btn" onclick="pushCalc('2')">2</button>
+                        <button class="c-btn" onclick="pushCalc('3')">3</button>
+                        <button class="c-btn op" onclick="solveCalc()" style="grid-row: span 2; height:100%;">=</button>
+
+                        <button class="c-btn" onclick="pushCalc('0')" style="grid-column: span 2;">0</button>
+                        <button class="c-btn" onclick="pushCalc('.')">.</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. UNIVERSAL UNIT CONVERTER -->
+            <div id="unit-converter" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-ruler-combined" style="color:#6366f1"></i> Universal Unit Converter</h2>
+                    <p>Instant precision conversions for Length, Weight, Temperature, and Volume.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Category:</label>
+                        <select id="unitCategory" onchange="updateUnitDropdowns()">
+                            <option value="length">Length</option>
+                            <option value="weight">Weight / Mass</option>
+                            <option value="temp">Temperature</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Value:</label>
+                        <input type="number" id="unitInputVal" value="1" oninput="calculateUnitConversion()">
+                    </div>
+                    <div class="form-group">
+                        <label>From:</label>
+                        <select id="unitFrom" onchange="calculateUnitConversion()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>To:</label>
+                        <select id="unitTo" onchange="calculateUnitConversion()"></select>
+                    </div>
+                </div>
+                <div class="status-msg success" id="unitResultBox">Result: 1 Meter = 3.2808 Foot</div>
+            </div>
+
+            <!-- 8. UNIVERSAL CURRENCY CONVERTER (ALL GLOBAL CURRENCIES + SWAP BUTTON) -->
+            <div id="currency-converter" class="tool-panel">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-coins" style="color:#6366f1"></i> Universal Currency Converter</h2>
+                    <p>Convert global currencies with standard real-time benchmark exchange rates.</p>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Amount:</label>
+                        <input type="number" id="currInputVal" value="100" oninput="calculateCurrency()">
+                    </div>
+                    <div class="form-group">
+                        <label>From Currency:</label>
+                        <select id="currFrom" onchange="calculateCurrency()"></select>
+                    </div>
+                    
+                    <button class="btn-swap" onclick="swapCurrencies()" title="Swap Currencies"><i class="fa-solid fa-right-left"></i></button>
+
+                    <div class="form-group">
+                        <label>To Currency:</label>
+                        <select id="currTo" onchange="calculateCurrency()"></select>
+                    </div>
+                </div>
+                <div class="status-msg success" id="currResultBox">Converted: 100 PKR = $0.36 USD</div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- UNIVERSAL 5-STAR RATING MODAL -->
+    <div class="modal-backdrop" id="starModal">
+        <div class="modal-card">
+            <i class="fa-solid fa-circle-check" style="font-size:3.8rem; color:#10b981;"></i>
+            <h2 style="margin-top:16px; font-size:1.6rem; font-weight:800;">Your File Processing is Ready!</h2>
+            <p style="color:var(--text-muted); margin-top:8px; font-size:0.95rem;">Please rate our website 5-Stars to unlock direct file download.</p>
+            
+            <div class="star-box" id="starContainer">
+                <i class="fa-solid fa-star active" onclick="setStars(1)"></i>
+                <i class="fa-solid fa-star active" onclick="setStars(2)"></i>
+                <i class="fa-solid fa-star active" onclick="setStars(3)"></i>
+                <i class="fa-solid fa-star active" onclick="setStars(4)"></i>
+                <i class="fa-solid fa-star active" onclick="setStars(5)"></i>
+            </div>
+
+            <button class="btn-action" style="width:100%; justify-content:center;" onclick="confirmStarsAndDownload()"><i class="fa-solid fa-download"></i> Rate 5 Stars & Save File</button>
+        </div>
+    </div>
+
+<script>
+    // --- TAB NAVIGATION ENGINE ---
+    function switchTab(tabId) {
+        document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        document.getElementById('btn-' + tabId).classList.add('active');
+    }
+
+    // --- UNIVERSAL 5-STAR RATING SYSTEM ---
+    let pendingTask = null;
+
+    function triggerRatingAndExecute(callbackFunc) {
+        pendingTask = callbackFunc;
+        document.getElementById('starModal').style.display = 'flex';
+    }
+
+    function setStars(count) {
+        const stars = document.querySelectorAll('#starContainer i');
+        stars.forEach((s, idx) => {
+            if (idx < count) s.classList.add('active');
+            else s.classList.remove('active');
+        });
+    }
+
+    function confirmStarsAndDownload() {
+        document.getElementById('starModal').style.display = 'none';
+        if (typeof pendingTask === 'function') {
+            pendingTask();
+            pendingTask = null;
+        }
+    }
+
+    // --- 1. DYNAMIC MERGE PDF ENGINE ---
+    let mergeFileList = [];
+
+    function addMergeFiles(e) {
+        const files = Array.from(e.target.files);
+        files.forEach(f => mergeFileList.push(f));
+        renderMergeFileList();
+        e.target.value = "";
+    }
+
+    function removeMergeFile(index) {
+        mergeFileList.splice(index, 1);
+        renderMergeFileList();
+    }
+
+    function moveMergeFile(index, dir) {
+        if (dir === -1 && index > 0) {
+            const temp = mergeFileList[index];
+            mergeFileList[index] = mergeFileList[index - 1];
+            mergeFileList[index - 1] = temp;
+        } else if (dir === 1 && index < mergeFileList.length - 1) {
+            const temp = mergeFileList[index];
+            mergeFileList[index] = mergeFileList[index + 1];
+            mergeFileList[index + 1] = temp;
+        }
+        renderMergeFileList();
+    }
+
+    function renderMergeFileList() {
+        const box = document.getElementById('mergeFileList');
+        if (mergeFileList.length === 0) {
+            box.innerHTML = `<div style="text-align:center; color:#94a3b8; font-weight:600; padding:20px;">No PDF files added yet. Click above to add files.</div>`;
+            return;
+        }
+
+        box.innerHTML = "";
+        mergeFileList.forEach((file, idx) => {
+            box.innerHTML += `
+                <div class="file-item">
+                    <div class="file-item-name"><i class="fa-solid fa-file-pdf" style="color:#ef4444;"></i> ${idx + 1}. ${file.name}</div>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn-secondary" onclick="moveMergeFile(${idx}, -1)"><i class="fa-solid fa-arrow-up"></i></button>
+                        <button class="btn-secondary" onclick="moveMergeFile(${idx}, 1)"><i class="fa-solid fa-arrow-down"></i></button>
+                        <button class="btn-secondary" style="background:#fee2e2; color:#ef4444;" onclick="removeMergeFile(${idx})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    async function processPDFMerge() {
+        const status = document.getElementById('mergeStatus');
+        if (mergeFileList.length < 2) {
+            status.innerHTML = `<div class="status-msg info">Please add at least 2 PDF files to merge.</div>`;
+            return;
+        }
+
+        status.innerHTML = `<div class="status-msg info"><i class="fa-solid fa-spinner fa-spin"></i> Merging ${mergeFileList.length} PDF files...</div>`;
+        try {
+            const mergedPdf = await PDFLib.PDFDocument.create();
+            for (let file of mergeFileList) {
+                const arrayBuf = await file.arrayBuffer();
+                const pdf = await PDFLib.PDFDocument.load(arrayBuf);
+                const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                copiedPages.forEach(p => mergedPdf.addPage(p));
+            }
+            const pdfBytes = await mergedPdf.save();
+            downloadBlob(pdfBytes, 'merged_document.pdf', 'application/pdf');
+            status.innerHTML = `<div class="status-msg success">PDF files successfully merged and downloaded!</div>`;
+        } catch(err) {
+            status.innerHTML = `<div class="status-msg info">Merge Error: ${err.message}</div>`;
+        }
+    }
+
+    // --- 2. SPLIT PDF ENGINE ---
+    async function processPDFSplit() {
+        const file = document.getElementById('splitInput').files[0];
+        const rangeStr = document.getElementById('splitPagesRange').value;
+        const status = document.getElementById('splitStatus');
+
+        if (!file || !rangeStr) {
+            status.innerHTML = `<div class="status-msg info">Please attach a PDF file and specify page ranges.</div>`;
+            return;
+        }
+
+        status.innerHTML = `<div class="status-msg info"><i class="fa-solid fa-spinner fa-spin"></i> Splitting PDF document...</div>`;
+        try {
+            const arrayBuf = await file.arrayBuffer();
+            const srcPdf = await PDFLib.PDFDocument.load(arrayBuf);
+            const newPdf = await PDFLib.PDFDocument.create();
+
+            const pagesToKeep = [];
+            rangeStr.split(',').forEach(p => {
+                if (p.includes('-')) {
+                    const [s, e] = p.split('-').map(Number);
+                    for (let i = s; i <= e; i++) pagesToKeep.push(i - 1);
+                } else {
+                    pagesToKeep.push(Number(p) - 1);
+                }
+            });
+
+            const copiedPages = await newPdf.copyPages(srcPdf, pagesToKeep);
+            copiedPages.forEach(p => newPdf.addPage(p));
+
+            const pdfBytes = await newPdf.save();
+            downloadBlob(pdfBytes, 'split_document.pdf', 'application/pdf');
+            status.innerHTML = `<div class="status-msg success">Extracted pages saved to PDF!</div>`;
+        } catch(err) {
+            status.innerHTML = `<div class="status-msg info">Split Error: ${err.message}</div>`;
+        }
+    }
+
+    // --- 3. OCR TEXT EXTRACTOR ENGINE ---
+    async function processOCR() {
+        const file = document.getElementById('ocrInputFile').files[0];
+        const status = document.getElementById('ocrStatus');
+        const output = document.getElementById('ocrOutput');
+
+        if (!file) {
+            status.innerHTML = `<div class="status-msg info">Please select an image file first.</div>`;
+            return;
+        }
+
+        status.innerHTML = `<div class="status-msg info"><i class="fa-solid fa-spinner fa-spin"></i> Running OCR text recognition...</div>`;
+        try {
+            const worker = await Tesseract.createWorker('eng');
+            const res = await worker.recognize(file);
+            output.value = res.data.text;
+            await worker.terminate();
+            status.innerHTML = `<div class="status-msg success">Text extracted successfully!</div>`;
+        } catch(err) {
+            status.innerHTML = `<div class="status-msg info">OCR Failed: ${err.message}</div>`;
+        }
+    }
+
+    function downloadOCRText() {
+        const txt = document.getElementById('ocrOutput').value;
+        if (!txt) return;
+        downloadBlob(txt, 'extracted_ocr_text.txt', 'text/plain');
+    }
+
+    // --- 4. MULTI-FORMAT DOCUMENT & IMAGE CONVERTERS ENGINE ---
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    function updateDocConvAccept() {
+        const type = document.getElementById('docConvType').value;
+        const inp = document.getElementById('docConvInput');
+        if (type === 'word2pdf' || type === 'word2img') inp.accept = ".docx";
+        else if (type === 'pdf2word' || type === 'pdf2img') inp.accept = "application/pdf";
+        else if (type === 'img2pdf' || type === 'img2word') inp.accept = "image/png, image/jpeg, image/webp, image/tiff";
+    }
+    updateDocConvAccept();
+
+    async function processDocConversion() {
+        const type = document.getElementById('docConvType').value;
+        const file = document.getElementById('docConvInput').files[0];
+        const status = document.getElementById('docConvStatus');
+
+        if (!file) {
+            status.innerHTML = `<div class="status-msg info">Please attach a file for conversion.</div>`;
+            return;
+        }
+
+        status.innerHTML = `<div class="status-msg info"><i class="fa-solid fa-spinner fa-spin"></i> Processing conversion...</div>`;
+        try {
+            if (type === 'word2pdf') {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const res = await mammoth.convertToHtml({arrayBuffer: e.target.result});
+                    const div = document.createElement('div');
+                    div.innerHTML = res.value;
+                    html2pdf().from(div).save('document.pdf');
+                    status.innerHTML = `<div class="status-msg success">Word document converted to PDF!</div>`;
+                };
+                reader.readAsArrayBuffer(file);
+            }
+            else if (type === 'pdf2word') {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const typedarray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    let text = "";
+                    for(let i=1; i<=pdf.numPages; i++){
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(' ') + "\n\n";
+                    }
+                    downloadBlob(text, 'converted_doc.doc', 'text/plain');
+                    status.innerHTML = `<div class="status-msg success">PDF converted to Word (.doc)!</div>`;
+                };
+                reader.readAsArrayBuffer(file);
+            }
+            else if (type === 'img2pdf') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF();
+                    pdf.addImage(e.target.result, 'JPEG', 10, 10, 180, 160);
+                    pdf.save('image_converted.pdf');
+                    status.innerHTML = `<div class="status-msg success">Image successfully converted to PDF!</div>`;
+                };
+                reader.readAsDataURL(file);
+            }
+            else if (type === 'img2word') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const htmlContent = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><title>Converted Image Doc</title></head><body><img src="${e.target.result}" style="max-width:100%;"/></body></html>`;
+                    downloadBlob(htmlContent, 'converted_image.doc', 'application/msword');
+                    status.innerHTML = `<div class="status-msg success">Image successfully converted to Word (.doc)!</div>`;
+                };
+                reader.readAsDataURL(file);
+            }
+            else if (type === 'pdf2img' || type === 'word2img') {
+                if (type === 'word2img') {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        const res = await mammoth.convertToHtml({arrayBuffer: e.target.result});
+                        const div = document.createElement('div');
+                        div.innerHTML = res.value;
+                        div.style.padding = "20px"; div.style.background = "#fff";
+                        document.body.appendChild(div);
+                        const canvas = await html2canvas(div);
+                        document.body.removeChild(div);
+                        downloadBlob(canvas.toDataURL('image/png'), 'word_page.png', 'image/png');
+                        status.innerHTML = `<div class="status-msg success">Word document converted to PNG Image!</div>`;
+                    };
+                    reader.readAsArrayBuffer(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        const typedarray = new Uint8Array(e.target.result);
+                        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                        const page = await pdf.getPage(1);
+                        const viewport = page.getViewport({scale: 1.5});
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        await page.render({canvasContext: ctx, viewport: viewport}).promise;
+                        
+                        const a = document.createElement('a');
+                        a.href = canvas.toDataURL('image/png');
+                        a.download = 'pdf_page.png';
+                        a.click();
+                        status.innerHTML = `<div class="status-msg success">PDF converted to PNG Image!</div>`;
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
+            }
+        } catch(err) {
+            status.innerHTML = `<div class="status-msg info">Conversion Failed: ${err.message}</div>`;
+        }
+    }
+
+    // --- 5. CALCULATOR ENGINE (WITH SIN, COS, TAN) ---
+    let calcExpression = "";
+    function toggleCalcMode() {
+        const mode = document.querySelector('input[name="calcMode"]:checked').value;
+        document.querySelectorAll('.sci-btn').forEach(b => b.style.display = (mode === 'sci') ? 'block' : 'none');
+    }
+    toggleCalcMode();
+
+    function pushCalc(val) { calcExpression += val; renderCalc(); }
+    function clearCalc() { calcExpression = ""; renderCalc(); }
+    function delCalc() { calcExpression = calcExpression.slice(0, -1); renderCalc(); }
+    function renderCalc() { document.getElementById('calcDisplay').innerText = calcExpression || "0"; }
+
+    function calcTrig(func) {
+        try {
+            let val = eval(calcExpression || "0");
+            let rad = val * (Math.PI / 180); // Degree based trig evaluation
+            if (func === 'sin') calcExpression = Math.sin(rad).toFixed(6).replace(/\.?0+$/, "");
+            if (func === 'cos') calcExpression = Math.cos(rad).toFixed(6).replace(/\.?0+$/, "");
+            if (func === 'tan') calcExpression = Math.tan(rad).toFixed(6).replace(/\.?0+$/, "");
+            renderCalc();
+        } catch(e) {
+            document.getElementById('calcDisplay').innerText = "Trig Error";
+            calcExpression = "";
+        }
+    }
+
+    function calcMath(func) {
+        try {
+            let val = eval(calcExpression || "0");
+            if (func === 'sqrt') calcExpression = Math.sqrt(val).toString();
+            if (func === 'log') calcExpression = Math.log10(val).toString();
+            if (func === 'ln') calcExpression = Math.log(val).toString();
+            renderCalc();
+        } catch(e) {
+            document.getElementById('calcDisplay').innerText = "Math Error";
+            calcExpression = "";
+        }
+    }
+
+    function solveCalc() {
+        try {
+            calcExpression = eval(calcExpression).toString();
+            renderCalc();
+        } catch(e) {
+            document.getElementById('calcDisplay').innerText = "Syntax Error";
+            calcExpression = "";
+        }
+    }
+
+    // --- 6. UNIT CONVERTER ENGINE ---
+    const unitDatabase = {
+        length: { Meter: 1, Kilometer: 0.001, Centimeter: 100, Foot: 3.28084, Inch: 39.3701 },
+        weight: { Kilogram: 1, Gram: 1000, Pound: 2.20462, Ounce: 35.274 },
+        temp: { Celsius: 'C', Fahrenheit: 'F', Kelvin: 'K' }
     };
 
-    // Show modal
-    const modal = document.getElementById('ratingModal');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+    function updateUnitDropdowns() {
+        const cat = document.getElementById('unitCategory').value;
+        const uFrom = document.getElementById('unitFrom');
+        const uTo = document.getElementById('unitTo');
+        uFrom.innerHTML = ""; uTo.innerHTML = "";
 
-function submitRatingAndDownload() {
-    closeRatingModal();
-    if (pendingDownloadAction) pendingDownloadAction();
-}
-
-function skipAndDownload() {
-    closeRatingModal();
-    if (pendingDownloadAction) pendingDownloadAction();
-}
-
-function closeRatingModal() {
-    const modal = document.getElementById('ratingModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    selectedRating = 0;
-    setRating(0);
-}
-
-/* --------------------------------------------------------------------------
-   PDF MERGER LOGIC (Fully Functional via PDFLib)
-   -------------------------------------------------------------------------- */
-async function processPDFMerge(files) {
-    if (!files || files.length < 2) {
-        alert("Baraye mehrbani kam az kam 2 PDF files select karein.");
-        return;
+        Object.keys(unitDatabase[cat]).forEach(u => {
+            uFrom.innerHTML += `<option value="${u}">${u}</option>`;
+            uTo.innerHTML += `<option value="${u}">${u}</option>`;
+        });
+        calculateUnitConversion();
     }
-    
-    try {
-        const mergedPdf = await PDFLib.PDFDocument.create();
-        for (let file of files) {
-            const arrayBuffer = await file.arrayBuffer();
-            const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
-            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-            copiedPages.forEach((page) => mergedPdf.addPage(page));
+    updateUnitDropdowns();
+
+    function calculateUnitConversion() {
+        const cat = document.getElementById('unitCategory').value;
+        const val = parseFloat(document.getElementById('unitInputVal').value) || 0;
+        const from = document.getElementById('unitFrom').value;
+        const to = document.getElementById('unitTo').value;
+        const box = document.getElementById('unitResultBox');
+
+        if (cat === 'length' || cat === 'weight') {
+            const base = val / unitDatabase[cat][from];
+            const result = base * unitDatabase[cat][to];
+            box.innerText = `Result: ${val} ${from} = ${result.toFixed(4)} ${to}`;
+        } else if (cat === 'temp') {
+            let res = val;
+            if (from === 'Celsius' && to === 'Fahrenheit') res = (val * 9/5) + 32;
+            else if (from === 'Fahrenheit' && to === 'Celsius') res = (val - 32) * 5/9;
+            box.innerText = `Result: ${val} ${from} = ${res.toFixed(2)} ${to}`;
         }
-        
-        const mergedPdfBytes = await mergedPdf.save();
-        const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
-        saveFileWithRating(blob, "Merged-Document-ToolsPortal.pdf");
-    } catch (error) {
-        console.error("PDF Merge Error:", error);
-        alert("PDF merge karte hue koi error aya. File check karein.");
-    }
-}
-
-/* --------------------------------------------------------------------------
-   IMAGE TO PDF LOGIC (Fully Functional via jsPDF)
-   -------------------------------------------------------------------------- */
-async function processImageToPDF(files) {
-    if (!files || files.length === 0) {
-        alert("Kam az kam ek tasveer select karein.");
-        return;
     }
 
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+    // --- 7. ALL GLOBAL CURRENCIES & SWAP ENGINE ---
+    const exchangeRates = {
+        USD: 1.0, EUR: 0.92, GBP: 0.78, PKR: 278.50, INR: 83.90, AED: 3.67, SAR: 3.75,
+        CAD: 1.36, AUD: 1.51, JPY: 155.2, CNY: 7.23, CHF: 0.91, BRL: 5.15, RUB: 91.2,
+        ZAR: 18.4, SGD: 1.35, NZD: 1.64, TRY: 32.2, MYR: 4.71, IDR: 16020, THB: 36.8,
+        EGP: 47.9, KWD: 0.31, QAR: 3.64, OMR: 0.38, BHD: 0.38, DKK: 6.88, SEK: 10.8,
+        NOK: 10.9, MXN: 16.7, ARS: 880.0
+    };
 
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const imageData = await readAsDataURL(file);
-            
-            if (i > 0) doc.addPage();
-            
-            const imgProps = doc.getImageProperties(imageData);
-            const pdfWidth = doc.internal.pageSize.getWidth();
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            
-            doc.addImage(imageData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-        }
+    function populateCurrencies() {
+        const uFrom = document.getElementById('currFrom');
+        const uTo = document.getElementById('currTo');
+        uFrom.innerHTML = ""; uTo.innerHTML = "";
 
-        const pdfOutput = doc.output('blob');
-        saveFileWithRating(pdfOutput, "Converted-Images-ToolsPortal.pdf");
-    } catch (error) {
-        console.error("Image to PDF Error:", error);
-        alert("Tasveer se PDF banane mein masla aaya.");
+        Object.keys(exchangeRates).forEach(code => {
+            uFrom.innerHTML += `<option value="${code}">${code}</option>`;
+            uTo.innerHTML += `<option value="${code}">${code}</option>`;
+        });
+
+        uFrom.value = "PKR";
+        uTo.value = "USD";
     }
-}
+    populateCurrencies();
 
-function readAsDataURL(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-    });
-}
-
-/* --------------------------------------------------------------------------
-   SCIENTIFIC CALCULATOR LOGIC
-   -------------------------------------------------------------------------- */
-let calcDisplayValue = "0";
-
-function calcInput(char) {
-    const display = document.getElementById('calcDisplay');
-    if (calcDisplayValue === "0" && char !== '.') {
-        calcDisplayValue = char;
-    } else {
-        calcDisplayValue += char;
+    function swapCurrencies() {
+        const uFrom = document.getElementById('currFrom');
+        const uTo = document.getElementById('currTo');
+        const temp = uFrom.value;
+        uFrom.value = uTo.value;
+        uTo.value = temp;
+        calculateCurrency();
     }
-    display.value = calcDisplayValue;
-}
 
-function calcClear() {
-    calcDisplayValue = "0";
-    document.getElementById('calcDisplay').value = "0";
-}
+    function calculateCurrency() {
+        const val = parseFloat(document.getElementById('currInputVal').value) || 0;
+        const from = document.getElementById('currFrom').value;
+        const to = document.getElementById('currTo').value;
 
-function calcDelete() {
-    calcDisplayValue = calcDisplayValue.slice(0, -1);
-    if (calcDisplayValue === "") calcDisplayValue = "0";
-    document.getElementById('calcDisplay').value = calcDisplayValue;
-}
-
-function calcCalculate() {
-    const display = document.getElementById('calcDisplay');
-    try {
-        let sanitized = calcDisplayValue
-            .replace(/sin/g, 'Math.sin')
-            .replace(/cos/g, 'Math.cos')
-            .replace(/tan/g, 'Math.tan')
-            .replace(/sqrt/g, 'Math.sqrt')
-            .replace(/log/g, 'Math.log10')
-            .replace(/π/g, 'Math.PI')
-            .replace(/e/g, 'Math.E');
-            
-        let result = Function('"use strict"; return (' + sanitized + ')')();
-        calcDisplayValue = String(result);
-        display.value = calcDisplayValue;
-    } catch (e) {
-        display.value = "Error";
-        calcDisplayValue = "0";
+        const baseUsd = val / exchangeRates[from];
+        const res = baseUsd * exchangeRates[to];
+        document.getElementById('currResultBox').innerText = `Converted Amount: ${val} ${from} = ${res.toFixed(2)} ${to}`;
     }
-}
-            <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Online Multi-Tool Web Portal - 100% Secure & Fast</title>
-    <meta name="description" content="Free online utility tools including PDF Merger, Image to PDF Converter, and Scientific Calculator. High speed, client-side browser processing.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    calculateCurrency();
 
-    <!-- Header -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-indigo-600 flex items-center gap-2">
-                <span>⚡ ToolsPortal</span>
-            </a>
-            <nav class="flex gap-4 font-medium text-sm text-slate-600">
-                <a href="pdf-merge.html" class="hover:text-indigo-600">PDF Merger</a>
-                <a href="image-to-pdf.html" class="hover:text-indigo-600">Image to PDF</a>
-                <a href="scientific-calculator.html" class="hover:text-indigo-600">Calculator</a>
-            </nav>
-        </div>
-    </header>
+    // --- 8. 1 TO 30 DAYS REMINDERS ENGINE ---
+    function populateDaysDropdown() {
+        const sel = document.getElementById('remDaysSelect');
+        sel.innerHTML = "";
+        for (let i = 1; i <= 30; i++) {
+            const text = (i === 1) ? "1 Day Schedule (Remind Tomorrow)" : `${i} Days Schedule (Daily alerts for ${i - 1} days)`;
+            sel.innerHTML += `<option value="${i}">${text}</option>`;
+        }
+    }
+    populateDaysDropdown();
 
-    <!-- Hero Section -->
-    <section class="max-w-5xl mx-auto px-4 py-16 text-center">
-        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4">Fast, Secure & Free Online Utilities</h1>
-        <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">Saray tools browser ke andar execute hotey hain. Aapki files server per upload nahi hotin.</p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Tool Card 1 -->
-            <a href="pdf-merge.html" class="p-6 bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 transition text-left group">
-                <div class="w-12 h-12 bg-red-100 text-red-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4 group-hover:bg-red-600 group-hover:text-white transition">PDF</div>
-                <h2 class="text-xl font-bold mb-2 text-slate-900">PDF Merger</h2>
-                <p class="text-sm text-slate-600">Combine multiple PDF files into one single document instantly without watermark.</p>
-            </a>
+    let taskStore = JSON.parse(localStorage.getItem('smart_tasks') || '[]');
 
-            <!-- Tool Card 2 -->
-            <a href="image-to-pdf.html" class="p-6 bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 transition text-left group">
-                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition">IMG</div>
-                <h2 class="text-xl font-bold mb-2 text-slate-900">Image to PDF</h2>
-                <p class="text-sm text-slate-600">Convert PNG, JPG, and WEBP images into high-quality PDF documents.</p>
-            </a>
-
-            <!-- Tool Card 3 -->
-            <a href="scientific-calculator.html" class="p-6 bg-white rounded-2xl shadow-sm hover:shadow-md border border-slate-200 transition text-left group">
-                <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4 group-hover:bg-indigo-600 group-hover:text-white transition">FX</div>
-                <h2 class="text-xl font-bold mb-2 text-slate-900">Scientific Calculator</h2>
-                <p class="text-sm text-slate-600">Advanced browser-based calculator for trigonometric and logarithmic functions.</p>
-            </a>
-        </div>
-    </section>
-
-    <script src="portal-core.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Online PDF Merger Without Watermark - ToolsPortal</title>
-    <meta name="description" content="Merge PDF files online for free without watermark. 100% private, fast, and works directly in your web browser.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
-
-    <header class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-indigo-600">⚡ ToolsPortal</a>
-            <a href="index.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600">← Back to All Tools</a>
-        </div>
-    </header>
-
-    <main class="max-w-3xl mx-auto px-4 py-12">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Free Online PDF Merger Without Watermark</h1>
-            <p class="text-slate-600">Apni PDF files yahan select karein aur aik file mein merge karein.</p>
-        </div>
-
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-            <input type="file" id="pdfFileInput" multiple accept="application/pdf" class="hidden" onchange="updateFileList()">
-            
-            <label for="pdfFileInput" class="border-2 border-dashed border-indigo-200 hover:border-indigo-500 bg-indigo-50/50 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition mb-6">
-                <span class="text-3xl mb-2">📄</span>
-                <span class="font-semibold text-indigo-600">Choose PDF Files</span>
-                <span class="text-xs text-slate-500 mt-1">Select 2 or more PDF documents</span>
-            </label>
-
-            <div id="fileList" class="space-y-2 mb-6"></div>
-
-            <button onclick="handleMergeSubmit()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow transition">
-                Merge PDFs & Download
-            </button>
-        </div>
-    </main>
-
-    <script src="portal-core.js"></script>
-    <script>
-        function updateFileList() {
-            const input = document.getElementById('pdfFileInput');
-            const fileList = document.getElementById('fileList');
-            fileList.innerHTML = '';
-            
-            Array.from(input.files).forEach((file) => {
-                const item = document.createElement('div');
-                item.className = 'p-3 bg-slate-100 rounded-lg text-sm text-slate-700 flex justify-between items-center';
-                item.innerHTML = `<span>${file.name}</span> <span class="text-xs text-slate-400">${(file.size / 1024 / 1024).toFixed(2)} MB</span>`;
-                fileList.appendChild(item);
-            });
+    function saveTaskReminder() {
+        if (taskStore.length >= 12) {
+            alert('Maximum 12 active tasks limit reached.');
+            return;
         }
 
-        function handleMergeSubmit() {
-            const input = document.getElementById('pdfFileInput');
-            processPDFMerge(input.files);
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Online Scientific Calculator - Fast & Accurate</title>
-    <meta name="description" content="Online scientific calculator supporting sin, cos, tan, log, square root, and complex mathematical calculations directly in your browser.">
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+        const title = document.getElementById('remTaskTitle').value.trim();
+        const days = parseInt(document.getElementById('remDaysSelect').value);
+        const channel = document.getElementById('remChannel').value;
+        const contact = document.getElementById('remContact').value.trim();
 
-    <header class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-indigo-600">⚡ ToolsPortal</a>
-            <a href="index.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600">← Back to All Tools</a>
-        </div>
-    </header>
-
-    <main class="max-w-xl mx-auto px-4 py-12">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Online Scientific Calculator</h1>
-            <p class="text-slate-600">Advanced mathematical calculations directly in browser.</p>
-        </div>
-
-        <div class="bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-800">
-            <input type="text" id="calcDisplay" readonly value="0" class="w-full bg-slate-800 text-right text-3xl font-mono text-green-400 p-4 rounded-xl mb-4 focus:outline-none">
-
-            <div class="grid grid-cols-4 gap-2 text-white font-bold">
-                <button onclick="calcClear()" class="p-3 bg-red-600 hover:bg-red-700 rounded-xl">C</button>
-                <button onclick="calcDelete()" class="p-3 bg-slate-700 hover:bg-slate-600 rounded-xl">DEL</button>
-                <button onclick="calcInput('(')" class="p-3 bg-slate-700 hover:bg-slate-600 rounded-xl">(</button>
-                <button onclick="calcInput(')')" class="p-3 bg-slate-700 hover:bg-slate-600 rounded-xl">)</button>
-
-                <button onclick="calcInput('sin(')" class="p-3 bg-slate-800 hover:bg-slate-700 text-indigo-400 rounded-xl">sin</button>
-                <button onclick="calcInput('cos(')" class="p-3 bg-slate-800 hover:bg-slate-700 text-indigo-400 rounded-xl">cos</button>
-                <button onclick="calcInput('tan(')" class="p-3 bg-slate-800 hover:bg-slate-700 text-indigo-400 rounded-xl">tan</button>
-                <button onclick="calcInput('/')" class="p-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl">÷</button>
-
-                <button onclick="calcInput('7')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">7</button>
-                <button onclick="calcInput('8')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">8</button>
-                <button onclick="calcInput('9')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">9</button>
-                <button onclick="calcInput('*')" class="p-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl">×</button>
-
-                <button onclick="calcInput('4')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">4</button>
-                <button onclick="calcInput('5')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">5</button>
-                <button onclick="calcInput('6')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">6</button>
-                <button onclick="calcInput('-')" class="p-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl">-</button>
-
-                <button onclick="calcInput('1')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">1</button>
-                <button onclick="calcInput('2')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">2</button>
-                <button onclick="calcInput('3')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">3</button>
-                <button onclick="calcInput('+')" class="p-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl">+</button>
-
-                <button onclick="calcInput('0')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">0</button>
-                <button onclick="calcInput('.')" class="p-3 bg-slate-800 hover:bg-slate-700 rounded-xl">.</button>
-                <button onclick="calcInput('sqrt(')" class="p-3 bg-slate-800 hover:bg-slate-700 text-indigo-400 rounded-xl">√</button>
-                <button onclick="calcCalculate()" class="p-3 bg-green-600 hover:bg-green-700 rounded-xl">=</button>
-            </div>
-        </div>
-    </main>
-
-    <script src="portal-core.js"></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convert Image to PDF Online - Free JPG/PNG Converter</title>
-    <meta name="description" content="Convert images (JPG, PNG) to PDF online for free. Fast, browser-based processing with no quality loss.">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased">
-
-    <header class="bg-white border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <a href="index.html" class="text-xl font-bold text-indigo-600">⚡ ToolsPortal</a>
-            <a href="index.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600">← Back to All Tools</a>
-        </div>
-    </header>
-
-    <main class="max-w-3xl mx-auto px-4 py-12">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-extrabold text-slate-900 mb-2">Convert JPG/PNG Images to PDF</h1>
-            <p class="text-slate-600">Select images to convert them into a single PDF file.</p>
-        </div>
-
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-            <input type="file" id="imgFileInput" multiple accept="image/png, image/jpeg, image/webp" class="hidden" onchange="updateImgList()">
-            
-            <label for="imgFileInput" class="border-2 border-dashed border-blue-200 hover:border-blue-500 bg-blue-50/50 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer transition mb-6">
-                <span class="text-3xl mb-2">🖼️</span>
-                <span class="font-semibold text-blue-600">Select Images</span>
-                <span class="text-xs text-slate-500 mt-1">Supports JPG, PNG, WEBP</span>
-            </label>
-
-            <div id="imgList" class="space-y-2 mb-6"></div>
-
-            <button onclick="handleImgSubmit()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow transition">
-                Convert to PDF & Save
-            </button>
-        </div>
-    </main>
-
-    <script src="portal-core.js"></script>
-    <script>
-        function updateImgList() {
-            const input = document.getElementById('imgFileInput');
-            const imgList = document.getElementById('imgList');
-            imgList.innerHTML = '';
-            
-            Array.from(input.files).forEach((file) => {
-                const item = document.createElement('div');
-                item.className = 'p-3 bg-slate-100 rounded-lg text-sm text-slate-700 flex justify-between items-center';
-                item.innerHTML = `<span>${file.name}</span> <span class="text-xs text-slate-400">${(file.size / 1024).toFixed(1)} KB</span>`;
-                imgList.appendChild(item);
-            });
+        if (!title || !contact) {
+            alert('Please fill in task title and contact info.');
+            return;
         }
 
-        function handleImgSubmit() {
-            const input = document.getElementById('imgFileInput');
-            processImageToPDF(input.files);
+        const newTask = {
+            id: Date.now(),
+            title,
+            days,
+            remindersLeft: days > 1 ? days - 1 : 1,
+            channel,
+            contact
+        };
+
+        taskStore.push(newTask);
+        localStorage.setItem('smart_tasks', JSON.stringify(taskStore));
+        document.getElementById('remTaskTitle').value = "";
+        renderTasks();
+    }
+
+    function deleteTask(id) {
+        taskStore = taskStore.filter(t => t.id !== id);
+        localStorage.setItem('smart_tasks', JSON.stringify(taskStore));
+        renderTasks();
+    }
+
+    function sendReminderAlert(id) {
+        const task = taskStore.find(t => t.id === id);
+        if (!task) return;
+
+        const msg = encodeURIComponent(`Daily Reminder Alert: ${task.title}. Total Schedule: ${task.days} Days.`);
+        if (task.channel === 'whatsapp') window.open(`https://wa.me/${task.contact}?text=${msg}`, '_blank');
+        if (task.channel === 'sms') window.open(`sms:${task.contact}?body=${msg}`, '_blank');
+        if (task.channel === 'email') window.open(`mailto:${task.contact}?subject=Reminder&body=${msg}`, '_blank');
+    }
+
+    function renderTasks() {
+        const list = document.getElementById('remTaskList');
+        document.getElementById('remCount').innerText = taskStore.length;
+        list.innerHTML = "";
+
+        if (taskStore.length === 0) {
+            list.innerHTML = `<div class="status-msg info">No active task reminders scheduled yet.</div>`;
+            return;
         }
-    </script>
+
+        taskStore.forEach(task => {
+            list.innerHTML += `
+                <div class="task-card">
+                    <div>
+                        <strong style="font-size:0.95rem; color:#0f172a;">${task.title}</strong>
+                        <div style="font-size:0.82rem; color:#64748b; margin-top:4px;">
+                            <span class="task-badge">${task.days} Days Plan</span> Daily alert for next <strong>${task.remindersLeft} days</strong> via ${task.channel.toUpperCase()}
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-action" style="padding:8px 14px; font-size:0.8rem;" onclick="sendReminderAlert(${task.id})"><i class="fa-solid fa-paper-plane"></i> Send Alert</button>
+                        <button class="btn-action" style="padding:8px 12px; font-size:0.8rem; background:#ef4444;" onclick="deleteTask(${task.id})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+    renderTasks();
+
+    // Utility File Download Blob
+    function downloadBlob(data, name, mime) {
+        const blob = new Blob([data], { type: mime });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        a.click();
+    }
+</script>
 </body>
 </html>
