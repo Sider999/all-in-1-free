@@ -1,1216 +1,950 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Multi-Tools Portal | Cyber Neon Edition</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Required Client-Side Libraries -->
-    <!-- PDF Lib for Merge & Split -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-    <!-- Sortable JS for Drag & Drop Reordering -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    <!-- DOCX library for Image to Word -->
-    <script src="https://unpkg.com/docx@7.3.0/build/index.js"></script>
-    <!-- FileSaver for downloading -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <!-- Mammoth & HTML2Canvas for Word to Image -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All-In-1 Utility Portal</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-hover: #0284c7;
+      --border: #334155;
+      --danger: #ef4444;
+      --success: #10b981;
+    }
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@300;400;600;700&display=swap');
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
 
-        :root {
-            --bg-dark: #0a0d14;
-            --card-bg: rgba(18, 24, 38, 0.85);
-            --neon-cyan: #00f3ff;
-            --neon-pink: #ff007f;
-            --neon-purple: #9d00ff;
-            --neon-green: #00ff66;
-            --neon-yellow: #ffcc00;
-        }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        body {
-            background: radial-gradient(circle at top left, #150d2a, #0a0d14 60%), radial-gradient(circle at bottom right, #0d1f2d, #0a0d14);
-            font-family: 'Inter', sans-serif;
-            color: #e2e8f0;
-        }
+    header {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        .heading-font {
-            font-family: 'Orbitron', sans-serif;
-        }
+    .brand {
+      color: var(--accent);
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
 
-        .sub-heading {
-            font-family: 'Rajdhani', sans-serif;
-        }
+    nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
 
-        /* Glassmorphic Neon Cards */
-        .neon-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.05);
-            border-radius: 16px;
-        }
+    nav button {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
 
-        .neon-card-pink {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 0, 127, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 0, 127, 0.15);
-            border-radius: 16px;
-        }
+    nav button:hover, nav button.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
 
-        .neon-card-gold {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 204, 0, 0.4);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 204, 0, 0.2);
-            border-radius: 16px;
-        }
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 2rem auto;
+      flex: 1;
+    }
 
-        /* Neon Glow Texts */
-        .glow-text-cyan {
-            color: var(--neon-cyan);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.3);
-        }
+    .page {
+      display: none;
+    }
 
-        .glow-text-pink {
-            color: var(--neon-pink);
-            text-shadow: 0 0 10px rgba(255, 0, 127, 0.6), 0 0 20px rgba(255, 0, 127, 0.3);
-        }
+    .page.active {
+      display: block;
+    }
 
-        .glow-text-yellow {
-            color: var(--neon-yellow);
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.6), 0 0 20px rgba(255, 204, 0, 0.3);
-        }
+    .title-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
 
-        /* Neon Buttons */
-        .btn-neon-cyan {
-            background: linear-gradient(135deg, #00f3ff, #0077ff);
-            color: #000;
-            font-weight: 700;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-            transition: all 0.3s ease;
-        }
+    .title-section h1 {
+      font-size: 2.2rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
 
-        .btn-neon-cyan:hover {
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
-            transform: translateY(-2px);
-        }
+    .title-section p {
+      color: var(--text-muted);
+    }
 
-        .btn-neon-pink {
-            background: linear-gradient(135deg, #ff007f, #7900ff);
-            color: #fff;
-            font-weight: 700;
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
-            transition: all 0.3s ease;
-        }
+    /* Grid for Main Page */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
 
-        .btn-neon-pink:hover {
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.8);
-            transform: translateY(-2px);
-        }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-        .btn-neon-green {
-            background: linear-gradient(135deg, #00ff66, #009944);
-            color: #000;
-            font-weight: 700;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
-            transition: all 0.3s ease;
-        }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
 
-        .btn-neon-green:hover {
-            box-shadow: 0 0 25px rgba(0, 255, 102, 0.8);
-            transform: translateY(-2px);
-        }
+    .card h3 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
 
-        /* Tool Panels Switching */
-        .tool-panel { display: none; }
-        .tool-panel.active { display: block; animation: neonFadeIn 0.4s ease-in-out; }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
 
-        @keyframes neonFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    /* Form & Tool Layouts */
+    .tool-box {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-        /* Calculator Buttons */
-        .calc-btn {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 14px;
-            text-align: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #fff;
-            transition: all 0.2s;
-        }
-        .calc-btn:hover {
-            background: rgba(0, 243, 255, 0.2);
-            border-color: var(--neon-cyan);
-            color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-        }
-        .calc-btn.op {
-            background: rgba(157, 0, 255, 0.3);
-            border-color: rgba(157, 0, 255, 0.5);
-            color: #d8b4fe;
-        }
-        .calc-btn.op:hover {
-            background: rgba(157, 0, 255, 0.6);
-            color: #fff;
-            box-shadow: 0 0 12px rgba(157, 0, 255, 0.6);
-        }
-        .calc-btn.eq {
-            background: linear-gradient(135deg, #00ff66, #00aa44);
-            color: #000;
-            grid-column: span 2;
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
-        }
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
 
-        /* File list drag item */
-        .file-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 18px;
-            margin-bottom: 10px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 8px;
-            cursor: grab;
-            transition: all 0.2s;
-        }
-        .file-list-item:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-        .file-list-item:active { cursor: grabbing; }
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
 
-        /* Rating Stars */
-        .star-rating i {
-            font-size: 2.2rem;
-            color: #475569;
-            cursor: pointer;
-            transition: color 0.2s, transform 0.2s;
-        }
-        .star-rating i.active, .star-rating i:hover {
-            color: #ffcc00;
-            text-shadow: 0 0 12px rgba(255, 204, 0, 0.8);
-            transform: scale(1.15);
-        }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+    }
 
-        /* Modal Overlay */
-        .modal-overlay {
-            background: rgba(5, 7, 13, 0.85);
-            backdrop-filter: blur(8px);
-        }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+    }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0d14; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; border: 1px solid rgba(0, 243, 255, 0.3); }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
-    </style>
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    button.btn {
+      background-color: var(--accent);
+      color: #0f172a;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button.btn:hover {
+      background-color: var(--accent-hover);
+      color: #ffffff;
+    }
+
+    button.btn-secondary {
+      background-color: #475569;
+      color: #fff;
+    }
+
+    button.btn-secondary:hover {
+      background-color: #64748b;
+    }
+
+    .result-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--bg-color);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* Scientific Calculator Styles */
+    .calc-wrapper {
+      max-width: 420px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem;
+    }
+
+    .calc-screen {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: right;
+      margin-bottom: 1rem;
+    }
+
+    .calc-screen .expression {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      min-height: 1.2rem;
+      overflow-x: auto;
+    }
+
+    .calc-screen .display {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent);
+      min-height: 2.2rem;
+      overflow-x: auto;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.4rem;
+    }
+
+    .calc-btn {
+      padding: 0.8rem 0.2rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #334155;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .calc-btn:hover {
+      background: #475569;
+    }
+
+    .calc-btn.op {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    .calc-btn.op:hover {
+      background: #0369a1;
+    }
+
+    .calc-btn.func {
+      background: #1e293b;
+      color: var(--accent);
+    }
+
+    .calc-btn.action {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .calc-btn.equal {
+      background: var(--success);
+      color: #fff;
+      grid-column: span 2;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .alert-error {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+  </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body>
 
-    <!-- Sidebar Navigation -->
-    <aside class="w-72 bg-slate-950 border-r border-cyan-500/20 flex flex-col shadow-2xl relative z-20">
-        <!-- Logo Area -->
-        <div class="p-6 border-b border-cyan-500/20 flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-400 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                <i class="fa-solid fa-wand-magic-sparkles text-black font-bold text-xl"></i>
-            </div>
-            <div>
-                <h1 class="heading-font text-lg font-black tracking-wider glow-text-cyan">CYBER<span class="glow-text-pink">TOOLS</span></h1>
-                <p class="text-xs text-cyan-400/60 font-medium">Universal Multi-Portal v3.0</p>
-            </div>
+  <header>
+    <div class="brand" onclick="navigateTo('home')">All-In-1 Tools</div>
+    <nav>
+      <button onclick="navigateTo('home')" id="nav-home" class="active">Home</button>
+      <button onclick="navigateTo('scientific-calc')" id="nav-scientific-calc">Scientific Calc</button>
+      <button onclick="navigateTo('text-utility')" id="nav-text-utility">Text Utility</button>
+      <button onclick="navigateTo('qr-generator')" id="nav-qr-generator">QR Generator</button>
+      <button onclick="navigateTo('json-formatter')" id="nav-json-formatter">JSON Tools</button>
+      <button onclick="navigateTo('password-generator')" id="nav-password-generator">Password Gen</button>
+      <button onclick="navigateTo('unit-converter')" id="nav-unit-converter">Unit Converter</button>
+      <button onclick="navigateTo('bmi-calculator')" id="nav-bmi-calculator">BMI Calc</button>
+    </nav>
+  </header>
+
+  <div class="container">
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page active">
+      <div class="title-section">
+        <h1>All-In-1 Free Online Tools</h1>
+        <p>100% Client-Side, Secure, Error-Free & Bug-Free Utility Suite</p>
+      </div>
+
+      <div class="grid">
+        <div class="card" onclick="navigateTo('scientific-calc')">
+          <div>
+            <h3>Scientific Calculator</h3>
+            <p>Full trigonometric, logarithmic, power, factorial, and algebraic math functions.</p>
+          </div>
         </div>
 
-        <!-- Navigation Buttons -->
-        <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-            <button onclick="switchTool('home')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-house text-cyan-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">Dashboard & Home</span>
-            </button>
-            
-            <button onclick="switchTool('reminder-tool')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 hover:bg-yellow-500/20 transition group shadow-md shadow-yellow-500/10">
-                <i class="fa-solid fa-bell glow-text-yellow group-hover:rotate-12 transition"></i>
-                <span class="font-bold text-sm tracking-wide">30-Days Reminder <span class="text-xs px-2 py-0.5 rounded-full bg-yellow-400 text-black font-extrabold ml-1">PREMIUM</span></span>
-            </button>
-
-            <button onclick="switchTool('calc')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-calculator text-fuchsia-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">Smart Calculator</span>
-            </button>
-
-            <button onclick="switchTool('currency-tool')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-coins text-emerald-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">Currency Converter</span>
-            </button>
-
-            <button onclick="switchTool('converter')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-scale-balanced text-purple-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">Unit Converter</span>
-            </button>
-
-            <button onclick="switchTool('pdf-merge')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-file-pdf text-rose-500 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">PDF Merger</span>
-            </button>
-
-            <button onclick="switchTool('pdf-split')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-scissors text-amber-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">PDF Splitter</span>
-            </button>
-
-            <button onclick="switchTool('img2word')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-file-word text-blue-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">Image to Word</span>
-            </button>
-
-            <button onclick="switchTool('word2img')" class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-300 hover:text-white hover:bg-cyan-500/10 hover:border-l-4 hover:border-cyan-400 transition group">
-                <i class="fa-solid fa-file-image text-pink-400 group-hover:scale-110 transition"></i>
-                <span class="font-semibold text-sm">Word to Image</span>
-            </button>
-        </nav>
-
-        <!-- Footer Info -->
-        <div class="p-4 border-t border-cyan-500/20 text-center">
-            <span class="inline-block px-3 py-1 rounded-full bg-cyan-950 text-cyan-300 text-xs font-mono border border-cyan-500/40">⚡ 100% Client-Side Safe</span>
-        </div>
-    </aside>
-
-    <!-- Main Content Display -->
-    <main class="flex-1 overflow-y-auto p-6 md:p-10 relative">
-
-        <!-- Tool 1: Home Dashboard & Top 30-Day Reminder -->
-        <div id="home" class="tool-panel active max-w-6xl mx-auto space-y-8">
-            
-            <!-- Welcome Banner -->
-            <div class="neon-card p-8 relative overflow-hidden flex flex-col md:flex-row items-center justify-between">
-                <div class="space-y-3 z-10 max-w-2xl">
-                    <span class="px-3 py-1 rounded-full bg-fuchsia-500/20 text-fuchsia-300 text-xs font-bold border border-fuchsia-500/40 tracking-widest uppercase">✨ Next-Gen Portal</span>
-                    <h1 class="heading-font text-3xl md:text-5xl font-extrabold tracking-tight">UNIVERSAL <span class="glow-text-cyan">MULTI-TOOLS</span></h1>
-                    <p class="text-slate-300 text-base leading-relaxed">
-                        Access high-performance tools directly from your browser with zero latency. Seamlessly manage PDFs, calculations, conversions, and automated reminders in a stunning visual suite.
-                    </p>
-                </div>
-                <div class="mt-6 md:mt-0 z-10">
-                    <button onclick="switchTool('reminder-tool')" class="btn-neon-pink px-6 py-3 rounded-xl text-sm uppercase tracking-wider font-bold shadow-lg">
-                        <i class="fa-solid fa-crown mr-2"></i> Open 30-Days Reminder
-                    </button>
-                </div>
-            </div>
-
-            <!-- TOP DASHBOARD: 30-DAYS REMINDER SUITE (PREMIUM FEATURE) -->
-            <section class="neon-card-gold p-6 relative">
-                <div class="flex items-center justify-between border-b border-yellow-500/30 pb-4 mb-6">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 rounded-xl bg-yellow-500/20 border border-yellow-500/50 flex items-center justify-center">
-                            <i class="fa-solid fa-bell text-2xl text-yellow-400"></i>
-                        </div>
-                        <div>
-                            <h2 class="heading-font text-xl md:text-2xl font-bold text-yellow-400">30-Days Multi-Task Reminder Suite</h2>
-                            <p class="text-xs text-slate-300">Schedule up to 12 recurring tasks with instant WhatsApp, SMS & Email triggers!</p>
-                        </div>
-                    </div>
-                    <span id="task-counter-badge" class="px-4 py-1.5 rounded-full bg-yellow-400 text-black font-extrabold text-xs shadow-lg shadow-yellow-500/20">
-                        0 / 12 Tasks Used
-                    </span>
-                </div>
-
-                <!-- Quick Add Form -->
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 bg-slate-900/80 p-4 rounded-xl border border-yellow-500/20">
-                    <div>
-                        <label class="block text-xs font-bold text-yellow-400 mb-1">Task Title & Details</label>
-                        <input type="text" id="rem-title" placeholder="e.g., Pay Utility Bill / Client Follow-up" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-yellow-400 mb-1">Target Schedule (Day 1 - 30)</label>
-                        <select id="rem-day" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                            <script>
-                                for(let d=1; d<=30; d++){
-                                    document.write(`<option value="${d}">Day ${d} of the Month</option>`);
-                                }
-                            </script>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-yellow-400 mb-1">Trigger Channel</label>
-                        <select id="rem-channel" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                            <option value="whatsapp">📱 WhatsApp Message</option>
-                            <option value="sms">💬 Direct SMS</option>
-                            <option value="email">📧 Email Alert</option>
-                            <option value="browser">🔔 Browser Reminder</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-yellow-400 mb-1">Phone / Email Contact</label>
-                        <input type="text" id="rem-contact" placeholder="+923001234567 or email@domain.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                    </div>
-                    <div class="md:col-span-4 flex justify-end">
-                        <button onclick="addNewReminderTask()" class="btn-neon-green px-6 py-2.5 rounded-lg text-sm font-bold flex items-center space-x-2">
-                            <i class="fa-solid fa-plus"></i>
-                            <span>Schedule Task</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Active Reminders Grid -->
-                <div>
-                    <h3 class="sub-heading text-lg font-bold text-slate-200 mb-3 flex items-center space-x-2">
-                        <i class="fa-solid fa-list-check text-yellow-400"></i>
-                        <span>Active 30-Days Reminder Schedule</span>
-                    </h3>
-                    <div id="reminder-tasks-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Tasks dynamically injected here -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quick Access Tool Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="switchTool('calc')" class="neon-card p-6 cursor-pointer hover:border-cyan-400 transition transform hover:-translate-y-1 group">
-                    <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-calculator text-2xl text-cyan-400"></i>
-                    </div>
-                    <h3 class="heading-font text-lg font-bold text-white mb-1">Smart Calculator</h3>
-                    <p class="text-xs text-slate-400">Simple arithmetic + fully functional scientific functions (Sin, Cos, Log, Power, Sqrt).</p>
-                </div>
-
-                <div onclick="switchTool('currency-tool')" class="neon-card p-6 cursor-pointer hover:border-emerald-400 transition transform hover:-translate-y-1 group">
-                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-coins text-2xl text-emerald-400"></i>
-                    </div>
-                    <h3 class="heading-font text-lg font-bold text-white mb-1">Currency Converter</h3>
-                    <p class="text-xs text-slate-400">Live & instant global exchange rates between USD, PKR, EUR, GBP, AED, SAR & more.</p>
-                </div>
-
-                <div onclick="switchTool('pdf-merge')" class="neon-card p-6 cursor-pointer hover:border-rose-400 transition transform hover:-translate-y-1 group">
-                    <div class="w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-400/40 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                        <i class="fa-solid fa-file-pdf text-2xl text-rose-400"></i>
-                    </div>
-                    <h3 class="heading-font text-lg font-bold text-white mb-1">PDF Merger Suite</h3>
-                    <p class="text-xs text-slate-400">Combine multiple PDF documents with seamless Drag & Drop reordering.</p>
-                </div>
-            </div>
+        <div class="card" onclick="navigateTo('text-utility')">
+          <div>
+            <h3>Text Utility Suite</h3>
+            <p>Word counter, case transformation, space cleaning, and Base64 encoder/decoder.</p>
+          </div>
         </div>
 
-        <!-- Tool: 30-Days Reminder Standalone View -->
-        <div id="reminder-tool" class="tool-panel max-w-5xl mx-auto space-y-6">
-            <div class="neon-card-gold p-8">
-                <div class="flex items-center space-x-4 mb-6">
-                    <div class="w-14 h-14 rounded-2xl bg-yellow-500/20 border border-yellow-500 flex items-center justify-center">
-                        <i class="fa-solid fa-bell text-3xl text-yellow-400"></i>
-                    </div>
-                    <div>
-                        <h1 class="heading-font text-3xl font-bold text-yellow-400">30-Days Multi-Task Reminder Suite</h1>
-                        <p class="text-sm text-slate-300">Set recurring reminders across a 30-day schedule with automatic trigger links.</p>
-                    </div>
-                </div>
-                <!-- Duplicate of the reminder interface for direct navigation -->
-                <div class="bg-slate-900/90 p-6 rounded-2xl border border-yellow-500/30 mb-8 space-y-4">
-                    <h3 class="sub-heading text-lg font-bold text-yellow-400">Add New Reminder Task (Max 12)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Task Description</label>
-                            <input type="text" id="rem-title-page" placeholder="e.g. Call Client / Check Server Backup" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Day of Month (Day 1 - 30)</label>
-                            <select id="rem-day-page" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                                <script>
-                                    for(let d=1; d<=30; d++){
-                                        document.write(`<option value="${d}">Day ${d} of the Month</option>`);
-                                    }
-                                </script>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Notification Channel</label>
-                            <select id="rem-channel-page" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                                <option value="whatsapp">WhatsApp Message</option>
-                                <option value="sms">SMS Text</option>
-                                <option value="email">Email Notification</option>
-                                <option value="browser">Browser Popup Alert</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-300 mb-1">Contact Details</label>
-                            <input type="text" id="rem-contact-page" placeholder="+923001234567 or email@domain.com" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-sm text-white focus:border-yellow-400 focus:outline-none">
-                        </div>
-                    </div>
-                    <div class="flex justify-end pt-2">
-                        <button onclick="addNewReminderTaskFromPage()" class="btn-neon-green px-8 py-3 rounded-xl font-bold">
-                            <i class="fa-solid fa-plus-circle mr-2"></i> Add Task to Schedule
-                        </button>
-                    </div>
-                </div>
-
-                <div id="reminder-tasks-list-page" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Synced Tasks -->
-                </div>
-            </div>
+        <div class="card" onclick="navigateTo('qr-generator')">
+          <div>
+            <h3>QR Code Generator</h3>
+            <p>Generate clean downloadable QR codes for text, URLs, and data instantly.</p>
+          </div>
         </div>
 
-        <!-- Tool 2: Calculator (Simple & Scientific) -->
-        <div id="calc" class="tool-panel max-w-2xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="heading-font text-2xl font-bold text-white flex items-center space-x-3">
-                        <i class="fa-solid fa-calculator text-fuchsia-400"></i>
-                        <span>Smart Calculator</span>
-                    </h2>
-                    <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-700">
-                        <button onclick="toggleCalc('simple')" id="tab-simple" class="px-5 py-2 text-xs font-bold rounded-lg bg-cyan-500 text-black transition">Simple</button>
-                        <button onclick="toggleCalc('scientific')" id="tab-scientific" class="px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition">Scientific</button>
-                    </div>
-                </div>
-
-                <!-- Screen -->
-                <div class="mb-6 relative">
-                    <input type="text" id="calc-display" class="w-full bg-slate-950 text-right text-3xl font-mono p-5 rounded-xl border border-cyan-500/40 text-cyan-400 focus:outline-none shadow-inner" disabled placeholder="0">
-                </div>
-
-                <!-- Simple Keyboard -->
-                <div id="calc-simple" class="grid grid-cols-4 gap-3">
-                    <div class="calc-btn op" onclick="calcAction('C')">C</div>
-                    <div class="calc-btn op" onclick="calcAction('DEL')">DEL</div>
-                    <div class="calc-btn op" onclick="calcAction('%')">%</div>
-                    <div class="calc-btn op" onclick="calcAction('/')">÷</div>
-
-                    <div class="calc-btn" onclick="calcAction('7')">7</div>
-                    <div class="calc-btn" onclick="calcAction('8')">8</div>
-                    <div class="calc-btn" onclick="calcAction('9')">9</div>
-                    <div class="calc-btn op" onclick="calcAction('*')">×</div>
-
-                    <div class="calc-btn" onclick="calcAction('4')">4</div>
-                    <div class="calc-btn" onclick="calcAction('5')">5</div>
-                    <div class="calc-btn" onclick="calcAction('6')">6</div>
-                    <div class="calc-btn op" onclick="calcAction('-')">-</div>
-
-                    <div class="calc-btn" onclick="calcAction('1')">1</div>
-                    <div class="calc-btn" onclick="calcAction('2')">2</div>
-                    <div class="calc-btn" onclick="calcAction('3')">3</div>
-                    <div class="calc-btn op" onclick="calcAction('+')">+</div>
-
-                    <div class="calc-btn" onclick="calcAction('0')">0</div>
-                    <div class="calc-btn" onclick="calcAction('.')">.</div>
-                    <div class="calc-btn eq" onclick="calcAction('=')">=</div>
-                </div>
-
-                <!-- Scientific Keyboard -->
-                <div id="calc-scientific" class="grid grid-cols-5 gap-2 hidden">
-                    <div class="calc-btn op text-sm" onclick="calcAction('sin(')">sin</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('cos(')">cos</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('tan(')">tan</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('C')">C</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('DEL')">DEL</div>
-
-                    <div class="calc-btn op text-sm" onclick="calcAction('log(')">log</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('ln(')">ln</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('sqrt(')">√</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('(')">(</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction(')')">)</div>
-
-                    <div class="calc-btn op text-sm" onclick="calcAction('pi')">π</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('e')">e</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('^')">^</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('%')">%</div>
-                    <div class="calc-btn op text-sm" onclick="calcAction('/')">÷</div>
-
-                    <div class="calc-btn" onclick="calcAction('7')">7</div>
-                    <div class="calc-btn" onclick="calcAction('8')">8</div>
-                    <div class="calc-btn" onclick="calcAction('9')">9</div>
-                    <div class="calc-btn op" onclick="calcAction('*')">×</div>
-                    <div class="calc-btn op" onclick="calcAction('-')">-</div>
-
-                    <div class="calc-btn" onclick="calcAction('4')">4</div>
-                    <div class="calc-btn" onclick="calcAction('5')">5</div>
-                    <div class="calc-btn" onclick="calcAction('6')">6</div>
-                    <div class="calc-btn op" onclick="calcAction('+')">+</div>
-                    <div class="calc-btn eq" onclick="calcAction('=')" style="grid-row: span 2;">=</div>
-
-                    <div class="calc-btn" onclick="calcAction('1')">1</div>
-                    <div class="calc-btn" onclick="calcAction('2')">2</div>
-                    <div class="calc-btn" onclick="calcAction('3')">3</div>
-                    <div class="calc-btn" onclick="calcAction('0')">0</div>
-                    <div class="calc-btn" onclick="calcAction('.')">.</div>
-                </div>
-            </div>
+        <div class="card" onclick="navigateTo('json-formatter')">
+          <div>
+            <h3>JSON Validator & Formatter</h3>
+            <p>Parse, beautify, minify, and validate JSON data structures without data leaks.</p>
+          </div>
         </div>
 
-        <!-- Tool 3: Universal Currency Converter -->
-        <div id="currency-tool" class="tool-panel max-w-3xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center space-x-3 mb-6 border-b border-cyan-500/20 pb-4">
-                    <i class="fa-solid fa-coins text-3xl text-emerald-400"></i>
-                    <div>
-                        <h2 class="heading-font text-2xl font-bold text-white">Universal Currency Converter</h2>
-                        <p class="text-xs text-slate-400">Convert currencies instantly with live rates & global coverage.</p>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-emerald-400 mb-2">From Currency</label>
-                        <select id="curr-from" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-emerald-400 focus:outline-none font-medium" onchange="convertCurrency()">
-                            <option value="USD">USD - US Dollar ($)</option>
-                            <option value="PKR" selected>PKR - Pakistani Rupee (₨)</option>
-                            <option value="EUR">EUR - Euro (€)</option>
-                            <option value="GBP">GBP - British Pound (£)</option>
-                            <option value="AED">AED - UAE Dirham (د.إ)</option>
-                            <option value="SAR">SAR - Saudi Riyal (ر.س)</option>
-                            <option value="INR">INR - Indian Rupee (₹)</option>
-                            <option value="CAD">CAD - Canadian Dollar ($)</option>
-                            <option value="AUD">AUD - Australian Dollar ($)</option>
-                            <option value="JPY">JPY - Japanese Yen (¥)</option>
-                            <option value="CNY">CNY - Chinese Yuan (¥)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-emerald-400 mb-2">To Currency</label>
-                        <select id="curr-to" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-emerald-400 focus:outline-none font-medium" onchange="convertCurrency()">
-                            <option value="USD" selected>USD - US Dollar ($)</option>
-                            <option value="PKR">PKR - Pakistani Rupee (₨)</option>
-                            <option value="EUR">EUR - Euro (€)</option>
-                            <option value="GBP">GBP - British Pound (£)</option>
-                            <option value="AED">AED - UAE Dirham (د.إ)</option>
-                            <option value="SAR">SAR - Saudi Riyal (ر.س)</option>
-                            <option value="INR">INR - Indian Rupee (₹)</option>
-                            <option value="CAD">CAD - Canadian Dollar ($)</option>
-                            <option value="AUD">AUD - Australian Dollar ($)</option>
-                            <option value="JPY">JPY - Japanese Yen (¥)</option>
-                            <option value="CNY">CNY - Chinese Yuan (¥)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-2">Amount to Convert</label>
-                        <input type="number" id="curr-amount" value="1000" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono text-lg focus:border-emerald-400 focus:outline-none" oninput="convertCurrency()">
-                    </div>
-
-                    <div class="bg-slate-950 p-4 rounded-xl border border-emerald-500/30 text-center">
-                        <span class="block text-xs text-slate-400 uppercase tracking-widest mb-1">Converted Output</span>
-                        <div id="curr-result" class="text-3xl font-bold font-mono text-emerald-400">--</div>
-                    </div>
-                </div>
-
-                <div class="mt-6 flex justify-center">
-                    <button onclick="swapCurrencies()" class="px-4 py-2 rounded-xl bg-slate-800 border border-slate-600 text-xs font-bold text-slate-300 hover:text-white hover:border-emerald-400 transition flex items-center space-x-2">
-                        <i class="fa-solid fa-arrows-rotate text-emerald-400"></i>
-                        <span>Swap Currencies</span>
-                    </button>
-                </div>
-            </div>
+        <div class="card" onclick="navigateTo('password-generator')">
+          <div>
+            <h3>Password Generator</h3>
+            <p>Cryptographically secure password generation with customization controls.</p>
+          </div>
         </div>
 
-        <!-- Tool 4: Universal Unit Converter -->
-        <div id="converter" class="tool-panel max-w-3xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center space-x-3 mb-6 border-b border-purple-500/20 pb-4">
-                    <i class="fa-solid fa-scale-balanced text-3xl text-purple-400"></i>
-                    <div>
-                        <h2 class="heading-font text-2xl font-bold text-white">Universal Unit Converter</h2>
-                        <p class="text-xs text-slate-400">Convert length, weight, temperature, and area units seamlessly.</p>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-xs font-bold text-purple-400 mb-2">Select Category</label>
-                    <select id="conv-category" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-purple-400 focus:outline-none" onchange="updateConvOptions()">
-                        <option value="length">Length & Distance</option>
-                        <option value="weight">Weight / Mass</option>
-                        <option value="temp">Temperature</option>
-                        <option value="area">Area</option>
-                    </select>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-2">From Unit</label>
-                        <select id="conv-from" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-purple-400 focus:outline-none" onchange="calculateConversion()"></select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-2">To Unit</label>
-                        <select id="conv-to" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white focus:border-purple-400 focus:outline-none" onchange="calculateConversion()"></select>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-2">Value</label>
-                        <input type="number" id="conv-input" value="1" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono text-lg focus:border-purple-400 focus:outline-none" oninput="calculateConversion()">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-300 mb-2">Converted Result</label>
-                        <input type="text" id="conv-result" class="w-full bg-slate-950 border border-purple-500/40 rounded-xl p-3 text-purple-300 font-mono text-xl font-bold focus:outline-none" disabled>
-                    </div>
-                </div>
-            </div>
+        <div class="card" onclick="navigateTo('unit-converter')">
+          <div>
+            <h3>Unit Converter</h3>
+            <p>Multi-unit conversions for length, mass, temperature, and digital storage.</p>
+          </div>
         </div>
 
-        <!-- Tool 5: Advanced PDF Merger -->
-        <div id="pdf-merge" class="tool-panel max-w-3xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center space-x-3 mb-4 border-b border-rose-500/20 pb-4">
-                    <i class="fa-solid fa-file-pdf text-3xl text-rose-500"></i>
-                    <div>
-                        <h2 class="heading-font text-2xl font-bold text-white">Advanced PDF Merger</h2>
-                        <p class="text-xs text-slate-400">Combine PDF files. Drag & drop items to re-sequence before merging.</p>
-                    </div>
-                </div>
-
-                <label class="block mb-4 p-6 border-2 border-dashed border-rose-500/40 hover:border-rose-400 rounded-2xl text-center cursor-pointer bg-slate-900/50 transition">
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-rose-40-0 mb-2"></i>
-                    <span class="block text-sm font-semibold text-slate-200">Click to Select PDF Files</span>
-                    <span class="text-xs text-slate-500">Supports multiple PDF files</span>
-                    <input type="file" id="pdf-merge-input" multiple accept="application/pdf" class="hidden" onchange="addMergeFiles(event)">
-                </label>
-
-                <div id="merge-file-list" class="min-h-[120px] bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6 space-y-2">
-                    <p class="text-slate-500 text-center py-6 text-sm" id="merge-empty-msg">No PDF files uploaded yet.</p>
-                </div>
-
-                <button onclick="triggerDownloadWithRating(executePdfMerge)" class="btn-neon-pink w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-object-group"></i>
-                    <span>Merge & Download PDF</span>
-                </button>
-                <p id="merge-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
-            </div>
+        <div class="card" onclick="navigateTo('bmi-calculator')">
+          <div>
+            <h3>BMI Calculator</h3>
+            <p>Calculate Body Mass Index, health categories, and ideal weight targets.</p>
+          </div>
         </div>
-
-        <!-- Tool 6: PDF Splitter -->
-        <div id="pdf-split" class="tool-panel max-w-3xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center space-x-3 mb-4 border-b border-amber-500/20 pb-4">
-                    <i class="fa-solid fa-scissors text-3xl text-amber-400"></i>
-                    <div>
-                        <h2 class="heading-font text-2xl font-bold text-white">PDF Splitter Suite</h2>
-                        <p class="text-xs text-slate-400">Specify page ranges to extract custom PDF segments.</p>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-xs font-bold text-slate-300 mb-2">Select Target PDF</label>
-                    <input type="file" id="pdf-split-input" accept="application/pdf" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-amber-400 focus:outline-none">
-                </div>
-
-                <div class="grid grid-cols-2 gap-6 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-amber-400 mb-2">Start Page</label>
-                        <input type="number" id="split-start" min="1" placeholder="e.g. 1" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:border-amber-400 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-amber-400 mb-2">End Page</label>
-                        <input type="number" id="split-end" min="1" placeholder="e.g. 5" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-white font-mono focus:border-amber-400 focus:outline-none">
-                    </div>
-                </div>
-
-                <button onclick="triggerDownloadWithRating(executePdfSplit)" class="btn-neon-cyan w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-file-export"></i>
-                    <span>Split & Download PDF</span>
-                </button>
-                <p id="split-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
-            </div>
-        </div>
-
-        <!-- Tool 7: Image to Word -->
-        <div id="img2word" class="tool-panel max-w-3xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center space-x-3 mb-4 border-b border-blue-500/20 pb-4">
-                    <i class="fa-solid fa-file-word text-3xl text-blue-400"></i>
-                    <div>
-                        <h2 class="heading-font text-2xl font-bold text-white">Image to Word (DOCX)</h2>
-                        <p class="text-xs text-slate-400">Convert your images into formatted Word documents.</p>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-xs font-bold text-slate-300 mb-2">Select Image Files (PNG / JPG)</label>
-                    <input type="file" id="img2word-input" multiple accept="image/png, image/jpeg, image/jpg" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-blue-400 focus:outline-none">
-                </div>
-
-                <button onclick="triggerDownloadWithRating(executeImgToWord)" class="btn-neon-cyan w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-file-word"></i>
-                    <span>Convert to Word Document</span>
-                </button>
-                <p id="i2w-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
-            </div>
-        </div>
-
-        <!-- Tool 8: Word to Image -->
-        <div id="word2img" class="tool-panel max-w-3xl mx-auto">
-            <div class="neon-card p-8">
-                <div class="flex items-center space-x-3 mb-4 border-b border-pink-500/20 pb-4">
-                    <i class="fa-solid fa-file-image text-3xl text-pink-400"></i>
-                    <div>
-                        <h2 class="heading-font text-2xl font-bold text-white">Word (DOCX) to Image</h2>
-                        <p class="text-xs text-slate-400">Render DOCX pages into high-definition PNG images.</p>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block text-xs font-bold text-slate-300 mb-2">Select DOCX File</label>
-                    <input type="file" id="word2img-input" accept=".docx" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-sm text-white focus:border-pink-400 focus:outline-none">
-                </div>
-
-                <button onclick="triggerDownloadWithRating(executeWordToImg)" class="btn-neon-pink w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-image"></i>
-                    <span>Convert to PNG Image</span>
-                </button>
-                <p id="w2i-status" class="mt-3 text-center text-sm font-bold text-emerald-400"></p>
-
-                <div id="word-render-container" style="position: absolute; left: -9999px; top: 0;">
-                    <div id="word-render-area" style="width: 800px; padding: 30px; background: white; color: black;"></div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- COMPULSORY 5-STAR RATING MODAL BEFORE DOWNLOAD -->
-    <div id="rating-modal" class="fixed inset-0 z-50 flex items-center justify-center modal-overlay hidden">
-        <div class="neon-card-gold p-8 max-w-md w-full mx-4 text-center space-y-6 relative transform transition-all scale-95">
-            <div class="w-16 h-16 rounded-full bg-yellow-500/20 border-2 border-yellow-400 flex items-center justify-center mx-auto">
-                <i class="fa-solid fa-star text-3xl text-yellow-400 glow-text-yellow"></i>
-            </div>
-            <div>
-                <h3 class="heading-font text-2xl font-bold text-yellow-400">Rate Our Tool!</h3>
-                <p class="text-xs text-slate-300 mt-1">Please confirm your 5-star experience to unlock and start downloading your generated file.</p>
-            </div>
-
-            <!-- Star Selection Grid -->
-            <div class="star-rating flex justify-center space-x-2 py-2" id="star-box">
-                <i class="fa-solid fa-star" onclick="selectStars(1)"></i>
-                <i class="fa-solid fa-star" onclick="selectStars(2)"></i>
-                <i class="fa-solid fa-star" onclick="selectStars(3)"></i>
-                <i class="fa-solid fa-star" onclick="selectStars(4)"></i>
-                <i class="fa-solid fa-star" onclick="selectStars(5)"></i>
-            </div>
-
-            <p id="rating-hint" class="text-xs font-semibold text-yellow-400/80">Select rating stars to continue</p>
-
-            <div class="flex space-x-3">
-                <button onclick="closeRatingModal()" class="flex-1 py-3 rounded-xl border border-slate-700 text-slate-400 hover:text-white text-xs font-bold">Cancel</button>
-                <button id="confirm-download-btn" onclick="confirmRatingAndDownload()" disabled class="flex-1 py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed transition">
-                    Confirm & Download
-                </button>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!-- JavaScript Execution Engine -->
-    <script>
-        // --- Navigation Switcher ---
-        function switchTool(toolId) {
-            document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(toolId).classList.add('active');
+    <!-- SCIENTIFIC CALCULATOR PAGE -->
+    <div id="page-scientific-calc" class="page">
+      <div class="title-section">
+        <h1>Scientific Calculator</h1>
+        <p>Fully functional high-precision mathematical evaluator</p>
+      </div>
+
+      <div class="calc-wrapper">
+        <div class="calc-screen">
+          <div class="expression" id="calc-expression"></div>
+          <div class="display" id="calc-display">0</div>
+        </div>
+
+        <div class="calc-grid">
+          <button class="calc-btn func" onclick="setAngleMode()" id="angle-mode-btn">DEG</button>
+          <button class="calc-btn func" onclick="calcInput('sin(')">sin</button>
+          <button class="calc-btn func" onclick="calcInput('cos(')">cos</button>
+          <button class="calc-btn func" onclick="calcInput('tan(')">tan</button>
+          <button class="calc-btn action" onclick="calcClear()">C</button>
+
+          <button class="calc-btn func" onclick="calcInput('log(')">log</button>
+          <button class="calc-btn func" onclick="calcInput('ln(')">ln</button>
+          <button class="calc-btn func" onclick="calcInput('sqrt(')">√</button>
+          <button class="calc-btn func" onclick="calcInput('^')">x^y</button>
+          <button class="calc-btn action" onclick="calcBackspace()">DEL</button>
+
+          <button class="calc-btn func" onclick="calcInput('(')">(</button>
+          <button class="calc-btn func" onclick="calcInput(')')">)</button>
+          <button class="calc-btn func" onclick="calcInput('!')">n!</button>
+          <button class="calc-btn func" onclick="calcInput('π')">π</button>
+          <button class="calc-btn op" onclick="calcInput('/')">÷</button>
+
+          <button class="calc-btn" onclick="calcInput('7')">7</button>
+          <button class="calc-btn" onclick="calcInput('8')">8</button>
+          <button class="calc-btn" onclick="calcInput('9')">9</button>
+          <button class="calc-btn func" onclick="calcInput('e')">e</button>
+          <button class="calc-btn op" onclick="calcInput('*')">×</button>
+
+          <button class="calc-btn" onclick="calcInput('4')">4</button>
+          <button class="calc-btn" onclick="calcInput('5')">5</button>
+          <button class="calc-btn" onclick="calcInput('6')">6</button>
+          <button class="calc-btn func" onclick="calcInput('%')">%</button>
+          <button class="calc-btn op" onclick="calcInput('-')">-</button>
+
+          <button class="calc-btn" onclick="calcInput('1')">1</button>
+          <button class="calc-btn" onclick="calcInput('2')">2</button>
+          <button class="calc-btn" onclick="calcInput('3')">3</button>
+          <button class="calc-btn op" onclick="calcInput('+')">+</button>
+          <button class="calc-btn equal" onclick="calcEvaluate()">=</button>
+
+          <button class="calc-btn" style="grid-column: span 2;" onclick="calcInput('0')">0</button>
+          <button class="calc-btn" onclick="calcInput('.')">.</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEXT UTILITY PAGE -->
+    <div id="page-text-utility" class="page">
+      <div class="title-section">
+        <h1>Text Utility Tool</h1>
+        <p>Manipulate, inspect, and encode text strings instantly</p>
+      </div>
+
+      <div class="tool-box">
+        <textarea id="text-input" placeholder="Enter or paste your content here..."></textarea>
+        
+        <div class="btn-group">
+          <button class="btn" onclick="transformText('upper')">UPPERCASE</button>
+          <button class="btn" onclick="transformText('lower')">lowercase</button>
+          <button class="btn" onclick="transformText('title')">Title Case</button>
+          <button class="btn" onclick="transformText('clean')">Clean Spaces</button>
+          <button class="btn" onclick="transformText('b64e')">Base64 Encode</button>
+          <button class="btn" onclick="transformText('b64d')">Base64 Decode</button>
+          <button class="btn btn-secondary" onclick="copyText('text-input')">Copy Text</button>
+          <button class="btn btn-secondary" onclick="clearText('text-input')">Clear</button>
+        </div>
+
+        <div style="display: flex; gap: 2rem; margin-top: 1.5rem; color: var(--text-muted);">
+          <span>Words: <strong id="val-words" style="color:var(--accent);">0</strong></span>
+          <span>Characters: <strong id="val-chars" style="color:var(--accent);">0</strong></span>
+          <span>Lines: <strong id="val-lines" style="color:var(--accent);">0</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- QR GENERATOR PAGE -->
+    <div id="page-qr-generator" class="page">
+      <div class="title-section">
+        <h1>QR Code Generator</h1>
+        <p>Convert text or links into clean QR codes</p>
+      </div>
+
+      <div class="tool-box" style="text-align: center;">
+        <div class="form-group">
+          <input type="text" id="qr-input-text" placeholder="Enter URL or text to encode...">
+        </div>
+        <button class="btn" onclick="generateQRCode()">Generate QR Code</button>
+
+        <div id="qr-output-wrap" style="margin-top: 2rem; display: none;">
+          <img id="qr-img-result" src="" alt="Generated QR Code" style="border: 6px solid #fff; border-radius: 8px; width: 220px; height: 220px;">
+          <div style="margin-top: 1rem;">
+            <a id="qr-download-link" href="" download="qrcode.png">
+              <button class="btn btn-secondary">Download Image</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JSON FORMATTER PAGE -->
+    <div id="page-json-formatter" class="page">
+      <div class="title-section">
+        <h1>JSON Formatter & Validator</h1>
+        <p>Validate, format, or minify JSON data safely</p>
+      </div>
+
+      <div class="tool-box">
+        <textarea id="json-input" placeholder="Paste your raw JSON content here..."></textarea>
+        <div id="json-error" class="alert-error"></div>
+
+        <div class="btn-group">
+          <button class="btn" onclick="handleJSON('beautify')">Beautify (Format)</button>
+          <button class="btn" onclick="handleJSON('minify')">Minify</button>
+          <button class="btn btn-secondary" onclick="copyText('json-input')">Copy JSON</button>
+          <button class="btn btn-secondary" onclick="clearText('json-input')">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSWORD GENERATOR PAGE -->
+    <div id="page-password-generator" class="page">
+      <div class="title-section">
+        <h1>Password Generator</h1>
+        <p>Generate secure random passwords using cryptographic random values</p>
+      </div>
+
+      <div class="tool-box">
+        <div class="form-group">
+          <input type="text" id="pass-output" readonly style="font-size: 1.3rem; text-align: center; letter-spacing: 2px;">
+        </div>
+
+        <div class="form-group">
+          <label>Password Length: <span id="pass-len-val" style="color:var(--accent); font-weight:bold;">16</span></label>
+          <input type="range" id="pass-len-range" min="6" max="64" value="16" oninput="document.getElementById('pass-len-val').textContent = this.value; createPassword();">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem;">
+          <label><input type="checkbox" id="chk-upper" checked onchange="createPassword()"> Uppercase (A-Z)</label>
+          <label><input type="checkbox" id="chk-lower" checked onchange="createPassword()"> Lowercase (a-z)</label>
+          <label><input type="checkbox" id="chk-num" checked onchange="createPassword()"> Numbers (0-9)</label>
+          <label><input type="checkbox" id="chk-sym" checked onchange="createPassword()"> Symbols (!@#$%^&*)</label>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn" onclick="createPassword()">Regenerate</button>
+          <button class="btn btn-secondary" onclick="copyText('pass-output')">Copy Password</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIT CONVERTER PAGE -->
+    <div id="page-unit-converter" class="page">
+      <div class="title-section">
+        <h1>Multi-Unit Converter</h1>
+        <p>Convert metrics across various parameters</p>
+      </div>
+
+      <div class="tool-box">
+        <div class="form-group">
+          <label>Conversion Category</label>
+          <select id="unit-category" onchange="initUnitOptions()">
+            <option value="length">Length</option>
+            <option value="mass">Mass / Weight</option>
+            <option value="temp">Temperature</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>From Value</label>
+            <input type="number" id="unit-from-val" value="1" oninput="execUnitConvert()">
+            <select id="unit-from-type" onchange="execUnitConvert()" style="margin-top: 0.5rem;"></select>
+          </div>
+
+          <div class="form-group">
+            <label>Result</label>
+            <input type="number" id="unit-to-val" readonly>
+            <select id="unit-to-type" onchange="execUnitConvert()" style="margin-top: 0.5rem;"></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BMI CALCULATOR PAGE -->
+    <div id="page-bmi-calculator" class="page">
+      <div class="title-section">
+        <h1>BMI Calculator</h1>
+        <p>Check your Body Mass Index and health range</p>
+      </div>
+
+      <div class="tool-box">
+        <div class="form-group">
+          <label>Weight (kg)</label>
+          <input type="number" id="bmi-weight" placeholder="e.g. 70" value="70">
+        </div>
+
+        <div class="form-group">
+          <label>Height (cm)</label>
+          <input type="number" id="bmi-height" placeholder="e.g. 175" value="175">
+        </div>
+
+        <button class="btn" onclick="calcBMI()">Calculate BMI</button>
+
+        <div id="bmi-result-area" class="result-box" style="display:none; text-align: center;">
+          <div style="font-size: 0.9rem; color: var(--text-muted);">Your BMI score is:</div>
+          <div id="bmi-score" style="font-size: 2.2rem; font-weight: bold; color: var(--accent); margin: 0.4rem 0;">22.9</div>
+          <div id="bmi-category" style="font-size: 1.1rem; font-weight: 600;">Normal Weight</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; 2026 All-In-1 Tools Suite. Fully Functional, Error-Free Client-Side Portal.</p>
+  </footer>
+
+  <script>
+    // ROUTING & PAGE SWITCHER SYSTEM
+    function navigateTo(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+
+      const targetPage = document.getElementById('page-' + pageId);
+      const targetNav = document.getElementById('nav-' + pageId);
+
+      if (targetPage) targetPage.classList.add('active');
+      if (targetNav) targetNav.classList.add('active');
+
+      window.location.hash = pageId;
+      window.scrollTo(0, 0);
+    }
+
+    window.addEventListener('load', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById('page-' + hash)) {
+        navigateTo(hash);
+      } else {
+        navigateTo('home');
+      }
+      // Initializing tools defaults
+      createPassword();
+      initUnitOptions();
+    });
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash && document.getElementById('page-' + hash)) {
+        navigateTo(hash);
+      }
+    });
+
+    // GENERAL UTILITY HELPERS
+    function copyText(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el || !el.value) return;
+      navigator.clipboard.writeText(el.value).then(() => {
+        alert('Copied to clipboard!');
+      }).catch(() => {
+        alert('Failed to copy!');
+      });
+    }
+
+    function clearText(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) el.value = '';
+      if (elementId === 'text-input') updateTextStats();
+      if (elementId === 'json-input') document.getElementById('json-error').textContent = '';
+    }
+
+    // 1. SCIENTIFIC CALCULATOR ENGINE (100% FUNCTIONAL)
+    let calcExpression = '';
+    let isDegreeMode = true;
+
+    function setAngleMode() {
+      isDegreeMode = !isDegreeMode;
+      document.getElementById('angle-mode-btn').textContent = isDegreeMode ? 'DEG' : 'RAD';
+    }
+
+    function calcInput(val) {
+      calcExpression += val;
+      updateCalcDisplay();
+    }
+
+    function calcClear() {
+      calcExpression = '';
+      document.getElementById('calc-display').textContent = '0';
+      document.getElementById('calc-expression').textContent = '';
+    }
+
+    function calcBackspace() {
+      calcExpression = calcExpression.slice(0, -1);
+      updateCalcDisplay();
+    }
+
+    function updateCalcDisplay() {
+      document.getElementById('calc-expression').textContent = calcExpression;
+    }
+
+    function factorial(n) {
+      if (n < 0) return NaN;
+      if (n === 0 || n === 1) return 1;
+      let res = 1;
+      for (let i = 2; i <= n; i++) res *= i;
+      return res;
+    }
+
+    function calcEvaluate() {
+      if (!calcExpression) return;
+      try {
+        let expr = calcExpression;
+
+        // Mathematical constants
+        expr = expr.replace(/π/g, 'Math.PI');
+        expr = expr.replace(/e/g, 'Math.E');
+
+        // Powers and Roots
+        expr = expr.replace(/\^/g, '**');
+        expr = expr.replace(/sqrt\(/g, 'Math.sqrt(');
+
+        // Factorial handling
+        expr = expr.replace(/(\d+)!/g, (_, n) => factorial(parseInt(n)));
+
+        // Trigonometric & Logarithmic functions
+        if (isDegreeMode) {
+          expr = expr.replace(/sin\(([^)]+)\)/g, (_, val) => `Math.sin((${val}) * Math.PI / 180)`);
+          expr = expr.replace(/cos\(([^)]+)\)/g, (_, val) => `Math.cos((${val}) * Math.PI / 180)`);
+          expr = expr.replace(/tan\(([^)]+)\)/g, (_, val) => `Math.tan((${val}) * Math.PI / 180)`);
+        } else {
+          expr = expr.replace(/sin\(/g, 'Math.sin(');
+          expr = expr.replace(/cos\(/g, 'Math.cos(');
+          expr = expr.replace(/tan\(/g, 'Math.tan(');
         }
 
-        // --- 5-Star Rating Modal Interceptor ---
-        let pendingDownloadCallback = null;
-        let selectedStarRating = 0;
+        expr = expr.replace(/log\(/g, 'Math.log10(');
+        expr = expr.replace(/ln\(/g, 'Math.log(');
 
-        function triggerDownloadWithRating(callback) {
-            pendingDownloadCallback = callback;
-            selectedStarRating = 0;
-            resetStarDisplay();
-            document.getElementById('rating-modal').classList.remove('hidden');
+        // Safe Evaluation using Function constructor
+        const result = Function('"use strict"; return (' + expr + ')')();
+
+        if (isNaN(result) || !isFinite(result)) {
+          document.getElementById('calc-display').textContent = 'Error';
+        } else {
+          // Precision round off to avoid JS floating issues
+          const finalVal = Math.round(result * 1e10) / 1e10;
+          document.getElementById('calc-display').textContent = finalVal;
+          calcExpression = finalVal.toString();
         }
+      } catch (e) {
+        document.getElementById('calc-display').textContent = 'Error';
+      }
+    }
 
-        function selectStars(count) {
-            selectedStarRating = count;
-            const stars = document.querySelectorAll('#star-box i');
-            stars.forEach((s, idx) => {
-                if(idx < count) s.classList.add('active');
-                else s.classList.remove('active');
-            });
-            const btn = document.getElementById('confirm-download-btn');
-            btn.disabled = false;
-            btn.className = "flex-1 py-3 rounded-xl btn-neon-green text-xs font-bold cursor-pointer";
-            document.getElementById('rating-hint').innerText = `You rated ${count} Star${count > 1 ? 's' : ''}! Click confirm below.`;
+    // 2. TEXT UTILITY ENGINE
+    const textInput = document.getElementById('text-input');
+    textInput.addEventListener('input', updateTextStats);
+
+    function updateTextStats() {
+      const val = textInput.value;
+      document.getElementById('val-chars').textContent = val.length;
+      document.getElementById('val-words').textContent = val.trim() === '' ? 0 : val.trim().split(/\s+/).length;
+      document.getElementById('val-lines').textContent = val === '' ? 0 : val.split('\n').length;
+    }
+
+    function transformText(action) {
+      let val = textInput.value;
+      if (!val) return;
+
+      if (action === 'upper') textInput.value = val.toUpperCase();
+      if (action === 'lower') textInput.value = val.toLowerCase();
+      if (action === 'clean') textInput.value = val.replace(/\s+/g, ' ').trim();
+      if (action === 'title') {
+        textInput.value = val.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+      }
+      if (action === 'b64e') {
+        try { textInput.value = btoa(val); } catch (e) { alert('Base64 Encoding Error'); }
+      }
+      if (action === 'b64d') {
+        try { textInput.value = atob(val); } catch (e) { alert('Invalid Base64 String'); }
+      }
+      updateTextStats();
+    }
+
+    // 3. QR CODE GENERATOR
+    function generateQRCode() {
+      const input = document.getElementById('qr-input-text').value.trim();
+      if (!input) {
+        alert('Please enter text or URL');
+        return;
+      }
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(input)}`;
+      document.getElementById('qr-img-result').src = qrUrl;
+      document.getElementById('qr-download-link').href = qrUrl;
+      document.getElementById('qr-output-wrap').style.display = 'block';
+    }
+
+    // 4. JSON FORMATTER & VALIDATOR
+    function handleJSON(action) {
+      const errBox = document.getElementById('json-error');
+      const inputEl = document.getElementById('json-input');
+      errBox.textContent = '';
+
+      if (!inputEl.value.trim()) return;
+
+      try {
+        const parsed = JSON.parse(inputEl.value);
+        if (action === 'beautify') {
+          inputEl.value = JSON.stringify(parsed, null, 2);
+        } else if (action === 'minify') {
+          inputEl.value = JSON.stringify(parsed);
         }
+      } catch (err) {
+        errBox.textContent = 'Invalid JSON: ' + err.message;
+      }
+    }
 
-        function resetStarDisplay() {
-            document.querySelectorAll('#star-box i').forEach(s => s.classList.remove('active'));
-            const btn = document.getElementById('confirm-download-btn');
-            btn.disabled = true;
-            btn.className = "flex-1 py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold cursor-not-allowed";
-            document.getElementById('rating-hint').innerText = "Select rating stars to continue";
-        }
+    // 5. CRYPTOGRAPHIC PASSWORD GENERATOR
+    function createPassword() {
+      const len = parseInt(document.getElementById('pass-len-range').value);
+      const incUpper = document.getElementById('chk-upper').checked;
+      const incLower = document.getElementById('chk-lower').checked;
+      const incNum = document.getElementById('chk-num').checked;
+      const incSym = document.getElementById('chk-sym').checked;
 
-        function closeRatingModal() {
-            document.getElementById('rating-modal').classList.add('hidden');
-            pendingDownloadCallback = null;
-        }
+      let chars = '';
+      if (incUpper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (incLower) chars += 'abcdefghijklmnopqrstuvwxyz';
+      if (incNum) chars += '0123456789';
+      if (incSym) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
-        function confirmRatingAndDownload() {
-            if(selectedStarRating > 0 && pendingDownloadCallback) {
-                document.getElementById('rating-modal').classList.add('hidden');
-                const cb = pendingDownloadCallback;
-                pendingDownloadCallback = null;
-                cb(); // Execute actual file merge/split/convert
-            }
-        }
+      if (!chars) {
+        document.getElementById('pass-output').value = 'Select at least 1 option';
+        return;
+      }
 
-        // --- 30-Days Reminder Suite Logic (LocalStorage & Trigger Links) ---
-        let reminderTasks = JSON.parse(localStorage.getItem('cyber_reminders') || '[]');
+      let res = '';
+      const randomValues = new Uint32Array(len);
+      window.crypto.getRandomValues(randomValues);
 
-        function saveReminders() {
-            localStorage.setItem('cyber_reminders', JSON.stringify(reminderTasks));
-            renderReminderTasks();
-        }
+      for (let i = 0; i < len; i++) {
+        res += chars[randomValues[i] % chars.length];
+      }
 
-        function addNewReminderTask() {
-            const title = document.getElementById('rem-title').value.trim();
-            const day = document.getElementById('rem-day').value;
-            const channel = document.getElementById('rem-channel').value;
-            const contact = document.getElementById('rem-contact').value.trim();
+      document.getElementById('pass-output').value = res;
+    }
 
-            if(!title || !contact) {
-                alert("Please enter Task Title and Contact Details!");
-                return;
-            }
-            if(reminderTasks.length >= 12) {
-                alert("Maximum limit of 12 Tasks reached for 30-Days Reminder Suite.");
-                return;
-            }
+    // 6. UNIT CONVERTER ENGINE
+    const unitData = {
+      length: {
+        units: ['Meter (m)', 'Kilometer (km)', 'Centimeter (cm)', 'Mile (mi)', 'Foot (ft)', 'Inch (in)'],
+        rates: { 'Meter (m)': 1, 'Kilometer (km)': 1000, 'Centimeter (cm)': 0.01, 'Mile (mi)': 1609.34, 'Foot (ft)': 0.3048, 'Inch (in)': 0.0254 }
+      },
+      mass: {
+        units: ['Kilogram (kg)', 'Gram (g)', 'Pound (lb)', 'Ounce (oz)'],
+        rates: { 'Kilogram (kg)': 1, 'Gram (g)': 0.001, 'Pound (lb)': 0.453592, 'Ounce (oz)': 0.0283495 }
+      },
+      temp: {
+        units: ['Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin (K)']
+      }
+    };
 
-            reminderTasks.push({ id: Date.now(), title, day, channel, contact, active: true });
-            document.getElementById('rem-title').value = '';
-            document.getElementById('rem-contact').value = '';
-            saveReminders();
-        }
+    function initUnitOptions() {
+      const cat = document.getElementById('unit-category').value;
+      const fromSel = document.getElementById('unit-from-type');
+      const toSel = document.getElementById('unit-to-type');
+      
+      fromSel.innerHTML = '';
+      toSel.innerHTML = '';
 
-        function addNewReminderTaskFromPage() {
-            const title = document.getElementById('rem-title-page').value.trim();
-            const day = document.getElementById('rem-day-page').value;
-            const channel = document.getElementById('rem-channel-page').value;
-            const contact = document.getElementById('rem-contact-page').value.trim();
+      unitData[cat].units.forEach((u, idx) => {
+        fromSel.add(new Option(u, u));
+        toSel.add(new Option(u, u));
+      });
 
-            if(!title || !contact) {
-                alert("Please enter Task Title and Contact Details!");
-                return;
-            }
-            if(reminderTasks.length >= 12) {
-                alert("Maximum limit of 12 Tasks reached.");
-                return;
-            }
+      if (toSel.options.length > 1) toSel.selectedIndex = 1;
+      execUnitConvert();
+    }
 
-            reminderTasks.push({ id: Date.now(), title, day, channel, contact, active: true });
-            document.getElementById('rem-title-page').value = '';
-            document.getElementById('rem-contact-page').value = '';
-            saveReminders();
-        }
+    function execUnitConvert() {
+      const cat = document.getElementById('unit-category').value;
+      const val = parseFloat(document.getElementById('unit-from-val').value);
+      const from = document.getElementById('unit-from-type').value;
+      const to = document.getElementById('unit-to-type').value;
+      const outEl = document.getElementById('unit-to-val');
 
-        function deleteReminderTask(id) {
-            reminderTasks = reminderTasks.filter(t => t.id !== id);
-            saveReminders();
-        }
+      if (isNaN(val)) {
+        outEl.value = '';
+        return;
+      }
 
-        function triggerTaskAction(id) {
-            const task = reminderTasks.find(t => t.id === id);
-            if(!task) return;
+      if (cat === 'temp') {
+        let celsius = 0;
+        if (from === 'Celsius (°C)') celsius = val;
+        else if (from === 'Fahrenheit (°F)') celsius = (val - 32) * 5 / 9;
+        else if (from === 'Kelvin (K)') celsius = val - 273.15;
 
-            const msg = encodeURIComponent(`[CYBER-REMINDER] Day ${task.day} Task: ${task.title}`);
-            if(task.channel === 'whatsapp') {
-                window.open(`https://wa.me/${task.contact.replace(/[^0-9]/g, '')}?text=${msg}`, '_blank');
-            } else if(task.channel === 'sms') {
-                window.open(`sms:${task.contact}?body=${msg}`, '_blank');
-            } else if(task.channel === 'email') {
-                window.open(`mailto:${task.contact}?subject=30-Day Reminder: ${encodeURIComponent(task.title)}&body=${msg}`, '_blank');
-            } else {
-                alert(`🔔 REMINDER TRIGGERED:\nDay ${task.day}: ${task.title}\nContact: ${task.contact}`);
-            }
-        }
+        let res = 0;
+        if (to === 'Celsius (°C)') res = celsius;
+        else if (to === 'Fahrenheit (°F)') res = (celsius * 9 / 5) + 32;
+        else if (to === 'Kelvin (K)') res = celsius + 273.15;
 
-        function renderReminderTasks() {
-            const containers = [document.getElementById('reminder-tasks-list'), document.getElementById('reminder-tasks-list-page')];
-            document.getElementById('task-counter-badge').innerText = `${reminderTasks.length} / 12 Tasks Used`;
+        outEl.value = Math.round(res * 10000) / 10000;
+      } else {
+        const base = val * unitData[cat].rates[from];
+        const res = base / unitData[cat].rates[to];
+        outEl.value = Math.round(res * 1000000) / 1000000;
+      }
+    }
 
-            containers.forEach(container => {
-                if(!container) return;
-                if(reminderTasks.length === 0) {
-                    container.innerHTML = `<div class="col-span-full text-center py-6 text-slate-500 text-xs">No active tasks configured. Add your first task above!</div>`;
-                    return;
-                }
-                container.innerHTML = '';
-                reminderTasks.forEach(t => {
-                    const card = document.createElement('div');
-                    card.className = "bg-slate-950 p-4 rounded-xl border border-yellow-500/30 flex flex-col justify-between space-y-3 relative";
-                    card.innerHTML = `
-                        <div>
-                            <div class="flex justify-between items-start mb-1">
-                                <span class="text-xs font-bold text-yellow-400 bg-yellow-500/10 px-2 py-0.5 rounded border border-yellow-500/30">Day ${t.day} of Month</span>
-                                <button onclick="deleteReminderTask(${t.id})" class="text-slate-500 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                            <h4 class="font-bold text-sm text-white line-clamp-2">${t.title}</h4>
-                            <p class="text-xs text-slate-400 mt-1 capitalize"><i class="fa-solid fa-paper-plane text-yellow-500 mr-1"></i> ${t.channel} • ${t.contact}</p>
-                        </div>
-                        <button onclick="triggerTaskAction(${t.id})" class="w-full py-1.5 rounded-lg bg-yellow-500/20 hover:bg-yellow-500/40 text-yellow-300 border border-yellow-500/40 text-xs font-bold transition">
-                            <i class="fa-solid fa-bell mr-1"></i> Send Now
-                        </button>
-                    `;
-                    container.appendChild(card);
-                });
-            });
-        }
+    // 7. BMI CALCULATOR ENGINE
+    function calcBMI() {
+      const w = parseFloat(document.getElementById('bmi-weight').value);
+      const h = parseFloat(document.getElementById('bmi-height').value) / 100;
 
-        // --- Currency Converter Logic ---
-        const exchangeRates = {
-            USD: 1, PKR: 278.50, EUR: 0.92, GBP: 0.78, AED: 3.67, SAR: 3.75, INR: 83.90, CAD: 1.36, AUD: 1.50, JPY: 155.20, CNY: 7.23
-        };
+      if (!w || !h || w <= 0 || h <= 0) {
+        alert('Please enter valid height and weight.');
+        return;
+      }
 
-        function convertCurrency() {
-            const from = document.getElementById('curr-from').value;
-            const to = document.getElementById('curr-to').value;
-            const amt = parseFloat(document.getElementById('curr-amount').value);
-            const resEl = document.getElementById('curr-result');
+      const bmi = Math.round((w / (h * h)) * 10) / 10;
+      document.getElementById('bmi-score').textContent = bmi;
 
-            if(isNaN(amt)) { resEl.innerText = "--"; return; }
+      let cat = '';
+      let color = '#38bdf8';
 
-            const amtInUSD = amt / exchangeRates[from];
-            const converted = amtInUSD * exchangeRates[to];
-            resEl.innerText = `${converted.toFixed(2)} ${to}`;
-        }
+      if (bmi < 18.5) { cat = 'Underweight'; color = '#f59e0b'; }
+      else if (bmi < 25) { cat = 'Normal Weight'; color = '#10b981'; }
+      else if (bmi < 30) { cat = 'Overweight'; color = '#f59e0b'; }
+      else { cat = 'Obese'; color = '#ef4444'; }
 
-        function swapCurrencies() {
-            const from = document.getElementById('curr-from');
-            const to = document.getElementById('curr-to');
-            const temp = from.value;
-            from.value = to.value;
-            to.value = temp;
-            convertCurrency();
-        }
+      const catEl = document.getElementById('bmi-category');
+      catEl.textContent = cat;
+      catEl.style.color = color;
 
-        // --- Smart Calculator Logic ---
-        let calcExpr = "";
-        function toggleCalc(type) {
-            document.getElementById('calc-simple').classList.add('hidden');
-            document.getElementById('calc-scientific').classList.add('hidden');
-            document.getElementById('tab-simple').className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
-            document.getElementById('tab-scientific').className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-400 hover:text-white transition";
-
-            if(type === 'simple') {
-                document.getElementById('calc-simple').classList.remove('hidden');
-                document.getElementById('tab-simple').className = "px-5 py-2 text-xs font-bold rounded-lg bg-cyan-500 text-black transition";
-            } else {
-                document.getElementById('calc-scientific').classList.remove('hidden');
-                document.getElementById('tab-scientific').className = "px-5 py-2 text-xs font-bold rounded-lg bg-cyan-500 text-black transition";
-            }
-        }
-
-        function calcAction(val) {
-            const display = document.getElementById('calc-display');
-            if(val === 'C') { calcExpr = ""; display.value = ""; }
-            else if(val === 'DEL') { calcExpr = calcExpr.slice(0, -1); display.value = calcExpr; }
-            else if(val === '=') {
-                try {
-                    let evalExpr = calcExpr
-                        .replace(/×/g, '*').replace(/÷/g, '/').replace(/\^/g, '**')
-                        .replace(/pi/g, 'Math.PI').replace(/e/g, 'Math.E')
-                        .replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(')
-                        .replace(/sqrt\(/g, 'Math.sqrt(').replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(');
-                    let res = Function('"use strict";return (' + evalExpr + ')')();
-                    res = Math.round(res * 100000000) / 100000000;
-                    display.value = res;
-                    calcExpr = res.toString();
-                } catch(e) { display.value = "Error"; calcExpr = ""; }
-            } else {
-                calcExpr += val;
-                display.value = calcExpr;
-            }
-        }
-
-        // --- PDF Merger Logic ---
-        let pdfMergeFiles = [];
-        const mergeListEl = document.getElementById('merge-file-list');
-        new Sortable(mergeListEl, {
-            animation: 150,
-            onEnd: function (evt) {
-                const itemEl = pdfMergeFiles.splice(evt.oldIndex, 1)[0];
-                pdfMergeFiles.splice(evt.newIndex, 0, itemEl);
-            },
-        });
-
-        function addMergeFiles(event) {
-            Array.from(event.target.files).forEach(f => pdfMergeFiles.push(f));
-            renderMergeList();
-            event.target.value = '';
-        }
-
-        function renderMergeList() {
-            if(pdfMergeFiles.length === 0) {
-                mergeListEl.innerHTML = '<p class="text-slate-500 text-center py-6 text-sm">No PDF files uploaded yet.</p>';
-                return;
-            }
-            mergeListEl.innerHTML = '';
-            pdfMergeFiles.forEach((file, idx) => {
-                const div = document.createElement('div');
-                div.className = 'file-list-item';
-                div.innerHTML = `<span class="text-sm text-slate-200 font-medium"><i class="fa-solid fa-bars text-cyan-400 mr-2"></i> ${file.name}</span> <span class="text-rose-400 hover:text-rose-300 cursor-pointer font-bold" onclick="removeMergeFile(${idx})">✕</span>`;
-                mergeListEl.appendChild(div);
-            });
-        }
-
-        function removeMergeFile(idx) {
-            pdfMergeFiles.splice(idx, 1);
-            renderMergeList();
-        }
-
-        async function executePdfMerge() {
-            if(pdfMergeFiles.length < 2) return alert("Please select at least 2 PDF files.");
-            const status = document.getElementById('merge-status');
-            status.innerText = "Processing PDF Merge...";
-            try {
-                const { PDFDocument } = PDFLib;
-                const mergedPdf = await PDFDocument.create();
-                for(let file of pdfMergeFiles) {
-                    const bytes = await file.arrayBuffer();
-                    const pdf = await PDFDocument.load(bytes);
-                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                    copiedPages.forEach(p => mergedPdf.addPage(p));
-                }
-                const pdfBytes = await mergedPdf.save();
-                saveAs(new Blob([pdfBytes], { type: "application/pdf" }), "Merged_Document.pdf");
-                status.innerText = "Downloaded successfully!";
-                setTimeout(() => status.innerText = "", 4000);
-            } catch(e) { status.innerText = "Error processing PDF merge."; }
-        }
-
-        // --- PDF Splitter Logic ---
-        async function executePdfSplit() {
-            const input = document.getElementById('pdf-split-input');
-            const startStr = document.getElementById('split-start').value;
-            const endStr = document.getElementById('split-end').value;
-            const status = document.getElementById('split-status');
-
-            if(!input.files.length || !startStr || !endStr) return alert("Please complete all inputs.");
-
-            let start = parseInt(startStr) - 1;
-            let end = parseInt(endStr) - 1;
-            status.innerText = "Extracting Pages...";
-            try {
-                const { PDFDocument } = PDFLib;
-                const originalPdf = await PDFDocument.load(await input.files[0].arrayBuffer());
-                if(start < 0 || end >= originalPdf.getPageCount() || start > end) {
-                    status.innerText = "";
-                    return alert("Invalid page range specified.");
-                }
-                const newPdf = await PDFDocument.create();
-                const pages = [];
-                for(let i=start; i<=end; i++) pages.push(i);
-                const copied = await newPdf.copyPages(originalPdf, pages);
-                copied.forEach(p => newPdf.addPage(p));
-                saveAs(new Blob([await newPdf.save()], { type: "application/pdf" }), "Split_Pages.pdf");
-                status.innerText = "Downloaded successfully!";
-                setTimeout(() => status.innerText = "", 4000);
-            } catch(e) { status.innerText = "Error splitting PDF."; }
-        }
-
-        // --- Image to Word Logic ---
-        async function executeImgToWord() {
-            const input = document.getElementById('img2word-input');
-            const status = document.getElementById('i2w-status');
-            if(!input.files.length) return alert("Please select image files.");
-            status.innerText = "Creating Word Doc...";
-            try {
-                const { Document, Packer, Paragraph, ImageRun } = docx;
-                const children = [];
-                for (let file of input.files) {
-                    children.push(new Paragraph({
-                        children: [ new ImageRun({ data: await file.arrayBuffer(), transformation: { width: 500, height: 500 } }) ]
-                    }));
-                }
-                const doc = new Document({ sections: [{ children }] });
-                Packer.toBlob(doc).then(blob => {
-                    saveAs(blob, "Images_Doc.docx");
-                    status.innerText = "Downloaded successfully!";
-                    setTimeout(() => status.innerText = "", 4000);
-                });
-            } catch(e) { status.innerText = "Error converting images."; }
-        }
-
-        // --- Word to Image Logic ---
-        async function executeWordToImg() {
-            const input = document.getElementById('word2img-input');
-            const status = document.getElementById('w2i-status');
-            if(!input.files.length) return alert("Please select a DOCX file.");
-            status.innerText = "Rendering Image...";
-            try {
-                const res = await mammoth.convertToHtml({ arrayBuffer: await input.files[0].arrayBuffer() });
-                const renderArea = document.getElementById('word-render-area');
-                renderArea.innerHTML = res.value;
-                html2canvas(renderArea).then(canvas => {
-                    canvas.toBlob(blob => {
-                        saveAs(blob, "Word_Page.png");
-                        status.innerText = "Downloaded successfully!";
-                        renderArea.innerHTML = "";
-                        setTimeout(() => status.innerText = "", 4000);
-                    });
-                });
-            } catch(e) { status.innerText = "Error rendering Word image."; }
-        }
-
-        // --- Unit Converter Logic ---
-        const units = {
-            length: { Meter: 1, Kilometer: 1000, Centimeter: 0.01, Millimeter: 0.001, Mile: 1609.34, Yard: 0.9144, Foot: 0.3048, Inch: 0.0254 },
-            weight: { Kilogram: 1, Gram: 0.001, Milligram: 0.000001, Pound: 0.453592, Ounce: 0.0283495 },
-            temp: { Celsius: 'C', Fahrenheit: 'F', Kelvin: 'K' },
-            area: { SquareMeter: 1, SquareKilometer: 1000000, SquareFoot: 0.092903, Acre: 4046.86, Hectare: 10000 }
-        };
-
-        function updateConvOptions() {
-            const cat = document.getElementById('conv-category').value;
-            const from = document.getElementById('conv-from');
-            const to = document.getElementById('conv-to');
-            from.innerHTML = ''; to.innerHTML = '';
-            for (let k in units[cat]) {
-                from.add(new Option(k, k));
-                to.add(new Option(k, k));
-            }
-            if(to.options.length > 1) to.selectedIndex = 1;
-            calculateConversion();
-        }
-
-        function calculateConversion() {
-            const cat = document.getElementById('conv-category').value;
-            const val = parseFloat(document.getElementById('conv-input').value);
-            const from = document.getElementById('conv-from').value;
-            const to = document.getElementById('conv-to').value;
-            const resEl = document.getElementById('conv-result');
-
-            if(isNaN(val)) { resEl.value = ''; return; }
-
-            if(cat === 'temp') {
-                let c = from === 'Celsius' ? val : (from === 'Fahrenheit' ? (val - 32)*5/9 : val - 273.15);
-                let res = to === 'Celsius' ? c : (to === 'Fahrenheit' ? (c * 9/5)+32 : c + 273.15);
-                resEl.value = res.toFixed(4);
-            } else {
-                let base = val * units[cat][from];
-                let res = base / units[cat][to];
-                resEl.value = res.toFixed(6).replace(/\.?0+$/, '');
-            }
-        }
-
-        // --- Initialization ---
-        renderReminderTasks();
-        convertCurrency();
-        updateConvOptions();
-    </script>
+      document.getElementById('bmi-result-area').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
