@@ -22,15 +22,16 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="calculator.html" class="active">Calculator</a></li>
-      <li><a href="unit-converter.html">Converters</a></li>
-      <li><a href="reminder.html">Reminder</a></li>
-      <li><a href="image-tool.html">Image Tools</a></li>
+      <li><a href="currency-converter.html">Currencies</a></li>
+      <li><a href="reminder.html">Reminders</a></li>
+      <li><a href="document-tools.html">PDF & Word</a></li>
+      <li><a href="image-tools.html">Image Tools</a></li>
     </ul>
   </nav>
 
   <div class="container">
     <div class="tool-box">
-      <h2 style="text-align: center; margin-bottom: 20px;">Scientific Calculator</h2>
+      <h2 class="tool-title">Scientific Calculator</h2>
       <input type="text" id="display" class="calc-screen" readonly value="0">
       
       <div class="calc-btn-grid">
@@ -83,15 +84,8 @@
       display.value = expr;
     }
 
-    function clearCalc() {
-      expr = '';
-      display.value = '0';
-    }
-
-    function backspace() {
-      expr = expr.slice(0, -1);
-      display.value = expr || '0';
-    }
+    function clearCalc() { expr = ''; display.value = '0'; }
+    function backspace() { expr = expr.slice(0, -1); display.value = expr || '0'; }
 
     function calcFunc(fn) {
       try {
@@ -100,22 +94,15 @@
           display.value = Math.sqrt(val);
           expr = display.value;
         }
-      } catch (e) {
-        display.value = 'Error';
-        expr = '';
-      }
+      } catch (e) { display.value = 'Error'; expr = ''; }
     }
 
     function calculate() {
       try {
-        // Safe evaluation without security risk
         let result = Function('"use strict";return (' + expr + ')')();
         display.value = result;
         expr = result.toString();
-      } catch (e) {
-        display.value = 'Error';
-        expr = '';
-      }
+      } catch (e) { display.value = 'Error'; expr = ''; }
     }
   </script>
 </body>
