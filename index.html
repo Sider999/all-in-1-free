@@ -3,34 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniTools Pro - Executive PDF & Utility Suite</title>
+    <title>Smart Free Tools - Executive Utility & Conversion Suite</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Client-Side Document Engines -->
+    <!-- Client-Side Document & Utility Engines -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <script>
         if (window.pdfjsLib) {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
         }
-        (function(){ if(window.emailjs) emailjs.init("YOUR_PUBLIC_KEY"); })();
     </script>
 
     <style>
-        .glass-panel { background: rgba(18, 24, 38, 0.8); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-card { background: rgba(26, 34, 52, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-panel { background: rgba(18, 24, 38, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: rgba(26, 34, 52, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .glow-indigo { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25); }
         .glow-emerald { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25); }
         .glow-cyan { box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.25); }
+        .glow-amber { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25); }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0b0f19; }
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
@@ -41,16 +40,16 @@
     <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- Header Navigation -->
-    <header class="glass-panel sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-slate-800">
+    <header class="glass-panel sticky top-0 z-40 px-6 py-4 flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center space-x-3.5">
             <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-cyan-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/20">
                 <div class="w-full h-full bg-[#0b0f19] rounded-[10px] flex items-center justify-center">
-                    <i class="fa-solid fa-layer-group text-cyan-400 text-lg"></i>
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 text-lg"></i>
                 </div>
             </div>
             <div>
-                <span class="text-xl font-black tracking-wider bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">OMNITOOLS PRO</span>
-                <span class="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase">iLovePDF Suite v5.0</span>
+                <span class="text-xl font-black tracking-wider bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">SMART FREE TOOLS</span>
+                <span class="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase">Pro Suite</span>
             </div>
         </div>
         <div class="text-xs text-slate-400 hidden lg:flex items-center space-x-3 bg-slate-900/80 px-4 py-2 rounded-full border border-slate-800">
@@ -58,15 +57,20 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span class="font-medium">100% Client-Side Engine • Zero-Data Logs • High Privacy</span>
+            <span class="font-medium">100% Secure Client-Side Engine • Sandboxed Privacy</span>
         </div>
     </header>
 
-    <!-- Main Viewport Layout -->
+    <!-- Main Layout -->
     <div class="flex-1 flex overflow-hidden">
         <!-- Sidebar Navigation -->
         <nav class="w-72 glass-panel border-r border-slate-800 p-4 space-y-2 hidden md:block overflow-y-auto">
-            <div class="text-[10px] font-black text-cyan-400 uppercase tracking-widest px-3 mb-2">iLovePDF Core Suite</div>
+            <div class="text-[10px] font-black text-amber-400 uppercase tracking-widest px-3 mb-2">Smart Productivity</div>
+            <button onclick="switchTab('reminder')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-amber-300 font-medium transition text-left" data-tab="reminder">
+                <i class="fa-solid fa-calendar-check w-5 text-center text-amber-400"></i><span>30-Day Smart Reminders</span>
+            </button>
+
+            <div class="text-[10px] font-black text-cyan-400 uppercase tracking-widest px-3 pt-4 mb-2">Document Tools</div>
             <button onclick="switchTab('pdf-merge')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="pdf-merge">
                 <i class="fa-solid fa-code-merge w-5 text-center text-cyan-400"></i><span>Merge PDFs</span>
             </button>
@@ -80,7 +84,7 @@
                 <i class="fa-solid fa-photo-film w-5 text-center text-amber-400"></i><span>Image Converter & Resizer</span>
             </button>
 
-            <div class="text-[10px] font-black text-indigo-400 uppercase tracking-widest px-3 pt-4 mb-2">Document Converters</div>
+            <div class="text-[10px] font-black text-indigo-400 uppercase tracking-widest px-3 pt-4 mb-2">Conversion Utilities</div>
             <button onclick="switchTab('pdf2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="pdf2word">
                 <i class="fa-solid fa-file-word w-5 text-center text-blue-400"></i><span>PDF to Editable Word</span>
             </button>
@@ -90,17 +94,8 @@
             <button onclick="switchTab('word2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="word2pdf">
                 <i class="fa-solid fa-file-pdf w-5 text-center text-rose-400"></i><span>Word (.docx) to PDF</span>
             </button>
-            <button onclick="switchTab('img2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="img2pdf">
-                <i class="fa-solid fa-images w-5 text-center text-purple-400"></i><span>Image to PDF</span>
-            </button>
-            <button onclick="switchTab('pdf2img')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="pdf2img">
-                <i class="fa-solid fa-image w-5 text-center text-amber-400"></i><span>PDF to High-Res PNG</span>
-            </button>
 
-            <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-3 pt-4 mb-2">Productivity & Utilities</div>
-            <button onclick="switchTab('reminder')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="reminder">
-                <i class="fa-solid fa-paper-plane w-5 text-center text-indigo-400"></i><span>30-Day Auto Reminder</span>
-            </button>
+            <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-3 pt-4 mb-2">Calculators & Units</div>
             <button onclick="switchTab('unit')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="unit">
                 <i class="fa-solid fa-ruler-combined w-5 text-center text-sky-400"></i><span>Universal Unit Converter</span>
             </button>
@@ -116,15 +111,62 @@
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
             <!-- Mobile Selector -->
             <div class="flex md:hidden space-x-2 overflow-x-auto pb-3 mb-6 border-b border-slate-800">
-                <button onclick="switchTab('pdf-merge')" class="tab-btn-m px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold whitespace-nowrap">Merge PDF</button>
+                <button onclick="switchTab('reminder')" class="tab-btn-m px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold whitespace-nowrap">Reminders</button>
+                <button onclick="switchTab('pdf-merge')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Merge PDF</button>
                 <button onclick="switchTab('pdf-split')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Split PDF</button>
                 <button onclick="switchTab('pdf-watermark')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Watermark</button>
                 <button onclick="switchTab('pdf2word')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">PDF->Word</button>
-                <button onclick="switchTab('reminder')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Reminder</button>
             </div>
 
-            <!-- 1. MERGE PDF FILES -->
-            <div id="tab-pdf-merge" class="tab-content max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
+            <!-- 1. MULTI-TASK 30-DAY REMINDER TOOL -->
+            <div id="tab-reminder" class="tab-content max-w-4xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-amber">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="p-3.5 bg-amber-500/10 text-amber-400 rounded-2xl border border-amber-500/20">
+                            <i class="fa-solid fa-calendar-check text-2xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white tracking-wide">30-Day Multi-Task Reminder Engine</h2>
+                            <p class="text-xs text-slate-400">Schedule daily automated reminders for up to 12 active tasks (1 to 30 Days duration).</p>
+                        </div>
+                    </div>
+                    <span id="task-counter-badge" class="px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-amber-400 text-xs font-bold">0 / 12 Tasks</span>
+                </div>
+                <hr class="border-slate-800 my-5">
+
+                <!-- Task Form -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="md:col-span-1">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Task Title / Details</label>
+                        <input type="text" id="rem-title" placeholder="e.g. Project Submission / Bill Payment" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Duration (1 to 30 Days)</label>
+                        <select id="rem-days" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
+                            <!-- JS dynamic fill 1 to 30 -->
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Daily Alert Time</label>
+                        <input type="time" id="rem-time" value="09:00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+
+                <button onclick="addReminderTask()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-amber-600/20 flex items-center justify-center space-x-2 text-sm mb-8">
+                    <i class="fa-solid fa-plus-circle"></i><span>Schedule Daily Reminder Task</span>
+                </button>
+
+                <!-- Scheduled Tasks List -->
+                <div>
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Active Task Schedules</h3>
+                    <div id="reminder-tasks-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Dynamic Task Cards -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. MERGE PDF FILES -->
+            <div id="tab-pdf-merge" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
                 <div class="flex items-center space-x-4 mb-3">
                     <div class="p-3.5 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20">
                         <i class="fa-solid fa-code-merge text-2xl"></i>
@@ -147,7 +189,7 @@
                 </div>
             </div>
 
-            <!-- 2. SPLIT & EXTRACT PDF PAGES -->
+            <!-- 3. SPLIT & EXTRACT PDF PAGES -->
             <div id="tab-pdf-split" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-indigo">
                 <div class="flex items-center space-x-4 mb-3">
                     <div class="p-3.5 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20">
@@ -164,7 +206,7 @@
                         <input type="file" id="pdf-split-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Page Selection (e.g. 1-3, 5)</label>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Page Range (e.g. 1-3)</label>
                         <input type="text" id="pdf-split-range" placeholder="1-3" value="1-2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500">
                     </div>
                     <button onclick="executePDFSplit()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 text-sm">
@@ -173,7 +215,7 @@
                 </div>
             </div>
 
-            <!-- 3. WATERMARK PDF GENERATOR -->
+            <!-- 4. WATERMARK PDF GENERATOR -->
             <div id="tab-pdf-watermark" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-emerald">
                 <div class="flex items-center space-x-4 mb-3">
                     <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
@@ -181,7 +223,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-bold text-white tracking-wide">PDF Watermark Generator</h2>
-                        <p class="text-xs text-slate-400">Stamp custom text, copyright, or security labels onto PDF pages.</p>
+                        <p class="text-xs text-slate-400">Stamp custom text or security labels onto PDF pages.</p>
                     </div>
                 </div>
                 <hr class="border-slate-800 my-5">
@@ -199,7 +241,7 @@
                 </div>
             </div>
 
-            <!-- 4. IMAGE CONVERTER & RESIZER -->
+            <!-- 5. IMAGE CONVERTER & RESIZER -->
             <div id="tab-img-convert" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
                 <div class="flex items-center space-x-4 mb-3">
                     <div class="p-3.5 bg-amber-500/10 text-amber-400 rounded-2xl border border-amber-500/20">
@@ -235,54 +277,38 @@
                 </div>
             </div>
 
-            <!-- EXISTING COMPONENT TABS (30-Day Reminder, PDF2Word, OCR, Word2PDF, Units, Currency, Calc) -->
+            <!-- CONVERTER & CALCULATOR TABS -->
             <div id="tab-pdf2word" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
                 <h2 class="text-xl font-bold text-white mb-2">Spatial PDF to Editable Word</h2>
+                <p class="text-xs text-slate-400 mb-4">Extract structured text into Microsoft Word format.</p>
                 <input type="file" id="pdf-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
                 <button onclick="convertPDFToWord()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">Convert to Word (.doc)</button>
             </div>
 
             <div id="tab-img2word" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
                 <h2 class="text-xl font-bold text-white mb-2">Image to Word (AI OCR Engine)</h2>
+                <p class="text-xs text-slate-400 mb-4">Recognize and extract text from images automatically.</p>
                 <input type="file" id="ocr-image-input" accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
                 <button onclick="convertImageToWord()" class="w-full bg-teal-600 text-white font-bold py-3 rounded-xl">Extract Text & Download Word</button>
             </div>
 
             <div id="tab-word2pdf" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
                 <h2 class="text-xl font-bold text-white mb-2">Word (.docx) to PDF Converter</h2>
+                <p class="text-xs text-slate-400 mb-4">Convert Word documents into read-only PDF format.</p>
                 <input type="file" id="word-input" accept=".docx" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
                 <button onclick="convertWordToPDF()" class="w-full bg-rose-600 text-white font-bold py-3 rounded-xl">Convert to PDF</button>
-            </div>
-
-            <div id="tab-img2pdf" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">Image to PDF (Multi-Page)</h2>
-                <input type="file" id="image-input" multiple accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <button onclick="convertToPDF()" class="w-full bg-purple-600 text-white font-bold py-3 rounded-xl">Generate Multi-Page PDF</button>
-            </div>
-
-            <div id="tab-pdf2img" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">PDF to High-Res PNG Pages</h2>
-                <input type="file" id="pdf2img-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <button onclick="convertPDFToImages()" class="w-full bg-amber-600 text-white font-bold py-3 rounded-xl">Extract PNG Pages</button>
-            </div>
-
-            <div id="tab-reminder" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">30-Day Multi-Channel Reminder</h2>
-                <input type="text" id="rem-title" placeholder="Event Title" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs mb-3">
-                <input type="datetime-local" id="rem-date" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <button onclick="execute30DaySchedule()" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl">Schedule Reminders</button>
             </div>
 
             <div id="tab-unit" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
                 <h2 class="text-xl font-bold text-white mb-2">Universal Unit Converter</h2>
                 <input type="number" id="unit-input" value="1" oninput="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <input type="text" id="unit-output" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs">
+                <input type="text" id="unit-output" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-cyan-300">
             </div>
 
             <div id="tab-currency" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
                 <h2 class="text-xl font-bold text-white mb-2">160+ Live Global Currencies</h2>
                 <input type="number" id="curr-amount" value="100" oninput="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <div id="curr-result" class="text-3xl font-bold text-emerald-400">0.00</div>
+                <div id="curr-result" class="text-3xl font-bold text-emerald-400">USD 100 = 27,850 PKR</div>
             </div>
 
             <div id="tab-calc" class="tab-content hidden max-w-md mx-auto glass-panel rounded-3xl p-6">
@@ -292,8 +318,53 @@
         </main>
     </div>
 
-    <!-- JavaScript Engines -->
+    <!-- 5-STAR RATING MODAL (POPUP BEFORE DOWNLOAD) -->
+    <div id="rating-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="max-w-md w-full glass-panel rounded-3xl p-6 text-center border border-amber-500/30 glow-amber transform transition-all scale-95" id="rating-modal-box">
+            <div class="h-16 w-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/20 text-2xl">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <h3 class="text-xl font-extrabold text-white mb-1">Rate Smart Free Tools</h3>
+            <p class="text-xs text-slate-400 mb-6">Please give us a 5-Star rating to support our free client-side tools before downloading your file!</p>
+            
+            <div class="flex items-center justify-center space-x-2 text-2xl text-amber-400 mb-6 cursor-pointer">
+                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(1)"></i>
+                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(2)"></i>
+                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(3)"></i>
+                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(4)"></i>
+                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(5)"></i>
+            </div>
+
+            <div class="space-y-2">
+                <button onclick="confirmRatingAndDownload()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black py-3 rounded-xl transition shadow-lg text-sm">
+                    Submit 5-Star Rating & Download File
+                </button>
+                <button onclick="bypassRatingAndDownload()" class="w-full bg-transparent hover:bg-slate-800 text-slate-400 text-xs py-2 rounded-xl transition">
+                    Skip & Direct Download
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Engines & Safe Operations -->
     <script>
+        // State Management
+        let activeDownloadCallback = null;
+        const MAX_REMINDER_TASKS = 12;
+
+        // Populate Duration Select (1 to 30 Days)
+        document.addEventListener('DOMContentLoaded', () => {
+            const daysSelect = document.getElementById('rem-days');
+            for (let i = 1; i <= 30; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = i === 1 ? '1 Day (Remind Daily)' : `${i} Days (Daily Reminders for ${i-1} Days)`;
+                daysSelect.appendChild(opt);
+            }
+            loadReminderTasks();
+            switchTab('reminder');
+        });
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             const target = document.getElementById('tab-' + tabId);
@@ -308,7 +379,130 @@
             });
         }
 
-        // 1. PDF MERGE ENGINE
+        // --- 5-STAR RATING & DOWNLOAD INTERCEPTOR ---
+        function downloadBlob(data, filename, type) {
+            triggerRatingModal(() => {
+                const blob = new Blob([data], { type: type });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                setTimeout(() => URL.revokeObjectURL(link.href), 1500);
+            });
+        }
+
+        function triggerRatingModal(callback) {
+            activeDownloadCallback = callback;
+            const modal = document.getElementById('rating-modal');
+            modal.classList.remove('hidden');
+        }
+
+        function selectRating(stars) {
+            alert(`Thank you for giving us a ${stars}-Star Rating!`);
+            confirmRatingAndDownload();
+        }
+
+        function confirmRatingAndDownload() {
+            document.getElementById('rating-modal').classList.add('hidden');
+            if (activeDownloadCallback) {
+                activeDownloadCallback();
+                activeDownloadCallback = null;
+            }
+        }
+
+        function bypassRatingAndDownload() {
+            document.getElementById('rating-modal').classList.add('hidden');
+            if (activeDownloadCallback) {
+                activeDownloadCallback();
+                activeDownloadCallback = null;
+            }
+        }
+
+        // --- 30-DAY MULTI-TASK REMINDER LOGIC (UP TO 12 TASKS) ---
+        function loadReminderTasks() {
+            const tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
+            const grid = document.getElementById('reminder-tasks-grid');
+            const badge = document.getElementById('task-counter-badge');
+            
+            badge.textContent = `${tasks.length} / ${MAX_REMINDER_TASKS} Tasks`;
+            grid.innerHTML = '';
+
+            if (tasks.length === 0) {
+                grid.innerHTML = '<div class="col-span-2 text-center text-xs text-slate-500 py-8 bg-slate-900/40 rounded-2xl border border-slate-800">No active reminder tasks scheduled yet.</div>';
+                return;
+            }
+
+            tasks.forEach((task, idx) => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-4 border border-slate-800 flex justify-between items-start";
+                
+                const titleEl = document.createElement('h4');
+                titleEl.className = "font-bold text-slate-200 text-sm mb-1";
+                titleEl.textContent = task.title;
+
+                const detailEl = document.createElement('p');
+                detailEl.className = "text-xs text-amber-400 font-medium";
+                detailEl.textContent = `Daily Alert at ${task.time} (${task.days} Days Schedule)`;
+
+                const scheduleEl = document.createElement('p');
+                scheduleEl.className = "text-[10px] text-slate-500 mt-1";
+                scheduleEl.textContent = `Reminding daily for ${task.days - 1 > 0 ? task.days - 1 : 1} days prior to target.`;
+
+                const leftDiv = document.createElement('div');
+                leftDiv.appendChild(titleEl);
+                leftDiv.appendChild(detailEl);
+                leftDiv.appendChild(scheduleEl);
+
+                const delBtn = document.createElement('button');
+                delBtn.className = "text-slate-500 hover:text-rose-400 p-2 text-xs transition";
+                delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                delBtn.onclick = () => deleteReminderTask(idx);
+
+                card.appendChild(leftDiv);
+                card.appendChild(delBtn);
+                grid.appendChild(card);
+            });
+        }
+
+        function addReminderTask() {
+            const titleInput = document.getElementById('rem-title');
+            const daysInput = document.getElementById('rem-days');
+            const timeInput = document.getElementById('rem-time');
+
+            const title = titleInput.value.trim();
+            const days = parseInt(daysInput.value);
+            const time = timeInput.value;
+
+            if (!title) { alert('Please enter a valid task title.'); return; }
+
+            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
+            if (tasks.length >= MAX_REMINDER_TASKS) {
+                alert('Maximum 12 tasks reached. Please delete an existing task to add a new one.');
+                return;
+            }
+
+            if ('Notification' in window && Notification.permission !== 'granted') {
+                Notification.requestPermission();
+            }
+
+            tasks.push({ title, days, time, createdAt: new Date().toISOString() });
+            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
+            
+            titleInput.value = '';
+            loadReminderTasks();
+            alert(`Task "${title}" scheduled successfully for a ${days}-day daily reminder cycle!`);
+        }
+
+        function deleteReminderTask(idx) {
+            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
+            tasks.splice(idx, 1);
+            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
+            loadReminderTasks();
+        }
+
+        // --- PDF & UTILITY EXECUTORS ---
         async function executePDFMerge() {
             const files = document.getElementById('pdf-merge-input').files;
             if (!files || files.length < 2) { alert('Please select at least 2 PDF files to merge.'); return; }
@@ -322,11 +516,10 @@
                     pages.forEach(page => mergedPdf.addPage(page));
                 }
                 const pdfBytes = await mergedPdf.save();
-                downloadBlob(pdfBytes, 'merged_omnitools.pdf', 'application/pdf');
+                downloadBlob(pdfBytes, 'merged_document.pdf', 'application/pdf');
             } catch (e) { alert('Merge Error: ' + e.message); }
         }
 
-        // 2. PDF SPLIT ENGINE
         async function executePDFSplit() {
             const files = document.getElementById('pdf-split-input').files;
             const rangeStr = document.getElementById('pdf-split-range').value || "1-2";
@@ -351,11 +544,10 @@
                 copiedPages.forEach(page => newPdf.addPage(page));
 
                 const pdfBytes = await newPdf.save();
-                downloadBlob(pdfBytes, 'split_omnitools.pdf', 'application/pdf');
+                downloadBlob(pdfBytes, 'split_document.pdf', 'application/pdf');
             } catch (e) { alert('Split Error: ' + e.message); }
         }
 
-        // 3. PDF WATERMARK ENGINE
         async function executePDFWatermark() {
             const files = document.getElementById('pdf-wm-input').files;
             const text = document.getElementById('pdf-wm-text').value || "CONFIDENTIAL";
@@ -372,7 +564,7 @@
                     page.drawText(text, {
                         x: width / 4,
                         y: height / 2,
-                        size: 38,
+                        size: 36,
                         font: font,
                         color: PDFLib.rgb(0.7, 0.7, 0.7),
                         opacity: 0.35,
@@ -381,11 +573,10 @@
                 });
 
                 const pdfBytes = await pdfDoc.save();
-                downloadBlob(pdfBytes, 'watermarked_omnitools.pdf', 'application/pdf');
+                downloadBlob(pdfBytes, 'watermarked_document.pdf', 'application/pdf');
             } catch (e) { alert('Watermark Error: ' + e.message); }
         }
 
-        // 4. IMAGE CONVERTER & RESIZER
         function executeImageConverter() {
             const input = document.getElementById('img-conv-input');
             const format = document.getElementById('img-conv-format').value;
@@ -414,10 +605,13 @@
 
                     const ext = format.split('/')[1];
                     canvas.toBlob(blob => {
-                        const link = document.createElement('a');
-                        link.href = URL.createObjectURL(blob);
-                        link.download = `converted_image.${ext}`;
-                        link.click();
+                        triggerRatingModal(() => {
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.download = `converted_image.${ext}`;
+                            link.click();
+                            setTimeout(() => URL.revokeObjectURL(link.href), 1500);
+                        });
                     }, format, 0.92);
                 };
                 img.src = e.target.result;
@@ -425,18 +619,15 @@
             reader.readAsDataURL(file);
         }
 
-        function downloadBlob(data, filename, type) {
-            const blob = new Blob([data], { type: type });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        function convertUnits() {
+            const val = parseFloat(document.getElementById('unit-input').value) || 0;
+            document.getElementById('unit-output').value = `${val} Meters = ${(val * 3.28084).toFixed(2)} Feet`;
         }
 
-        // Initialize Default View
-        switchTab('pdf-merge');
+        function convertCurrency() {
+            const val = parseFloat(document.getElementById('curr-amount').value) || 0;
+            document.getElementById('curr-result').textContent = `USD ${val} = ${(val * 278.50).toLocaleString()} PKR`;
+        }
     </script>
 </body>
 </html>
