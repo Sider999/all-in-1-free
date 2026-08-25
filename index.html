@@ -1,271 +1,414 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Tool Utility Portal</title>
-    <!-- Libraries for Converters & Formatting -->
+    <title>Pro Multi-Tool Hub & Portal</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Converters & Utility JS Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f4f7f6; color: #333; padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { text-align: center; margin-bottom: 20px; color: #1a73e8; }
-        
-        /* Navigation Tabs */
-        .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .tab-btn { padding: 10px 18px; border: none; background: #e8f0fe; color: #1a73e8; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        .tab-btn.active, .tab-btn:hover { background: #1a73e8; color: #fff; }
-        
-        .tool-card { display: none; background: #fafafa; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-top: 10px; }
-        .tool-card.active { display: block; }
-        
-        /* Forms & Inputs */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: 600; }
-        input, select, textarea, button { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        button.action-btn { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        button.action-btn:hover { background: #218838; }
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-        /* Calculator Specifics */
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
-        .calc-display { grid-column: span 4; font-size: 24px; text-align: right; background: #222; color: #00ffcc; padding: 15px; border-radius: 6px; }
-        .calc-btn { background: #e0e0e0; font-size: 16px; font-weight: bold; padding: 15px; border: none; border-radius: 6px; cursor: pointer; }
-        .calc-btn:hover { background: #d0d0d0; }
-        .calc-btn.op { background: #ff9800; color: white; }
-        .calc-btn.sci { background: #009688; color: white; }
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-main: #f8fafc;
+            --surface: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* Top Navigation Header */
+        header { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 70px; }
+        .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.25rem; color: var(--primary); }
+        .brand i { font-size: 1.5rem; }
         
-        .status { margin-top: 10px; font-weight: bold; color: #007bff; }
+        .top-nav { display: flex; gap: 8px; list-style: none; overflow-x: auto; padding: 5px 0; }
+        .nav-item { padding: 8px 16px; font-size: 0.9rem; font-weight: 500; border-radius: 8px; color: var(--text-muted); cursor: pointer; transition: all 0.2s ease; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+        .nav-item:hover { background: #f1f5f9; color: var(--text-dark); }
+        .nav-item.active { background: #e0e7ff; color: var(--primary); font-weight: 600; }
+
+        /* Main Portal Layout */
+        .main-layout { max-width: 1400px; margin: 25px auto; display: grid; grid-template-columns: 260px 1fr; gap: 25px; padding: 0 20px; width: 100%; flex: 1; }
+
+        /* Sidebar Navigation */
+        .sidebar { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px; height: fit-content; box-shadow: var(--shadow); }
+        .sidebar-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin: 10px 0 8px 10px; letter-spacing: 0.05em; }
+        .side-btn { width: 100%; text-align: left; padding: 10px 14px; border: none; background: transparent; border-radius: 8px; font-size: 0.9rem; color: var(--text-dark); cursor: pointer; display: flex; align-items: center; gap: 10px; margin-bottom: 4px; transition: 0.2s; }
+        .side-btn:hover { background: #f1f5f9; }
+        .side-btn.active { background: var(--primary); color: white; }
+
+        /* Main Content View Container */
+        .content-area { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; box-shadow: var(--shadow); }
+        .tool-panel { display: none; }
+        .tool-panel.active { display: block; }
+        .panel-header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .panel-header h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); }
+        .panel-header p { font-size: 0.9rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* UI Inputs & Buttons */
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; font-size: 0.875rem; margin-bottom: 6px; color: var(--text-dark); }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; outline: none; transition: 0.2s; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+        .btn-primary { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        /* Modern Scientific Calculator Styling */
+        .calc-wrapper { max-width: 420px; margin: 0 auto; background: #0f172a; padding: 20px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        .calc-screen { background: #1e293b; color: #38bdf8; font-size: 1.8rem; font-family: monospace; text-align: right; padding: 20px; border-radius: 10px; margin-bottom: 15px; min-height: 70px; word-wrap: break-word; word-break: break-all; }
+        .calc-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .btn-calc { padding: 15px; font-size: 1rem; font-weight: 600; border: none; border-radius: 8px; background: #334155; color: white; cursor: pointer; transition: 0.1s; }
+        .btn-calc:hover { background: #475569; }
+        .btn-calc.op { background: #6366f1; }
+        .btn-calc.op:hover { background: #4f46e5; }
+        .btn-calc.sci { background: #0284c7; font-size: 0.85rem; }
+        .btn-calc.sci:hover { background: #0369a1; }
+        .btn-calc.danger { background: #ef4444; }
+        .btn-calc.danger:hover { background: #dc2626; }
+
+        /* Output & Status Boxes */
+        .status-box { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 500; font-size: 0.9rem; }
+        .status-box.info { background: #e0f2fe; color: #0369a1; }
+        .status-box.success { background: #dcfce7; color: #15803d; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Multi-Tool Web Portal</h1>
-    
-    <!-- Tab Controls -->
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('reminders')">Reminders Tool</button>
-        <button class="tab-btn" onclick="switchTab('calculators')">Simple & Scientific Calculator</button>
-        <button class="tab-btn" onclick="switchTab('converters')">Document & Image Converters</button>
+    <!-- TOP GLOBAL NAVIGATION BAR -->
+    <header>
+        <div class="nav-container">
+            <div class="brand">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>ProUtility Web</span>
+            </div>
+            <ul class="top-nav">
+                <li class="nav-item active" onclick="switchCategory('all')"><i class="fa-solid fa-border-all"></i> All Tools</li>
+                <li class="nav-item" onclick="switchCategory('productivity')"><i class="fa-solid fa-bell"></i> Reminders</li>
+                <li class="nav-item" onclick="switchCategory('math')"><i class="fa-solid fa-calculator"></i> Calculators</li>
+                <li class="nav-item" onclick="switchCategory('converters')"><i class="fa-solid fa-file-export"></i> Document Converters</li>
+                <li class="nav-item" onclick="switchCategory('text')"><i class="fa-solid fa-font"></i> Text Tools</li>
+                <li class="nav-item" onclick="switchCategory('dev')"><i class="fa-solid fa-code"></i> Developer & Web Tools</li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- MAIN PORTAL CONTAINER -->
+    <div class="main-layout">
+        <!-- SIDEBAR DIRECTORY -->
+        <aside class="sidebar">
+            <div class="sidebar-title">Core Utilities</div>
+            <button class="side-btn active" onclick="loadTool('reminders-tool')"><i class="fa-solid fa-clock"></i> Smart Reminders</button>
+            <button class="side-btn" onclick="loadTool('calc-tool')"><i class="fa-solid fa-calculator"></i> Dual Calculator</button>
+            <button class="side-btn" onclick="loadTool('converter-tool')"><i class="fa-solid fa-file-pdf"></i> File Converters</button>
+            
+            <div class="sidebar-title">Restored Classic Tools</div>
+            <button class="side-btn" onclick="loadTool('text-tool')"><i class="fa-solid fa-align-left"></i> Text Editor & Case</button>
+            <button class="side-btn" onclick="loadTool('qr-tool')"><i class="fa-solid fa-qrcode"></i> QR Code Generator</button>
+            <button class="side-btn" onclick="loadTool('base64-tool')"><i class="fa-solid fa-shield-halved"></i> Base64 Encoder</button>
+        </aside>
+
+        <!-- MAIN CONTENT TOOL PANELS -->
+        <main class="content-area">
+            
+            <!-- 1. SMART REMINDERS TOOL -->
+            <div id="reminders-tool" class="tool-panel active">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-bell" style="color: var(--primary);"></i> Smart Notification & Reminder System</h2>
+                    <p>Send direct scheduled text alerts via WhatsApp, SMS, Email, or Web Push.</p>
+                </div>
+                <div class="form-group">
+                    <label>Reminder Text Message:</label>
+                    <textarea id="remMsg" rows="3" placeholder="Type your reminder message here..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Select Delivery Channel:</label>
+                    <select id="remChannel" onchange="updateReminderInputs()">
+                        <option value="whatsapp">WhatsApp Direct Message</option>
+                        <option value="sms">SMS Text Message</option>
+                        <option value="email">Email Notification</option>
+                        <option value="browser">Browser Push Notification</option>
+                    </select>
+                </div>
+                <div class="form-group" id="recipientContainer">
+                    <label id="recipientLabel">Phone Number (with country code e.g. 923001234567):</label>
+                    <input type="text" id="remRecipient" placeholder="e.g. 923001234567">
+                </div>
+                <button class="btn-primary" onclick="executeReminder()"><i class="fa-solid fa-paper-plane"></i> Dispatch Reminder</button>
+                <div id="remStatus"></div>
+            </div>
+
+            <!-- 2. DUAL CALCULATOR TOOL -->
+            <div id="calc-tool" class="tool-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-calculator" style="color: var(--primary);"></i> Simple & Scientific Calculator</h2>
+                    <p>Fully functional scientific engine with logarithm, square root ($\sqrt{x}$), and exponent calculations.</p>
+                </div>
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; margin-right: 20px;">
+                        <input type="radio" name="calcMode" value="simple" checked onclick="toggleCalcUI()"> Simple Mode
+                    </label>
+                    <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="calcMode" value="sci" onclick="toggleCalcUI()"> Scientific Mode
+                    </label>
+                </div>
+
+                <div class="calc-wrapper">
+                    <div class="calc-screen" id="calcDisplay">0</div>
+                    <div class="calc-controls">
+                        <!-- Scientific Mode Buttons -->
+                        <button class="btn-calc sci sci-btn" onclick="calcMath('sqrt')">√x</button>
+                        <button class="btn-calc sci sci-btn" onclick="calcMath('log')">log₁₀</button>
+                        <button class="btn-calc sci sci-btn" onclick="calcMath('ln')">ln</button>
+                        <button class="btn-calc sci sci-btn" onclick="appendCalc('**')">x^y</button>
+
+                        <button class="btn-calc danger" onclick="clearCalc()">C</button>
+                        <button class="btn-calc danger" onclick="deleteCalc()">DEL</button>
+                        <button class="btn-calc op" onclick="appendCalc('/')">/</button>
+                        <button class="btn-calc op" onclick="appendCalc('*')">×</button>
+
+                        <button class="btn-calc" onclick="appendCalc('7')">7</button>
+                        <button class="btn-calc" onclick="appendCalc('8')">8</button>
+                        <button class="btn-calc" onclick="appendCalc('9')">9</button>
+                        <button class="btn-calc op" onclick="appendCalc('-')">-</button>
+
+                        <button class="btn-calc" onclick="appendCalc('4')">4</button>
+                        <button class="btn-calc" onclick="appendCalc('5')">5</button>
+                        <button class="btn-calc" onclick="appendCalc('6')">6</button>
+                        <button class="btn-calc op" onclick="appendCalc('+')">+</button>
+
+                        <button class="btn-calc" onclick="appendCalc('1')">1</button>
+                        <button class="btn-calc" onclick="appendCalc('2')">2</button>
+                        <button class="btn-calc" onclick="appendCalc('3')">3</button>
+                        <button class="btn-calc op" onclick="solveCalc()" style="grid-row: span 2; height: 100%;">=</button>
+
+                        <button class="btn-calc" onclick="appendCalc('0')" style="grid-column: span 2;">0</button>
+                        <button class="btn-calc" onclick="appendCalc('.')">.</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. FILE & DOCUMENT CONVERTERS -->
+            <div id="converter-tool" class="tool-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-file-export" style="color: var(--primary);"></i> Document & Image Converter</h2>
+                    <p>Convert seamlessly between Word (.docx), PDF, and Image formats completely client-side.</p>
+                </div>
+                <div class="form-group">
+                    <label>Select Conversion Operation:</label>
+                    <select id="convType">
+                        <option value="word2pdf">Word (.docx) to PDF</option>
+                        <option value="pdf2word">PDF to Word (.doc)</option>
+                        <option value="img2pdf">Image to PDF</option>
+                        <option value="pdf2img">PDF to Image (PNG)</option>
+                        <option value="img2word">Image to Word (.doc)</option>
+                        <option value="word2img">Word (.docx) to Image</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Choose File from Computer:</label>
+                    <input type="file" id="fileInput">
+                </div>
+                <button class="btn-primary" onclick="convertFile()"><i class="fa-solid fa-arrows-rotate"></i> Start Conversion</button>
+                <div id="convStatus"></div>
+            </div>
+
+            <!-- 4. TEXT TOOLS (RESTORED CLASSIC TOOL) -->
+            <div id="text-tool" class="tool-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-font" style="color: var(--primary);"></i> Text Manipulation Tool</h2>
+                    <p>Analyze word count, strip white space, and transform text cases.</p>
+                </div>
+                <div class="form-group">
+                    <textarea id="textInput" rows="6" placeholder="Enter or paste your content here..."></textarea>
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
+                    <button class="btn-primary" onclick="transformText('upper')">UPPERCASE</button>
+                    <button class="btn-primary" onclick="transformText('lower')">lowercase</button>
+                    <button class="btn-primary" onclick="transformText('clean')">Remove Extra Spaces</button>
+                </div>
+                <div class="status-box info" id="textStats">Words: 0 | Characters: 0</div>
+            </div>
+
+            <!-- 5. QR CODE GENERATOR (RESTORED CLASSIC TOOL) -->
+            <div id="qr-tool" class="tool-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-qrcode" style="color: var(--primary);"></i> QR Code Generator</h2>
+                    <p>Create downloadable vector-ready QR codes for URLs and text.</p>
+                </div>
+                <div class="form-group">
+                    <label>Enter Web URL or Text:</label>
+                    <input type="text" id="qrText" placeholder="https://example.com">
+                </div>
+                <button class="btn-primary" onclick="generateQR()">Generate QR Code</button>
+                <div id="qrcode" style="margin-top:20px;"></div>
+            </div>
+
+            <!-- 6. BASE64 TOOL (RESTORED CLASSIC TOOL) -->
+            <div id="base64-tool" class="tool-panel">
+                <div class="panel-header">
+                    <h2><i class="fa-solid fa-shield-halved" style="color: var(--primary);"></i> Base64 Encoder / Decoder</h2>
+                    <p>Encode plain text into base64 standard string or decode string back.</p>
+                </div>
+                <div class="form-group">
+                    <textarea id="b64Input" rows="4" placeholder="Enter string..."></textarea>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-primary" onclick="processBase64(true)">Encode to Base64</button>
+                    <button class="btn-primary" onclick="processBase64(false)">Decode from Base64</button>
+                </div>
+                <div class="form-group" style="margin-top:20px;">
+                    <label>Result:</label>
+                    <textarea id="b64Output" rows="4" readonly></textarea>
+                </div>
+            </div>
+
+        </main>
     </div>
-
-    <!-- 1. REMINDERS TOOL -->
-    <div id="reminders" class="tool-card active">
-        <h2>Smart Reminder Tool</h2>
-        <div class="form-group">
-            <label>Reminder Message:</label>
-            <textarea id="remText" rows="3" placeholder="Enter your notification text..."></textarea>
-        </div>
-        <div class="form-group">
-            <label>Send Option / Platform:</label>
-            <select id="remPlatform" onchange="toggleContactInput()">
-                <option value="whatsapp">WhatsApp Message</option>
-                <option value="sms">SMS Text</option>
-                <option value="email">Email</option>
-                <option value="browser">Browser Notification</option>
-            </select>
-        </div>
-        <div class="form-group" id="contactGroup">
-            <label id="contactLabel">Phone Number (with Country Code e.g. 923001234567):</label>
-            <input type="text" id="remContact" placeholder="e.g., 923001234567">
-        </div>
-        <button class="action-btn" onclick="sendReminder()">Send / Schedule Reminder</button>
-        <div id="reminderStatus" class="status"></div>
-    </div>
-
-    <!-- 2. CALCULATORS -->
-    <div id="calculators" class="tool-card">
-        <h2>Dual Calculator (Simple & Scientific)</h2>
-        <div class="calc-display" id="calcDisplay">0</div>
-        
-        <!-- Toggle Simple / Scientific Controls -->
-        <div style="margin: 10px 0;">
-            <label><input type="radio" name="calcType" value="simple" checked onclick="toggleCalcMode()"> Simple Mode</label>
-            <label style="margin-left: 15px;"><input type="radio" name="calcType" value="scientific" onclick="toggleCalcMode()"> Scientific Mode</label>
-        </div>
-
-        <div class="calc-grid">
-            <!-- Scientific Row (Hidden in Simple Mode) -->
-            <button class="calc-btn sci sci-mode" onclick="calcFunc('sqrt')">√x</button>
-            <button class="calc-btn sci sci-mode" onclick="calcFunc('log')">log10</button>
-            <button class="calc-btn sci sci-mode" onclick="calcFunc('ln')">ln</button>
-            <button class="calc-btn sci sci-mode" onclick="appendCalc('**')">x^y</button>
-
-            <!-- Standard Buttons -->
-            <button class="calc-btn" onclick="clearCalc()">C</button>
-            <button class="calc-btn" onclick="backspaceCalc()">DEL</button>
-            <button class="calc-btn op" onclick="appendCalc('/')">/</button>
-            <button class="calc-btn op" onclick="appendCalc('*')">*</button>
-
-            <button class="calc-btn" onclick="appendCalc('7')">7</button>
-            <button class="calc-btn" onclick="appendCalc('8')">8</button>
-            <button class="calc-btn" onclick="appendCalc('9')">9</button>
-            <button class="calc-btn op" onclick="appendCalc('-')">-</button>
-
-            <button class="calc-btn" onclick="appendCalc('4')">4</button>
-            <button class="calc-btn" onclick="appendCalc('5')">5</button>
-            <button class="calc-btn" onclick="appendCalc('6')">6</button>
-            <button class="calc-btn op" onclick="appendCalc('+')">+</button>
-
-            <button class="calc-btn" onclick="appendCalc('1')">1</button>
-            <button class="calc-btn" onclick="appendCalc('2')">2</button>
-            <button class="calc-btn" onclick="appendCalc('3')">3</button>
-            <button class="calc-btn op" onclick="calculateResult()">=</button>
-
-            <button class="calc-btn" onclick="appendCalc('0')" style="grid-column: span 2;">0</button>
-            <button class="calc-btn" onclick="appendCalc('.')">.</button>
-        </div>
-    </div>
-
-    <!-- 3. CONVERTERS -->
-    <div id="converters" class="tool-card">
-        <h2>Document & Image Converters</h2>
-        <div class="form-group">
-            <label>Select Conversion Type:</label>
-            <select id="conversionType">
-                <option value="img2pdf">Image to PDF</option>
-                <option value="pdf2img">PDF to Image (PNG)</option>
-                <option value="word2pdf">Word (.docx) to PDF</option>
-                <option value="pdf2word">PDF to Word (.doc)</option>
-                <option value="img2word">Image to Word (.doc)</option>
-                <option value="word2img">Word (.docx) to Image</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Upload Input File:</label>
-            <input type="file" id="converterInputFile">
-        </div>
-        <button class="action-btn" onclick="processConversion()">Convert & Download</button>
-        <div id="converterStatus" class="status"></div>
-        <div id="canvasContainer" style="display:none;"></div>
-    </div>
-</div>
 
 <script>
-    // Tab Switcher
-    function switchTab(tabId) {
-        document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
+    // --- PORTAL NAVIGATION SYSTEM ---
+    function loadTool(toolId) {
+        document.querySelectorAll('.tool-panel').forEach(panel => panel.classList.remove('active'));
+        document.querySelectorAll('.side-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(toolId).classList.add('active');
+        event.currentTarget.classList.add('active');
     }
 
-    // --- REMINDERS TOOL LOGIC ---
-    function toggleContactInput() {
-        const platform = document.getElementById('remPlatform').value;
-        const label = document.getElementById('contactLabel');
-        const group = document.getElementById('contactGroup');
+    function switchCategory(cat) {
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        event.currentTarget.classList.add('active');
         
-        if(platform === 'whatsapp' || platform === 'sms') {
-            group.style.display = 'block';
-            label.innerText = 'Phone Number (with country code e.g. 923001234567):';
-        } else if(platform === 'email') {
-            group.style.display = 'block';
-            label.innerText = 'Target Email Address:';
+        if (cat === 'productivity') loadTool('reminders-tool');
+        if (cat === 'math') loadTool('calc-tool');
+        if (cat === 'converters') loadTool('converter-tool');
+        if (cat === 'text') loadTool('text-tool');
+        if (cat === 'dev') loadTool('qr-tool');
+        if (cat === 'all') loadTool('reminders-tool');
+    }
+
+    // --- REMINDERS SYSTEM ---
+    function updateReminderInputs() {
+        const channel = document.getElementById('remChannel').value;
+        const container = document.getElementById('recipientContainer');
+        const label = document.getElementById('recipientLabel');
+
+        if (channel === 'whatsapp' || channel === 'sms') {
+            container.style.display = 'block';
+            label.innerText = "Phone Number (with Country Code e.g., 923001234567):";
+        } else if (channel === 'email') {
+            container.style.display = 'block';
+            label.innerText = "Target Email Address:";
         } else {
-            group.style.display = 'none';
+            container.style.display = 'none';
         }
     }
 
-    function sendReminder() {
-        const msg = encodeURIComponent(document.getElementById('remText').value);
-        const platform = document.getElementById('remPlatform').value;
-        const contact = document.getElementById('remContact').value.trim();
-        const status = document.getElementById('reminderStatus');
+    function executeReminder() {
+        const msg = encodeURIComponent(document.getElementById('remMsg').value);
+        const channel = document.getElementById('remChannel').value;
+        const recipient = document.getElementById('remRecipient').value.trim();
+        const status = document.getElementById('remStatus');
 
-        if (!msg) { status.innerText = "Please enter a reminder message."; return; }
+        if(!msg) {
+            status.innerHTML = `<div class="status-box info">Please enter a message for your reminder.</div>`;
+            return;
+        }
 
-        if (platform === 'whatsapp') {
-            window.open(`https://wa.me/${contact}?text=${msg}`, '_blank');
-        } else if (platform === 'sms') {
-            window.open(`sms:${contact}?body=${msg}`, '_blank');
-        } else if (platform === 'email') {
-            window.open(`mailto:${contact}?subject=Reminder&body=${msg}`, '_blank');
-        } else if (platform === 'browser') {
+        if (channel === 'whatsapp') {
+            window.open(`https://wa.me/${recipient}?text=${msg}`, '_blank');
+        } else if (channel === 'sms') {
+            window.open(`sms:${recipient}?body=${msg}`, '_blank');
+        } else if (channel === 'email') {
+            window.open(`mailto:${recipient}?subject=Reminder&body=${msg}`, '_blank');
+        } else if (channel === 'browser') {
             if ("Notification" in window) {
-                Notification.requestPermission().then(perm => {
-                    if (perm === "granted") new Notification("Reminder", { body: decodeURIComponent(msg) });
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") new Notification("Reminder Alert", { body: decodeURIComponent(msg) });
                     else alert(decodeURIComponent(msg));
                 });
             } else { alert(decodeURIComponent(msg)); }
         }
-        status.innerText = "Reminder request launched successfully!";
+        status.innerHTML = `<div class="status-box success"><i class="fa-solid fa-check"></i> Reminder dispatched successfully!</div>`;
     }
 
-    // --- CALCULATOR LOGIC ---
-    let calcVal = "";
-    
-    function toggleCalcMode() {
-        const mode = document.querySelector('input[name="calcType"]:checked').value;
-        const sciBtns = document.querySelectorAll('.sci-mode');
-        sciBtns.forEach(btn => btn.style.display = (mode === 'scientific') ? 'block' : 'none');
+    // --- CALCULATOR ENGINE ---
+    let expression = "";
+
+    function toggleCalcUI() {
+        const mode = document.querySelector('input[name="calcMode"]:checked').value;
+        const sciBtns = document.querySelectorAll('.sci-btn');
+        sciBtns.forEach(b => b.style.display = (mode === 'sci') ? 'block' : 'none');
     }
-    toggleCalcMode();
+    toggleCalcUI();
 
-    function appendCalc(val) { calcVal += val; updateCalcDisplay(); }
-    function clearCalc() { calcVal = ""; updateCalcDisplay(); }
-    function backspaceCalc() { calcVal = calcVal.slice(0, -1); updateCalcDisplay(); }
-    function updateCalcDisplay() { document.getElementById('calcDisplay').innerText = calcVal || "0"; }
+    function appendCalc(val) { expression += val; renderCalc(); }
+    function clearCalc() { expression = ""; renderCalc(); }
+    function deleteCalc() { expression = expression.slice(0, -1); renderCalc(); }
+    function renderCalc() { document.getElementById('calcDisplay').innerText = expression || "0"; }
 
-    function calcFunc(fn) {
+    function calcMath(func) {
         try {
-            let current = eval(calcVal || "0");
-            if (fn === 'sqrt') calcVal = Math.sqrt(current).toString();
-            if (fn === 'log') calcVal = Math.log10(current).toString();
-            if (fn === 'ln') calcVal = Math.log(current).toString();
-            updateCalcDisplay();
+            let currentNum = eval(expression || "0");
+            if (func === 'sqrt') expression = Math.sqrt(currentNum).toString();
+            if (func === 'log') expression = Math.log10(currentNum).toString();
+            if (func === 'ln') expression = Math.log(currentNum).toString();
+            renderCalc();
         } catch(e) {
-            document.getElementById('calcDisplay').innerText = "Error";
-            calcVal = "";
+            document.getElementById('calcDisplay').innerText = "Math Error";
+            expression = "";
         }
     }
 
-    function calculateResult() {
+    function solveCalc() {
         try {
-            calcVal = eval(calcVal).toString();
-            updateCalcDisplay();
+            expression = eval(expression).toString();
+            renderCalc();
         } catch(e) {
-            document.getElementById('calcDisplay').innerText = "Error";
-            calcVal = "";
+            document.getElementById('calcDisplay').innerText = "Syntax Error";
+            expression = "";
         }
     }
 
-    // --- FILE CONVERTERS LOGIC ---
+    // --- DOCUMENT CONVERTERS ENGINE ---
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-    async function processConversion() {
-        const type = document.getElementById('conversionType').value;
-        const fileInput = document.getElementById('converterInputFile');
-        const status = document.getElementById('converterStatus');
-        
-        if (!fileInput.files[0]) { status.innerText = "Please select a file first."; return; }
-        const file = fileInput.files[0];
-        status.innerText = "Processing conversion, please wait...";
+    async function convertFile() {
+        const type = document.getElementById('convType').value;
+        const input = document.getElementById('fileInput');
+        const status = document.getElementById('convStatus');
+
+        if (!input.files[0]) {
+            status.innerHTML = `<div class="status-box info">Please attach a valid file first.</div>`;
+            return;
+        }
+
+        const file = input.files[0];
+        status.innerHTML = `<div class="status-box info"><i class="fa-solid fa-spinner fa-spin"></i> Processing your file conversion...</div>`;
 
         try {
-            if (type === 'img2pdf') {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF();
-                    pdf.addImage(e.target.result, 'JPEG', 10, 10, 180, 160);
-                    pdf.save('converted.pdf');
-                    status.innerText = "Completed!";
-                };
-                reader.readAsDataURL(file);
-            } 
-            else if (type === 'word2pdf') {
+            if (type === 'word2pdf') {
                 const reader = new FileReader();
                 reader.onload = async function(e) {
-                    const result = await mammoth.convertToHtml({arrayBuffer: e.target.result});
-                    const element = document.createElement('div');
-                    element.innerHTML = result.value;
-                    html2pdf().from(element).save('converted.pdf');
-                    status.innerText = "Completed!";
+                    const res = await mammoth.convertToHtml({arrayBuffer: e.target.result});
+                    const div = document.createElement('div');
+                    div.innerHTML = res.value;
+                    html2pdf().from(div).save('document.pdf');
+                    status.innerHTML = `<div class="status-box success">Converted & Downloaded!</div>`;
                 };
                 reader.readAsArrayBuffer(file);
             }
@@ -274,16 +417,27 @@
                 reader.onload = async function(e) {
                     const typedarray = new Uint8Array(e.target.result);
                     const pdf = await pdfjsLib.getDocument(typedarray).promise;
-                    let fullText = "";
+                    let text = "";
                     for(let i=1; i<=pdf.numPages; i++){
                         const page = await pdf.getPage(i);
-                        const textContent = await page.getTextContent();
-                        fullText += textContent.items.map(item => item.str).join(' ') + "\n\n";
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(' ') + "\n\n";
                     }
-                    downloadFile(fullText, 'converted_doc.doc', 'text/plain');
-                    status.innerText = "Completed!";
+                    saveDownload(text, 'converted_pdf.doc', 'text/plain');
+                    status.innerHTML = `<div class="status-box success">PDF extracted to Word!</div>`;
                 };
                 reader.readAsArrayBuffer(file);
+            }
+            else if (type === 'img2pdf') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    doc.addImage(e.target.result, 'JPEG', 10, 10, 180, 160);
+                    doc.save('image.pdf');
+                    status.innerHTML = `<div class="status-box success">Image PDF saved!</div>`;
+                };
+                reader.readAsDataURL(file);
             }
             else if (type === 'pdf2img') {
                 const reader = new FileReader();
@@ -300,56 +454,55 @@
                     
                     const a = document.createElement('a');
                     a.href = canvas.toDataURL('image/png');
-                    a.download = 'pdf_page_1.png';
+                    a.download = 'pdf_page.png';
                     a.click();
-                    status.innerText = "Completed!";
-                };
-                reader.readAsArrayBuffer(file);
-            }
-            else if (type === 'img2word') {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const html = `<html><body><img src="${e.target.result}" style="max-width:100%;"></body></html>`;
-                    downloadFile(html, 'image_document.doc', 'text/html');
-                    status.innerText = "Completed!";
-                };
-                reader.readAsDataURL(file);
-            }
-            else if (type === 'word2img') {
-                const reader = new FileReader();
-                reader.onload = async function(e) {
-                    const result = await mammoth.convertToHtml({arrayBuffer: e.target.result});
-                    const container = document.createElement('div');
-                    container.style.width = '600px';
-                    container.style.padding = '20px';
-                    container.style.background = '#fff';
-                    container.innerHTML = result.value;
-                    document.body.appendChild(container);
-                    
-                    html2pdf().from(container).toImg().outputImg('dataurl').then(imgData => {
-                        const a = document.createElement('a');
-                        a.href = imgData;
-                        a.download = 'word_as_image.png';
-                        a.click();
-                        document.body.removeChild(container);
-                        status.innerText = "Completed!";
-                    });
+                    status.innerHTML = `<div class="status-box success">Page converted to PNG Image!</div>`;
                 };
                 reader.readAsArrayBuffer(file);
             }
         } catch(err) {
-            status.innerText = "Error processing file: " + err.message;
+            status.innerHTML = `<div class="status-box info">Execution failed: ${err.message}</div>`;
         }
     }
 
-    function downloadFile(content, fileName, mimeType) {
-        const blob = new Blob([content], { type: mimeType });
+    function saveDownload(data, name, type) {
+        const file = new Blob([data], {type: type});
         const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = fileName;
+        a.href = URL.createObjectURL(file);
+        a.download = name;
         a.click();
     }
-</script>
 
+    // --- RESTORED TEXT & UTILITY TOOLS ---
+    document.getElementById('textInput').addEventListener('input', function() {
+        const val = this.value;
+        const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+        document.getElementById('textStats').innerText = `Words: ${words} | Characters: ${val.length}`;
+    });
+
+    function transformText(action) {
+        const elem = document.getElementById('textInput');
+        if (action === 'upper') elem.value = elem.value.toUpperCase();
+        if (action === 'lower') elem.value = elem.value.toLowerCase();
+        if (action === 'clean') elem.value = elem.value.replace(/\s+/g, ' ').trim();
+    }
+
+    function generateQR() {
+        const val = document.getElementById('qrText').value;
+        const box = document.getElementById('qrcode');
+        box.innerHTML = "";
+        if(val) new QRCode(box, val);
+    }
+
+    function processBase64(isEncode) {
+        const input = document.getElementById('b64Input').value;
+        const out = document.getElementById('b64Output');
+        try {
+            out.value = isEncode ? btoa(input) : atob(input);
+        } catch(e) {
+            out.value = "Invalid input string for Base64 execution.";
+        }
+    }
+</script>
 </body>
 </html>
