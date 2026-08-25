@@ -48,6 +48,8 @@
         /* Navigation Sidebar */
         .sidebar-card { background: var(--sidebar-bg); border-radius: var(--radius-xl); padding: 22px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); height: fit-content; }
         .sidebar-title { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #94a3b8; margin: 18px 0 8px 10px; letter-spacing: 0.1em; }
+        .sidebar-title.top-title { margin-top: 0; }
+        
         .nav-btn { width: 100%; text-align: left; padding: 12px 16px; border: none; background: transparent; border-radius: var(--radius-lg); font-size: 0.9rem; font-weight: 700; color: #334155; cursor: pointer; display: flex; align-items: center; gap: 12px; margin-bottom: 6px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
         .nav-btn:hover { background: #f1f5f9; color: #4f46e5; transform: translateX(3px); }
         .nav-btn.active { background: var(--primary-grad); color: #ffffff; box-shadow: var(--shadow-glow); }
@@ -64,16 +66,18 @@
         .tool-header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 6px; font-weight: 500; }
 
         /* UI Forms & Action Controls */
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 20px; }
-        .form-group { margin-bottom: 20px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 20px; align-items: flex-end; }
+        .form-group { margin-bottom: 18px; }
         label { display: block; font-weight: 700; font-size: 0.88rem; margin-bottom: 8px; color: #1e293b; }
         input, select, textarea { width: 100%; padding: 14px 18px; border: 1.5px solid var(--border-color); border-radius: var(--radius-lg); font-size: 0.95rem; font-weight: 500; outline: none; background: #ffffff; transition: 0.2s; }
         input:focus, select:focus, textarea:focus { border-color: #8b5cf6; box-shadow: 0 0 0 4px var(--accent-glow); }
         
-        .btn-action { background: var(--primary-grad); color: #ffffff; border: none; padding: 14px 28px; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; transition: all 0.2s ease; box-shadow: var(--shadow-glow); }
+        .btn-action { background: var(--primary-grad); color: #ffffff; border: none; padding: 14px 28px; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s ease; box-shadow: var(--shadow-glow); }
         .btn-action:hover { transform: translateY(-2px); box-shadow: 0 15px 35px -5px rgba(168, 85, 247, 0.45); }
         .btn-secondary { background: #e2e8f0; color: #1e293b; border: none; padding: 10px 18px; border-radius: var(--radius-md); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
         .btn-secondary:hover { background: #cbd5e1; }
+        .btn-swap { background: #6366f1; color: #ffffff; border: none; height: 50px; width: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px auto; transition: 0.2s; box-shadow: var(--shadow-glow); }
+        .btn-swap:hover { transform: rotate(180deg) scale(1.1); }
 
         /* PDF Merge File List Item Styling */
         .file-list-box { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; min-height: 100px; }
@@ -81,13 +85,14 @@
         .file-item-name { font-weight: 700; font-size: 0.9rem; color: #0f172a; display: flex; align-items: center; gap: 10px; word-break: break-all; }
 
         /* Scientific / Simple Dual Calculator */
-        .calc-wrapper { max-width: 450px; margin: 0 auto; background: #090d16; padding: 26px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+        .calc-wrapper { max-width: 480px; margin: 0 auto; background: #090d16; padding: 26px; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
         .calc-display { background: #172033; color: #38bdf8; font-size: 2.2rem; font-family: monospace; text-align: right; padding: 20px; border-radius: 14px; margin-bottom: 22px; min-height: 80px; overflow-x: auto; word-break: break-all; border: 1px solid rgba(255,255,255,0.05); }
-        .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-        .c-btn { padding: 16px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 12px; background: #26334d; color: #fff; cursor: pointer; transition: all 0.15s ease; }
+        .calc-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .c-btn { padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 12px; background: #26334d; color: #fff; cursor: pointer; transition: all 0.15s ease; }
         .c-btn:hover { background: #3b4f75; transform: scale(1.02); }
         .c-btn.op { background: #6366f1; }
-        .c-btn.sci { background: #0284c7; font-size: 0.9rem; }
+        .c-btn.sci { background: #0284c7; font-size: 0.85rem; }
+        .c-btn.trig { background: #8b5cf6; font-size: 0.85rem; }
         .c-btn.danger { background: #ef4444; }
 
         /* 30-Days Task Reminders Cards */
@@ -123,30 +128,68 @@
     <!-- APP MAIN LAYOUT -->
     <div class="app-layout">
         
-        <!-- SIDEBAR DIRECTORY -->
+        <!-- SIDEBAR DIRECTORY (REMINDERS TOP SHIFTED) -->
         <aside class="sidebar-card">
+            <div class="sidebar-title top-title">Smart Workflows</div>
+            <button class="nav-btn active" id="btn-reminders-30days" onclick="switchTab('reminders-30days')"><i class="fa-solid fa-bell"></i> 1 to 30 Days Reminders</button>
+
             <div class="sidebar-title">PDF & Document Suite</div>
-            <button class="nav-btn active" onclick="switchTab('merge-pdf')"><i class="fa-solid fa-object-group"></i> Merge PDF (Multi-Add)</button>
-            <button class="nav-btn" onclick="switchTab('split-pdf')"><i class="fa-solid fa-scissors"></i> Split PDF</button>
-            <button class="nav-btn" onclick="switchTab('ocr-tool')"><i class="fa-solid fa-file-lines"></i> OCR Text Extractor</button>
-            <button class="nav-btn" onclick="switchTab('doc-converters')"><i class="fa-solid fa-file-export"></i> Document Converters</button>
+            <button class="nav-btn" id="btn-merge-pdf" onclick="switchTab('merge-pdf')"><i class="fa-solid fa-object-group"></i> Merge PDF (Multi-Add)</button>
+            <button class="nav-btn" id="btn-split-pdf" onclick="switchTab('split-pdf')"><i class="fa-solid fa-scissors"></i> Split PDF</button>
+            <button class="nav-btn" id="btn-ocr-tool" onclick="switchTab('ocr-tool')"><i class="fa-solid fa-file-lines"></i> OCR Text Extractor</button>
+            <button class="nav-btn" id="btn-doc-converters" onclick="switchTab('doc-converters')"><i class="fa-solid fa-file-export"></i> Document Converters</button>
 
             <div class="sidebar-title">Calculators & Math</div>
-            <button class="nav-btn" onclick="switchTab('calculators')"><i class="fa-solid fa-calculator"></i> Simple & Scientific Calc</button>
+            <button class="nav-btn" id="btn-calculators" onclick="switchTab('calculators')"><i class="fa-solid fa-calculator"></i> Simple & Scientific Calc</button>
 
             <div class="sidebar-title">Universal Converters</div>
-            <button class="nav-btn" onclick="switchTab('unit-converter')"><i class="fa-solid fa-ruler-combined"></i> Unit Converter</button>
-            <button class="nav-btn" onclick="switchTab('currency-converter')"><i class="fa-solid fa-coins"></i> Currency Converter</button>
-
-            <div class="sidebar-title">Smart Workflows</div>
-            <button class="nav-btn" onclick="switchTab('reminders-30days')"><i class="fa-solid fa-bell"></i> 1 to 30 Days Reminders</button>
+            <button class="nav-btn" id="btn-unit-converter" onclick="switchTab('unit-converter')"><i class="fa-solid fa-ruler-combined"></i> Unit Converter</button>
+            <button class="nav-btn" id="btn-currency-converter" onclick="switchTab('currency-converter')"><i class="fa-solid fa-coins"></i> Currency Converter</button>
         </aside>
 
         <!-- MAIN WORKSPACE -->
         <main class="workspace-card">
 
-            <!-- 1. MERGE PDF (MULTI-ADD SUPPORT) -->
-            <div id="merge-pdf" class="tool-panel active">
+            <!-- 1. 1 TO 30 DAYS TASK REMINDERS ENGINE (NOW TOP) -->
+            <div id="reminders-30days" class="tool-panel active">
+                <div class="tool-header">
+                    <h2><i class="fa-solid fa-bell" style="color:#6366f1"></i> 1 to 30 Days Task Reminders</h2>
+                    <p>Schedule active tasks (1 to 30 Days selector) with direct automated triggers via WhatsApp, SMS, and Email.</p>
+                </div>
+
+                <div style="background:#f8fafc; padding:22px; border-radius:16px; border:1px solid var(--border-color); margin-bottom:24px;">
+                    <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-plus-circle" style="color:#6366f1"></i> Schedule New Task Reminder</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Task Message / Title:</label>
+                            <input type="text" id="remTaskTitle" placeholder="e.g. Manuscript Proofreading Due">
+                        </div>
+                        <div class="form-group">
+                            <label>Select Duration (1 to 30 Days):</label>
+                            <select id="remDaysSelect"></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Alert Delivery Channel:</label>
+                            <select id="remChannel">
+                                <option value="whatsapp">WhatsApp Direct Message</option>
+                                <option value="sms">SMS Text Message</option>
+                                <option value="email">Email Notification</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact (Phone / Email):</label>
+                            <input type="text" id="remContact" placeholder="923001234567 or email@domain.com">
+                        </div>
+                    </div>
+                    <button class="btn-action" onclick="saveTaskReminder()"><i class="fa-solid fa-clock"></i> Schedule Task</button>
+                </div>
+
+                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:14px;">Active Scheduled Reminders (<span id="remCount">0</span>/12 Slots Used)</h3>
+                <div id="remTaskList"></div>
+            </div>
+
+            <!-- 2. MERGE PDF (MULTI-ADD SUPPORT) -->
+            <div id="merge-pdf" class="tool-panel">
                 <div class="tool-header">
                     <h2><i class="fa-solid fa-object-group" style="color:#6366f1"></i> Merge PDF Documents</h2>
                     <p>Add PDF files sequentially, reorder pages, and merge them into a single PDF document.</p>
@@ -165,7 +208,7 @@
                 <div id="mergeStatus"></div>
             </div>
 
-            <!-- 2. SPLIT PDF -->
+            <!-- 3. SPLIT PDF -->
             <div id="split-pdf" class="tool-panel">
                 <div class="tool-header">
                     <h2><i class="fa-solid fa-scissors" style="color:#6366f1"></i> Split PDF Pages</h2>
@@ -183,15 +226,15 @@
                 <div id="splitStatus"></div>
             </div>
 
-            <!-- 3. OCR TEXT EXTRACTOR -->
+            <!-- 4. OCR TEXT EXTRACTOR -->
             <div id="ocr-tool" class="tool-panel">
                 <div class="tool-header">
                     <h2><i class="fa-solid fa-file-lines" style="color:#6366f1"></i> OCR Text Extractor</h2>
                     <p>Scan images or document photos to extract clean, editable plain text.</p>
                 </div>
                 <div class="form-group">
-                    <label>Upload Image File (PNG, JPG, WEBP):</label>
-                    <input type="file" id="ocrInputFile" accept="image/*">
+                    <label>Upload Image File (PNG, JPG, WEBP, TIFF):</label>
+                    <input type="file" id="ocrInputFile" accept="image/png, image/jpeg, image/webp, image/tiff">
                 </div>
                 <button class="btn-action" onclick="processOCR()"><i class="fa-solid fa-wand-magic-sparkles"></i> Extract Text</button>
                 <div id="ocrStatus"></div>
@@ -203,36 +246,36 @@
                 <button class="btn-action" style="background:#059669;" onclick="triggerRatingAndExecute(downloadOCRText)"><i class="fa-solid fa-file-arrow-down"></i> Save Text File</button>
             </div>
 
-            <!-- 4. DOCUMENT CONVERTERS -->
+            <!-- 5. MULTI-FORMAT DOCUMENT & IMAGE CONVERTERS -->
             <div id="doc-converters" class="tool-panel">
                 <div class="tool-header">
-                    <h2><i class="fa-solid fa-file-export" style="color:#6366f1"></i> Universal Document Converters</h2>
-                    <p>Convert seamlessly between Word (.docx), PDF, and Images client-side.</p>
+                    <h2><i class="fa-solid fa-file-export" style="color:#6366f1"></i> Multi-Format Document & Image Converters</h2>
+                    <p>Seamlessly convert Word, PDF, PNG, JPG, WEBP, and TIFF formats client-side.</p>
                 </div>
                 <div class="form-group">
                     <label>Select Conversion Type:</label>
-                    <select id="docConvType">
+                    <select id="docConvType" onchange="updateDocConvAccept()">
                         <option value="word2pdf">Word (.docx) to PDF</option>
                         <option value="pdf2word">PDF to Word (.doc)</option>
-                        <option value="img2pdf">Image to PDF</option>
-                        <option value="pdf2img">PDF to Image (PNG)</option>
-                        <option value="img2word">Image to Word (.doc)</option>
-                        <option value="word2img">Word (.docx) to Image</option>
+                        <option value="img2pdf">Image (PNG/JPG/WEBP/TIFF) to PDF</option>
+                        <option value="img2word">Image (PNG/JPG/WEBP/TIFF) to Word (.doc)</option>
+                        <option value="pdf2img">PDF to Image (PNG / JPG / WEBP)</option>
+                        <option value="word2img">Word (.docx) to Image (PNG)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Choose File:</label>
                     <input type="file" id="docConvInput">
                 </div>
-                <button class="btn-action" onclick="triggerRatingAndExecute(processDocConversion)"><i class="fa-solid fa-sync"></i> Convert Document</button>
+                <button class="btn-action" onclick="triggerRatingAndExecute(processDocConversion)"><i class="fa-solid fa-sync"></i> Convert & Download</button>
                 <div id="docConvStatus"></div>
             </div>
 
-            <!-- 5. CALCULATORS -->
+            <!-- 6. CALCULATORS (WITH SIN, COS, TAN OPERATIONAL FUNCTIONS) -->
             <div id="calculators" class="tool-panel">
                 <div class="tool-header">
                     <h2><i class="fa-solid fa-calculator" style="color:#6366f1"></i> Simple & Scientific Calculator</h2>
-                    <p>High-precision calculation engine for basic arithmetic and advanced logarithmic functions.</p>
+                    <p>Precision calculator featuring standard arithmetic, logs, square root, and sin, cos, tan functions.</p>
                 </div>
                 <div style="text-align:center; margin-bottom:18px;">
                     <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; margin-right:24px;">
@@ -246,14 +289,20 @@
                 <div class="calc-wrapper">
                     <div class="calc-display" id="calcDisplay">0</div>
                     <div class="calc-buttons">
+                        <!-- Trigonometric Operational Functions -->
+                        <button class="c-btn trig sci-btn" onclick="calcTrig('sin')">sin</button>
+                        <button class="c-btn trig sci-btn" onclick="calcTrig('cos')">cos</button>
+                        <button class="c-btn trig sci-btn" onclick="calcTrig('tan')">tan</button>
+                        <button class="c-btn sci sci-btn" onclick="pushCalc('**')">x^y</button>
+
                         <button class="c-btn sci sci-btn" onclick="calcMath('sqrt')">√x</button>
                         <button class="c-btn sci sci-btn" onclick="calcMath('log')">log₁₀</button>
                         <button class="c-btn sci sci-btn" onclick="calcMath('ln')">ln</button>
-                        <button class="c-btn sci sci-btn" onclick="pushCalc('**')">x^y</button>
+                        <button class="c-btn op" onclick="pushCalc('/')">/</button>
 
                         <button class="c-btn danger" onclick="clearCalc()">C</button>
                         <button class="c-btn danger" onclick="delCalc()">DEL</button>
-                        <button class="c-btn op" onclick="pushCalc('/')">/</button>
+                        <button class="c-btn op" onclick="pushCalc('%')">%</button>
                         <button class="c-btn op" onclick="pushCalc('*')">×</button>
 
                         <button class="c-btn" onclick="pushCalc('7')">7</button>
@@ -277,7 +326,7 @@
                 </div>
             </div>
 
-            <!-- 6. UNIVERSAL UNIT CONVERTER -->
+            <!-- 7. UNIVERSAL UNIT CONVERTER -->
             <div id="unit-converter" class="tool-panel">
                 <div class="tool-header">
                     <h2><i class="fa-solid fa-ruler-combined" style="color:#6366f1"></i> Universal Unit Converter</h2>
@@ -308,7 +357,7 @@
                 <div class="status-msg success" id="unitResultBox">Result: 1 Meter = 3.2808 Foot</div>
             </div>
 
-            <!-- 7. UNIVERSAL CURRENCY CONVERTER -->
+            <!-- 8. UNIVERSAL CURRENCY CONVERTER (ALL GLOBAL CURRENCIES + SWAP BUTTON) -->
             <div id="currency-converter" class="tool-panel">
                 <div class="tool-header">
                     <h2><i class="fa-solid fa-coins" style="color:#6366f1"></i> Universal Currency Converter</h2>
@@ -321,68 +370,17 @@
                     </div>
                     <div class="form-group">
                         <label>From Currency:</label>
-                        <select id="currFrom" onchange="calculateCurrency()">
-                            <option value="USD">USD - US Dollar</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="GBP">GBP - British Pound</option>
-                            <option value="PKR" selected>PKR - Pakistani Rupee</option>
-                            <option value="INR">INR - Indian Rupee</option>
-                            <option value="AED">AED - UAE Dirham</option>
-                            <option value="SAR">SAR - Saudi Riyal</option>
-                        </select>
+                        <select id="currFrom" onchange="calculateCurrency()"></select>
                     </div>
+                    
+                    <button class="btn-swap" onclick="swapCurrencies()" title="Swap Currencies"><i class="fa-solid fa-right-left"></i></button>
+
                     <div class="form-group">
                         <label>To Currency:</label>
-                        <select id="currTo" onchange="calculateCurrency()">
-                            <option value="USD" selected>USD - US Dollar</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="GBP">GBP - British Pound</option>
-                            <option value="PKR">PKR - Pakistani Rupee</option>
-                            <option value="INR">INR - Indian Rupee</option>
-                            <option value="AED">AED - UAE Dirham</option>
-                            <option value="SAR">SAR - Saudi Riyal</option>
-                        </select>
+                        <select id="currTo" onchange="calculateCurrency()"></select>
                     </div>
                 </div>
                 <div class="status-msg success" id="currResultBox">Converted: 100 PKR = $0.36 USD</div>
-            </div>
-
-            <!-- 8. 1 TO 30 DAYS TASK REMINDERS ENGINE -->
-            <div id="reminders-30days" class="tool-panel">
-                <div class="tool-header">
-                    <h2><i class="fa-solid fa-bell" style="color:#6366f1"></i> 1 to 30 Days Task Reminders</h2>
-                    <p>Schedule up to 12 active tasks (1 to 30 Days selector) with daily alerts via WhatsApp, SMS, and Email.</p>
-                </div>
-
-                <div style="background:#f8fafc; padding:22px; border-radius:16px; border:1px solid var(--border-color); margin-bottom:24px;">
-                    <h3 style="font-size:1.05rem; font-weight:800; margin-bottom:16px;"><i class="fa-solid fa-plus-circle" style="color:#6366f1"></i> Schedule New Task Reminder</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Task Message / Title:</label>
-                            <input type="text" id="remTaskTitle" placeholder="e.g. Complete Biological Data Submission">
-                        </div>
-                        <div class="form-group">
-                            <label>Select Duration (1 to 30 Days):</label>
-                            <select id="remDaysSelect"></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Alert Delivery Channel:</label>
-                            <select id="remChannel">
-                                <option value="whatsapp">WhatsApp Direct Message</option>
-                                <option value="sms">SMS Text Message</option>
-                                <option value="email">Email Notification</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Contact (Phone / Email):</label>
-                            <input type="text" id="remContact" placeholder="923001234567 or email@domain.com">
-                        </div>
-                    </div>
-                    <button class="btn-action" onclick="saveTaskReminder()"><i class="fa-solid fa-clock"></i> Schedule Task</button>
-                </div>
-
-                <h3 style="font-size:1.1rem; font-weight:800; margin-bottom:14px;">Active Scheduled Reminders (<span id="remCount">0</span>/12 Slots Used)</h3>
-                <div id="remTaskList"></div>
             </div>
 
         </main>
@@ -414,7 +412,7 @@
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         
         document.getElementById(tabId).classList.add('active');
-        event.currentTarget.classList.add('active');
+        document.getElementById('btn-' + tabId).classList.add('active');
     }
 
     // --- UNIVERSAL 5-STAR RATING SYSTEM ---
@@ -441,14 +439,14 @@
         }
     }
 
-    // --- 1. DYNAMIC MERGE PDF ENGINE (MULTI-FILE ADD FIX) ---
+    // --- 1. DYNAMIC MERGE PDF ENGINE ---
     let mergeFileList = [];
 
     function addMergeFiles(e) {
         const files = Array.from(e.target.files);
         files.forEach(f => mergeFileList.push(f));
         renderMergeFileList();
-        e.target.value = ""; // Reset input so same file can be re-selected
+        e.target.value = "";
     }
 
     function removeMergeFile(index) {
@@ -582,8 +580,17 @@
         downloadBlob(txt, 'extracted_ocr_text.txt', 'text/plain');
     }
 
-    // --- 4. DOCUMENT CONVERTERS ENGINE ---
+    // --- 4. MULTI-FORMAT DOCUMENT & IMAGE CONVERTERS ENGINE ---
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+    function updateDocConvAccept() {
+        const type = document.getElementById('docConvType').value;
+        const inp = document.getElementById('docConvInput');
+        if (type === 'word2pdf' || type === 'word2img') inp.accept = ".docx";
+        else if (type === 'pdf2word' || type === 'pdf2img') inp.accept = "application/pdf";
+        else if (type === 'img2pdf' || type === 'img2word') inp.accept = "image/png, image/jpeg, image/webp, image/tiff";
+    }
+    updateDocConvAccept();
 
     async function processDocConversion() {
         const type = document.getElementById('docConvType').value;
@@ -630,38 +637,63 @@
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF();
                     pdf.addImage(e.target.result, 'JPEG', 10, 10, 180, 160);
-                    pdf.save('image.pdf');
-                    status.innerHTML = `<div class="status-msg success">Image converted to PDF!</div>`;
+                    pdf.save('image_converted.pdf');
+                    status.innerHTML = `<div class="status-msg success">Image successfully converted to PDF!</div>`;
                 };
                 reader.readAsDataURL(file);
             }
-            else if (type === 'pdf2img') {
+            else if (type === 'img2word') {
                 const reader = new FileReader();
-                reader.onload = async function(e) {
-                    const typedarray = new Uint8Array(e.target.result);
-                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
-                    const page = await pdf.getPage(1);
-                    const viewport = page.getViewport({scale: 1.5});
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
-                    await page.render({canvasContext: ctx, viewport: viewport}).promise;
-                    
-                    const a = document.createElement('a');
-                    a.href = canvas.toDataURL('image/png');
-                    a.download = 'pdf_page.png';
-                    a.click();
-                    status.innerHTML = `<div class="status-msg success">PDF converted to PNG Image!</div>`;
+                reader.onload = function(e) {
+                    const htmlContent = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><title>Converted Image Doc</title></head><body><img src="${e.target.result}" style="max-width:100%;"/></body></html>`;
+                    downloadBlob(htmlContent, 'converted_image.doc', 'application/msword');
+                    status.innerHTML = `<div class="status-msg success">Image successfully converted to Word (.doc)!</div>`;
                 };
-                reader.readAsArrayBuffer(file);
+                reader.readAsDataURL(file);
+            }
+            else if (type === 'pdf2img' || type === 'word2img') {
+                if (type === 'word2img') {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        const res = await mammoth.convertToHtml({arrayBuffer: e.target.result});
+                        const div = document.createElement('div');
+                        div.innerHTML = res.value;
+                        div.style.padding = "20px"; div.style.background = "#fff";
+                        document.body.appendChild(div);
+                        const canvas = await html2canvas(div);
+                        document.body.removeChild(div);
+                        downloadBlob(canvas.toDataURL('image/png'), 'word_page.png', 'image/png');
+                        status.innerHTML = `<div class="status-msg success">Word document converted to PNG Image!</div>`;
+                    };
+                    reader.readAsArrayBuffer(file);
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        const typedarray = new Uint8Array(e.target.result);
+                        const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                        const page = await pdf.getPage(1);
+                        const viewport = page.getViewport({scale: 1.5});
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+                        await page.render({canvasContext: ctx, viewport: viewport}).promise;
+                        
+                        const a = document.createElement('a');
+                        a.href = canvas.toDataURL('image/png');
+                        a.download = 'pdf_page.png';
+                        a.click();
+                        status.innerHTML = `<div class="status-msg success">PDF converted to PNG Image!</div>`;
+                    };
+                    reader.readAsArrayBuffer(file);
+                }
             }
         } catch(err) {
             status.innerHTML = `<div class="status-msg info">Conversion Failed: ${err.message}</div>`;
         }
     }
 
-    // --- 5. DUAL CALCULATOR ENGINE ---
+    // --- 5. CALCULATOR ENGINE (WITH SIN, COS, TAN) ---
     let calcExpression = "";
     function toggleCalcMode() {
         const mode = document.querySelector('input[name="calcMode"]:checked').value;
@@ -674,6 +706,20 @@
     function delCalc() { calcExpression = calcExpression.slice(0, -1); renderCalc(); }
     function renderCalc() { document.getElementById('calcDisplay').innerText = calcExpression || "0"; }
 
+    function calcTrig(func) {
+        try {
+            let val = eval(calcExpression || "0");
+            let rad = val * (Math.PI / 180); // Degree based trig evaluation
+            if (func === 'sin') calcExpression = Math.sin(rad).toFixed(6).replace(/\.?0+$/, "");
+            if (func === 'cos') calcExpression = Math.cos(rad).toFixed(6).replace(/\.?0+$/, "");
+            if (func === 'tan') calcExpression = Math.tan(rad).toFixed(6).replace(/\.?0+$/, "");
+            renderCalc();
+        } catch(e) {
+            document.getElementById('calcDisplay').innerText = "Trig Error";
+            calcExpression = "";
+        }
+    }
+
     function calcMath(func) {
         try {
             let val = eval(calcExpression || "0");
@@ -682,7 +728,7 @@
             if (func === 'ln') calcExpression = Math.log(val).toString();
             renderCalc();
         } catch(e) {
-            document.getElementById('calcDisplay').innerText = "Error";
+            document.getElementById('calcDisplay').innerText = "Math Error";
             calcExpression = "";
         }
     }
@@ -737,8 +783,38 @@
         }
     }
 
-    // --- 7. CURRENCY CONVERTER ENGINE ---
-    const exchangeRates = { USD: 1, EUR: 0.92, GBP: 0.78, PKR: 278.50, INR: 83.90, AED: 3.67, SAR: 3.75 };
+    // --- 7. ALL GLOBAL CURRENCIES & SWAP ENGINE ---
+    const exchangeRates = {
+        USD: 1.0, EUR: 0.92, GBP: 0.78, PKR: 278.50, INR: 83.90, AED: 3.67, SAR: 3.75,
+        CAD: 1.36, AUD: 1.51, JPY: 155.2, CNY: 7.23, CHF: 0.91, BRL: 5.15, RUB: 91.2,
+        ZAR: 18.4, SGD: 1.35, NZD: 1.64, TRY: 32.2, MYR: 4.71, IDR: 16020, THB: 36.8,
+        EGP: 47.9, KWD: 0.31, QAR: 3.64, OMR: 0.38, BHD: 0.38, DKK: 6.88, SEK: 10.8,
+        NOK: 10.9, MXN: 16.7, ARS: 880.0
+    };
+
+    function populateCurrencies() {
+        const uFrom = document.getElementById('currFrom');
+        const uTo = document.getElementById('currTo');
+        uFrom.innerHTML = ""; uTo.innerHTML = "";
+
+        Object.keys(exchangeRates).forEach(code => {
+            uFrom.innerHTML += `<option value="${code}">${code}</option>`;
+            uTo.innerHTML += `<option value="${code}">${code}</option>`;
+        });
+
+        uFrom.value = "PKR";
+        uTo.value = "USD";
+    }
+    populateCurrencies();
+
+    function swapCurrencies() {
+        const uFrom = document.getElementById('currFrom');
+        const uTo = document.getElementById('currTo');
+        const temp = uFrom.value;
+        uFrom.value = uTo.value;
+        uTo.value = temp;
+        calculateCurrency();
+    }
 
     function calculateCurrency() {
         const val = parseFloat(document.getElementById('currInputVal').value) || 0;
@@ -747,7 +823,7 @@
 
         const baseUsd = val / exchangeRates[from];
         const res = baseUsd * exchangeRates[to];
-        document.getElementById('currResultBox').innerText = `Converted Amount: ${res.toFixed(2)} ${to}`;
+        document.getElementById('currResultBox').innerText = `Converted Amount: ${val} ${from} = ${res.toFixed(2)} ${to}`;
     }
     calculateCurrency();
 
