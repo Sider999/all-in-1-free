@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter - MultiTools</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">⚡ MultiTools Portal</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="unit-converter.html" class="active">Converters</a></li>
+      <li><a href="reminder.html">Reminder</a></li>
+      <li><a href="image-tool.html">Image Tools</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="tool-box">
+      <h2 style="text-align: center; margin-bottom: 20px;">Length Unit Converter</h2>
+      
+      <label>Enter Value:</label>
+      <input type="number" id="unitVal" placeholder="Type a number" oninput="convertUnits()">
+
+      <label>From:</label>
+      <select id="fromUnit" onchange="convertUnits()">
+        <option value="m">Meters (m)</option>
+        <option value="km">Kilometers (km)</option>
+        <option value="cm">Centimeters (cm)</option>
+        <option value="ft">Feet (ft)</option>
+        <option value="inch">Inches (in)</option>
+      </select>
+
+      <label>To:</label>
+      <select id="toUnit" onchange="convertUnits()">
+        <option value="km">Kilometers (km)</option>
+        <option value="m">Meters (m)</option>
+        <option value="cm">Centimeters (cm)</option>
+        <option value="ft">Feet (ft)</option>
+        <option value="inch">Inches (in)</option>
+      </select>
+
+      <div style="background: #0f172a; padding: 15px; border-radius: 6px; text-align: center; margin-top: 10px;">
+        <h3>Result: <span id="unitResult" style="color:#38bdf8;">0</span></h3>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 MultiTools Portal</p>
+  </footer>
+
+  <script>
+    function convertUnits() {
+      let val = parseFloat(document.getElementById('unitVal').value);
+      if (isNaN(val)) {
+        document.getElementById('unitResult').innerText = '0';
+        return;
+      }
+      let from = document.getElementById('fromUnit').value;
+      let to = document.getElementById('toUnit').value;
+
+      // Base unit: Meters
+      let inMeters = 0;
+      if (from === 'm') inMeters = val;
+      else if (from === 'km') inMeters = val * 1000;
+      else if (from === 'cm') inMeters = val / 100;
+      else if (from === 'ft') inMeters = val / 3.28084;
+      else if (from === 'inch') inMeters = val / 39.3701;
+
+      // Output conversion
+      let result = 0;
+      if (to === 'm') result = inMeters;
+      else if (to === 'km') result = inMeters / 1000;
+      else if (to === 'cm') result = inMeters * 100;
+      else if (to === 'ft') result = inMeters * 3.28084;
+      else if (to === 'inch') result = inMeters * 39.3701;
+
+      document.getElementById('unitResult').innerText = result.toFixed(4) + ' ' + to;
+    }
+  </script>
+</body>
+</html>
