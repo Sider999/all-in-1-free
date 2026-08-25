@@ -1,1234 +1,355 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#0b0f19] text-slate-100">
+<html lang="ur">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Free Tools - Ultimate Utility & Conversion Suite</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Client-Side Engines -->
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <title>Multi-Tool Utility Portal</title>
+    <!-- Libraries for Converters & Formatting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    
-    <script>
-        if (window.pdfjsLib) {
-            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-        }
-    </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        .glass-panel { background: rgba(18, 24, 38, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glass-card { background: rgba(26, 34, 52, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .glow-indigo { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25); }
-        .glow-emerald { box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25); }
-        .glow-cyan { box-shadow: 0 0 25px -5px rgba(6, 182, 212, 0.25); }
-        .glow-amber { box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25); }
-        .glow-purple { box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.25); }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f4f7f6; color: #333; padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { text-align: center; margin-bottom: 20px; color: #1a73e8; }
+        
+        /* Navigation Tabs */
+        .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .tab-btn { padding: 10px 18px; border: none; background: #e8f0fe; color: #1a73e8; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active, .tab-btn:hover { background: #1a73e8; color: #fff; }
+        
+        .tool-card { display: none; background: #fafafa; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-top: 10px; }
+        .tool-card.active { display: block; }
+        
+        /* Forms & Inputs */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input, select, textarea, button { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        button.action-btn { background: #28a745; color: white; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button.action-btn:hover { background: #218838; }
+
+        /* Calculator Specifics */
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; }
+        .calc-display { grid-column: span 4; font-size: 24px; text-align: right; background: #222; color: #00ffcc; padding: 15px; border-radius: 6px; }
+        .calc-btn { background: #e0e0e0; font-size: 16px; font-weight: bold; padding: 15px; border: none; border-radius: 6px; cursor: pointer; }
+        .calc-btn:hover { background: #d0d0d0; }
+        .calc-btn.op { background: #ff9800; color: white; }
+        .calc-btn.sci { background: #009688; color: white; }
+        
+        .status { margin-top: 10px; font-weight: bold; color: #007bff; }
     </style>
 </head>
-<body class="h-full flex flex-col font-sans antialiased bg-[#0b0f19] text-slate-200">
-    <div class="fixed top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+<body>
 
-    <!-- Header Navigation -->
-    <header class="glass-panel sticky top-0 z-40 px-6 py-4 flex items-center justify-between border-b border-slate-800">
-        <div class="flex items-center space-x-3.5">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-cyan-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/20">
-                <div class="w-full h-full bg-[#0b0f19] rounded-[10px] flex items-center justify-center">
-                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400 text-lg"></i>
-                </div>
-            </div>
-            <div>
-                <span class="text-xl font-black tracking-wider bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">SMART FREE TOOLS</span>
-                <span class="ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 uppercase">Ultimate Suite</span>
-            </div>
-        </div>
-        <div class="text-xs text-slate-400 hidden lg:flex items-center space-x-3 bg-slate-900/80 px-4 py-2 rounded-full border border-slate-800">
-            <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span class="font-medium">100% Client-Side Engines • Browser Offline Privacy</span>
-        </div>
-    </header>
-
-    <!-- Main Layout -->
-    <div class="flex-1 flex overflow-hidden">
-        <!-- Sidebar Navigation -->
-        <nav class="w-72 glass-panel border-r border-slate-800 p-4 space-y-2 hidden md:block overflow-y-auto">
-            <div class="text-[10px] font-black text-amber-400 uppercase tracking-widest px-3 mb-2">Smart Productivity</div>
-            <button onclick="switchTab('reminder')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-amber-300 font-medium transition text-left text-xs" data-tab="reminder">
-                <i class="fa-solid fa-calendar-check w-4 text-center text-amber-400"></i><span>30-Day Smart Reminders</span>
-            </button>
-
-            <div class="text-[10px] font-black text-cyan-400 uppercase tracking-widest px-3 pt-3 mb-2">Document & PDF Tools</div>
-            <button onclick="switchTab('pdf-merge')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="pdf-merge">
-                <i class="fa-solid fa-code-merge w-4 text-center text-cyan-400"></i><span>Merge PDFs (Ordered)</span>
-            </button>
-            <button onclick="switchTab('pdf-split')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="pdf-split">
-                <i class="fa-solid fa-scissors w-4 text-center text-indigo-400"></i><span>Split & Extract Pages</span>
-            </button>
-            <button onclick="switchTab('img-to-pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="img-to-pdf">
-                <i class="fa-solid fa-file-image w-4 text-center text-sky-400"></i><span>Images to PDF Converter</span>
-            </button>
-            <button onclick="switchTab('pdf-compress')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="pdf-compress">
-                <i class="fa-solid fa-file-compress w-4 text-center text-emerald-400"></i><span>PDF Compressor</span>
-            </button>
-            <button onclick="switchTab('pdf-watermark')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="pdf-watermark">
-                <i class="fa-solid fa-stamp w-4 text-center text-teal-400"></i><span>Watermark PDF</span>
-            </button>
-            <button onclick="switchTab('ocr')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="ocr">
-                <i class="fa-solid fa-font w-4 text-center text-purple-400"></i><span>Image Text Extractor (OCR)</span>
-            </button>
-            <button onclick="switchTab('img-convert')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="img-convert">
-                <i class="fa-solid fa-photo-film w-4 text-center text-amber-400"></i><span>Image Converter & Resizer</span>
-            </button>
-
-            <div class="text-[10px] font-black text-indigo-400 uppercase tracking-widest px-3 pt-3 mb-2">Calculators & Units</div>
-            <button onclick="switchTab('calc')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="calc">
-                <i class="fa-solid fa-calculator w-4 text-center text-indigo-400"></i><span>Scientific Calculator</span>
-            </button>
-            <button onclick="switchTab('unit')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="unit">
-                <i class="fa-solid fa-ruler-combined w-4 text-center text-sky-400"></i><span>Universal Unit Converter</span>
-            </button>
-            <button onclick="switchTab('currency')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs" data-tab="currency">
-                <i class="fa-solid fa-coins w-4 text-center text-emerald-400"></i><span>Universal Currency Converter</span>
-            </button>
-
-            <div class="text-[10px] font-black text-purple-400 uppercase tracking-widest px-3 pt-3 mb-2">Developer & Security</div>
-            <button onclick="switchTab('json-tool')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-purple-300 font-medium transition text-left text-xs" data-tab="json-tool">
-                <i class="fa-solid fa-code w-4 text-center text-purple-400"></i><span>JSON Formatter & Validator</span>
-            </button>
-            <button onclick="switchTab('crypto-tool')" class="tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-purple-300 font-medium transition text-left text-xs" data-tab="crypto-tool">
-                <i class="fa-solid fa-key w-4 text-center text-emerald-400"></i><span>Password & Hash Generator</span>
-            </button>
-        </nav>
-
-        <!-- Workspace Viewport -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <!-- Mobile Horizontal Navigation Bar -->
-            <div class="flex md:hidden space-x-2 overflow-x-auto pb-3 mb-6 border-b border-slate-800">
-                <button onclick="switchTab('reminder')" class="px-3 py-1.5 rounded-lg bg-amber-600 text-white text-xs font-bold whitespace-nowrap">Reminders</button>
-                <button onclick="switchTab('pdf-merge')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Merge PDF</button>
-                <button onclick="switchTab('img-to-pdf')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Images to PDF</button>
-                <button onclick="switchTab('ocr')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">OCR Extractor</button>
-                <button onclick="switchTab('calc')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Calculator</button>
-                <button onclick="switchTab('json-tool')" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">JSON Tool</button>
-            </div>
-
-            <!-- 1. 30-DAY REMINDER TOOL -->
-            <div id="tab-reminder" class="tab-content max-w-4xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-amber">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center space-x-4">
-                        <div class="p-3.5 bg-amber-500/10 text-amber-400 rounded-2xl border border-amber-500/20">
-                            <i class="fa-solid fa-calendar-check text-2xl"></i>
-                        </div>
-                        <div>
-                            <h2 class="text-xl font-bold text-white tracking-wide">30-Day Multi-Task Reminder Engine</h2>
-                            <p class="text-xs text-slate-400">Schedule daily automated reminders for up to 12 active tasks (1 to 30 Days duration).</p>
-                        </div>
-                    </div>
-                    <span id="task-counter-badge" class="px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-amber-400 text-xs font-bold">0 / 12 Tasks</span>
-                </div>
-                <hr class="border-slate-800 my-5">
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="md:col-span-1">
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Task Title / Details</label>
-                        <input type="text" id="rem-title" placeholder="e.g. Project Submission / Bill Payment" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Duration (1 to 30 Days)</label>
-                        <select id="rem-days" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Daily Alert Time</label>
-                        <input type="time" id="rem-time" value="09:00" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
-                    </div>
-                </div>
-
-                <button onclick="addReminderTask()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-amber-600/20 flex items-center justify-center space-x-2 text-sm mb-8">
-                    <i class="fa-solid fa-plus-circle"></i><span>Schedule Daily Reminder Task</span>
-                </button>
-
-                <div>
-                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Active Task Schedules</h3>
-                    <div id="reminder-tasks-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 2. MERGE PDF TOOL -->
-            <div id="tab-pdf-merge" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20">
-                        <i class="fa-solid fa-code-merge text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Merge PDF Documents (Sequence Controlled)</h2>
-                        <p class="text-xs text-slate-400">Add multiple PDFs, arrange their sequence numbers, and merge seamlessly.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-cyan-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <i class="fa-solid fa-file-circle-plus text-3xl text-cyan-400 mb-2 block"></i>
-                        <p class="text-xs font-semibold text-slate-200">Select or Add PDF Files</p>
-                        <p class="text-[10px] text-slate-400 mb-3">Multiple files select karein ya bar bar mazeed files add karein.</p>
-                        <input type="file" id="pdf-merge-input" multiple accept=".pdf" onchange="handlePdfMergeFilesSelect(event)" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500 cursor-pointer">
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">File Sequence List</span>
-                            <button onclick="clearAllMergeFiles()" class="text-[11px] text-rose-400 hover:underline">Clear All</button>
-                        </div>
-                        <div id="pdf-merge-file-list" class="space-y-2 text-xs text-slate-300 max-h-60 overflow-y-auto pr-1"></div>
-                    </div>
-
-                    <button onclick="executePDFMerge()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-layer-group"></i><span>Merge PDFs In Selected Sequence</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 3. SPLIT PDF TOOL -->
-            <div id="tab-pdf-split" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-indigo">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20">
-                        <i class="fa-solid fa-scissors text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Split & Extract PDF Pages</h2>
-                        <p class="text-xs text-slate-400">Extract specific page ranges or split a large PDF document.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-indigo-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <input type="file" id="pdf-split-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Page Range (e.g. 1-3)</label>
-                        <input type="text" id="pdf-split-range" placeholder="1-3" value="1-2" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500">
-                    </div>
-                    <button onclick="executePDFSplit()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-file-export"></i><span>Extract Selected Pages</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 4. NEW: IMAGES TO PDF CONVERTER -->
-            <div id="tab-img-to-pdf" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-sky-500/10 text-sky-400 rounded-2xl border border-sky-500/20">
-                        <i class="fa-solid fa-file-image text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Images to PDF Converter</h2>
-                        <p class="text-xs text-slate-400">Convert JPG, PNG, WEBP images into a single PDF document.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-sky-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <input type="file" id="img2pdf-input" multiple accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-600 file:text-white">
-                    </div>
-                    <button onclick="executeImagesToPDF()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-sky-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-file-pdf"></i><span>Convert Images to PDF</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 5. NEW: PDF COMPRESSOR -->
-            <div id="tab-pdf-compress" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-emerald">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
-                        <i class="fa-solid fa-file-compress text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">PDF File Compressor</h2>
-                        <p class="text-xs text-slate-400">Reduce PDF file size directly in your browser without quality loss.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-emerald-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <input type="file" id="pdf-compress-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-emerald-600 file:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Compression Level</label>
-                        <select id="pdf-compress-level" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm">
-                            <option value="0.7">Medium Compression (Recommended - Good Quality)</option>
-                            <option value="0.4">High Compression (Smaller File Size)</option>
-                        </select>
-                    </div>
-                    <button onclick="executePDFCompress()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-compress"></i><span>Compress PDF File</span>
-                    </button>
-                    <div id="compress-status" class="hidden text-xs text-cyan-400 text-center font-semibold pt-2"></div>
-                </div>
-            </div>
-
-            <!-- 6. WATERMARK PDF TOOL -->
-            <div id="tab-pdf-watermark" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-emerald">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-teal-500/10 text-teal-400 rounded-2xl border border-teal-500/20">
-                        <i class="fa-solid fa-stamp text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">PDF Watermark Generator</h2>
-                        <p class="text-xs text-slate-400">Stamp custom text or security labels onto PDF pages.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-teal-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <input type="file" id="pdf-wm-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-600 file:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Watermark Stamp Text</label>
-                        <input type="text" id="pdf-wm-text" value="CONFIDENTIAL" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-teal-500">
-                    </div>
-                    <button onclick="executePDFWatermark()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-teal-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-shield-halved"></i><span>Apply Watermark Stamp</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 7. NEW: IMAGE TEXT EXTRACTOR (OCR) -->
-            <div id="tab-ocr" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-purple">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-purple-500/10 text-purple-400 rounded-2xl border border-purple-500/20">
-                        <i class="fa-solid fa-font text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Image Text Extractor (OCR Engine)</h2>
-                        <p class="text-xs text-slate-400">Extract editable text from images using optical character recognition.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-purple-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <input type="file" id="ocr-input" accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white">
-                    </div>
-                    <button onclick="executeOCR()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-purple-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-eye"></i><span>Extract Text From Image</span>
-                    </button>
-
-                    <div id="ocr-progress" class="hidden text-xs text-purple-400 font-semibold text-center">Processing OCR Engine...</div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Extracted Text Output</label>
-                        <textarea id="ocr-output" rows="6" placeholder="Extracted text will appear here..." class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-xs font-mono text-slate-200 focus:outline-none"></textarea>
-                    </div>
-                    <button onclick="copyToClipboard('ocr-output')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs py-2 px-4 rounded-xl border border-slate-700">
-                        <i class="fa-solid fa-copy mr-2"></i>Copy Extracted Text
-                    </button>
-                </div>
-            </div>
-
-            <!-- 8. IMAGE CONVERTER & RESIZER TOOL -->
-            <div id="tab-img-convert" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-amber-500/10 text-amber-400 rounded-2xl border border-amber-500/20">
-                        <i class="fa-solid fa-photo-film text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Image Format Converter & Resizer</h2>
-                        <p class="text-xs text-slate-400">Convert between PNG, JPG, WEBP formats and scale dimensions.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div class="border-2 border-dashed border-slate-700 hover:border-amber-500/50 rounded-2xl p-6 text-center transition bg-slate-900/40">
-                        <input type="file" id="img-conv-input" accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-amber-600 file:text-white">
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Target Format</label>
-                            <select id="img-conv-format" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm">
-                                <option value="image/png">PNG Format</option>
-                                <option value="image/jpeg">JPG / JPEG Format</option>
-                                <option value="image/webp">WEBP Format</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Max Width (px)</label>
-                            <input type="number" id="img-conv-width" placeholder="Original Width" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm">
-                        </div>
-                    </div>
-                    <button onclick="executeImageConverter()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-amber-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-arrows-rotate"></i><span>Convert & Download Image</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- 9. SCIENTIFIC CALCULATOR -->
-            <div id="tab-calc" class="tab-content hidden max-w-md mx-auto glass-panel rounded-3xl p-6 glow-indigo">
-                <div class="flex items-center space-x-3 mb-4">
-                    <div class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
-                        <i class="fa-solid fa-calculator text-lg"></i>
-                    </div>
-                    <h2 class="text-lg font-bold text-white">Scientific Calculator</h2>
-                </div>
-                
-                <input type="text" id="calc-screen" readonly value="0" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-right text-3xl font-mono text-cyan-300 mb-4 shadow-inner focus:outline-none">
-                
-                <div class="grid grid-cols-4 gap-2 text-sm font-bold">
-                    <button onclick="clearCalc()" class="p-3.5 bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 rounded-xl border border-rose-500/30">AC</button>
-                    <button onclick="deleteCalc()" class="p-3.5 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 rounded-xl border border-amber-500/30">DEL</button>
-                    <button onclick="appendCalc('^')" class="p-3.5 bg-slate-800 text-cyan-400 hover:bg-slate-700 rounded-xl">x^y</button>
-                    <button onclick="appendCalc('/')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">/</button>
-
-                    <button onclick="calcMathFunc('sin')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">sin</button>
-                    <button onclick="calcMathFunc('cos')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">cos</button>
-                    <button onclick="calcMathFunc('tan')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">tan</button>
-                    <button onclick="appendCalc('*')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">*</button>
-
-                    <button onclick="calcMathFunc('sqrt')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">√</button>
-                    <button onclick="calcMathFunc('log')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">log</button>
-                    <button onclick="appendCalc('(')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">(</button>
-                    <button onclick="appendCalc(')')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">)</button>
-
-                    <button onclick="appendCalc('7')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">7</button>
-                    <button onclick="appendCalc('8')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">8</button>
-                    <button onclick="appendCalc('9')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">9</button>
-                    <button onclick="appendCalc('-')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">-</button>
-
-                    <button onclick="appendCalc('4')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">4</button>
-                    <button onclick="appendCalc('5')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">5</button>
-                    <button onclick="appendCalc('6')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">6</button>
-                    <button onclick="appendCalc('+')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">+</button>
-
-                    <button onclick="appendCalc('1')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">1</button>
-                    <button onclick="appendCalc('2')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">2</button>
-                    <button onclick="appendCalc('3')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">3</button>
-                    <button onclick="calculateResult()" class="p-3.5 row-span-2 bg-gradient-to-b from-cyan-500 to-indigo-600 text-white hover:from-cyan-400 hover:to-indigo-500 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-indigo-500/30">=</button>
-
-                    <button onclick="appendCalc('0')" class="p-3.5 col-span-2 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">0</button>
-                    <button onclick="appendCalc('.')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">.</button>
-                </div>
-            </div>
-
-            <!-- 10. UNIVERSAL UNIT CONVERTER -->
-            <div id="tab-unit" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-sky-500/10 text-sky-400 rounded-2xl border border-sky-500/20">
-                        <i class="fa-solid fa-ruler-combined text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Universal Unit Converter</h2>
-                        <p class="text-xs text-slate-400">Convert Length, Weight, and Temperature instantly.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Category</label>
-                        <select id="unit-category" onchange="setupUnitCategory()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:border-sky-500 focus:outline-none">
-                            <option value="length">Length (Meters, Feet, Inches, Kilometers, Miles)</option>
-                            <option value="weight">Weight (Kilograms, Grams, Pounds, Ounces)</option>
-                            <option value="temp">Temperature (Celsius, Fahrenheit, Kelvin)</option>
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">From</label>
-                            <select id="unit-from" onchange="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none"></select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">To</label>
-                            <select id="unit-to" onchange="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none"></select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Enter Value</label>
-                        <input type="number" id="unit-input" value="1" oninput="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-sky-500">
-                    </div>
-
-                    <div class="bg-slate-900/80 rounded-2xl p-4 border border-slate-800 text-center">
-                        <span class="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">Converted Result</span>
-                        <span id="unit-result-text" class="text-2xl font-black text-sky-400">---</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 11. UNIVERSAL CURRENCY CONVERTER -->
-            <div id="tab-currency" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-emerald">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
-                        <i class="fa-solid fa-coins text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Universal Currency Converter</h2>
-                        <p class="text-xs text-slate-400">Convert between 10+ Major Global Currencies with accurate rates.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Amount</label>
-                        <input type="number" id="curr-amount" value="100" oninput="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-emerald-500">
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">From Currency</label>
-                            <select id="curr-from" onchange="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
-                                <option value="USD" selected>USD - US Dollar</option>
-                                <option value="PKR">PKR - Pakistani Rupee</option>
-                                <option value="EUR">EUR - Euro</option>
-                                <option value="GBP">GBP - British Pound</option>
-                                <option value="INR">INR - Indian Rupee</option>
-                                <option value="AED">AED - UAE Dirham</option>
-                                <option value="SAR">SAR - Saudi Riyal</option>
-                                <option value="CAD">CAD - Canadian Dollar</option>
-                                <option value="AUD">AUD - Australian Dollar</option>
-                                <option value="CNY">CNY - Chinese Yuan</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">To Currency</label>
-                            <select id="curr-to" onchange="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
-                                <option value="USD">USD - US Dollar</option>
-                                <option value="PKR" selected>PKR - Pakistani Rupee</option>
-                                <option value="EUR">EUR - Euro</option>
-                                <option value="GBP">GBP - British Pound</option>
-                                <option value="INR">INR - Indian Rupee</option>
-                                <option value="AED">AED - UAE Dirham</option>
-                                <option value="SAR">SAR - Saudi Riyal</option>
-                                <option value="CAD">CAD - Canadian Dollar</option>
-                                <option value="AUD">AUD - Australian Dollar</option>
-                                <option value="CNY">CNY - Chinese Yuan</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/80 rounded-2xl p-5 border border-slate-800 text-center">
-                        <span class="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">Conversion Total</span>
-                        <div id="curr-result" class="text-3xl font-black text-emerald-400">USD 100 = 27,850 PKR</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 12. NEW: JSON FORMATTER & VALIDATOR -->
-            <div id="tab-json-tool" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-purple">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-purple-500/10 text-purple-400 rounded-2xl border border-purple-500/20">
-                        <i class="fa-solid fa-code text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">JSON Formatter & Validator</h2>
-                        <p class="text-xs text-slate-400">Format, minify, and validate raw JSON code instantly.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Input Raw JSON</label>
-                        <textarea id="json-input" rows="6" placeholder='{"name": "Smart Free Tools", "status": "Active"}' class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-xs font-mono text-cyan-300 focus:outline-none focus:border-purple-500"></textarea>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="formatJSON()" class="flex-1 bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 rounded-xl text-xs transition">Format / Beautify</button>
-                        <button onclick="minifyJSON()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl text-xs transition">Minify JSON</button>
-                    </div>
-                    <div id="json-status" class="hidden text-xs font-semibold p-3 rounded-xl border"></div>
-                </div>
-            </div>
-
-            <!-- 13. NEW: SECURE PASSWORD & HASH GENERATOR -->
-            <div id="tab-crypto-tool" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-emerald">
-                <div class="flex items-center space-x-4 mb-3">
-                    <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
-                        <i class="fa-solid fa-key text-2xl"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold text-white tracking-wide">Password & Hash Generator</h2>
-                        <p class="text-xs text-slate-400">Generate secure random passwords & compute SHA-256 cryptographic hashes.</p>
-                    </div>
-                </div>
-                <hr class="border-slate-800 my-5">
-                <div class="space-y-6">
-                    <!-- Password Generator Section -->
-                    <div class="space-y-3">
-                        <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Strong Password Generator</h3>
-                        <div class="flex items-center space-x-3">
-                            <input type="text" id="pwd-output" readonly placeholder="Generated Password..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-sm font-mono text-emerald-300">
-                            <button onclick="generatePassword()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-3 rounded-xl text-xs">Generate</button>
-                            <button onclick="copyToClipboard('pwd-output')" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-3 py-3 rounded-xl text-xs"><i class="fa-solid fa-copy"></i></button>
-                        </div>
-                    </div>
-
-                    <hr class="border-slate-800">
-
-                    <!-- SHA-256 Hash Generator Section -->
-                    <div class="space-y-3">
-                        <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-wider">SHA-256 Cryptographic Hash Generator</h3>
-                        <input type="text" id="hash-input" oninput="generateSHA256Hash()" placeholder="Enter text to generate hash..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-xs text-white">
-                        <div>
-                            <label class="block text-[10px] text-slate-400 uppercase mb-1">SHA-256 Digest Output</label>
-                            <input type="text" id="hash-output" readonly placeholder="Hash result will appear here..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs font-mono text-cyan-400">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+<div class="container">
+    <h1>Multi-Tool Web Portal</h1>
+    
+    <!-- Tab Controls -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('reminders')">Reminders Tool</button>
+        <button class="tab-btn" onclick="switchTab('calculators')">Simple & Scientific Calculator</button>
+        <button class="tab-btn" onclick="switchTab('converters')">Document & Image Converters</button>
     </div>
 
-    <!-- 5-STAR RATING MODAL -->
-    <div id="rating-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-        <div class="max-w-md w-full glass-panel rounded-3xl p-6 text-center border border-amber-500/30 glow-amber transform transition-all scale-95">
-            <div class="h-16 w-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/20 text-2xl">
-                <i class="fa-solid fa-star"></i>
-            </div>
-            <h3 class="text-xl font-extrabold text-white mb-1">Rate Smart Free Tools</h3>
-            <p class="text-xs text-slate-400 mb-6">Please give us a 5-Star rating to support our free client-side tools before downloading your file!</p>
-            
-            <div class="flex items-center justify-center space-x-2 text-2xl text-amber-400 mb-6 cursor-pointer">
-                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(1)"></i>
-                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(2)"></i>
-                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(3)"></i>
-                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(4)"></i>
-                <i class="fa-solid fa-star hover:scale-125 transition" onclick="selectRating(5)"></i>
-            </div>
+    <!-- 1. REMINDERS TOOL -->
+    <div id="reminders" class="tool-card active">
+        <h2>Smart Reminder Tool</h2>
+        <div class="form-group">
+            <label>Reminder Message:</label>
+            <textarea id="remText" rows="3" placeholder="Enter your notification text..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>Send Option / Platform:</label>
+            <select id="remPlatform" onchange="toggleContactInput()">
+                <option value="whatsapp">WhatsApp Message</option>
+                <option value="sms">SMS Text</option>
+                <option value="email">Email</option>
+                <option value="browser">Browser Notification</option>
+            </select>
+        </div>
+        <div class="form-group" id="contactGroup">
+            <label id="contactLabel">Phone Number (with Country Code e.g. 923001234567):</label>
+            <input type="text" id="remContact" placeholder="e.g., 923001234567">
+        </div>
+        <button class="action-btn" onclick="sendReminder()">Send / Schedule Reminder</button>
+        <div id="reminderStatus" class="status"></div>
+    </div>
 
-            <div class="space-y-2">
-                <button onclick="confirmRatingAndDownload()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black py-3 rounded-xl transition shadow-lg text-sm">
-                    Submit 5-Star Rating & Download File
-                </button>
-                <button onclick="bypassRatingAndDownload()" class="w-full bg-transparent hover:bg-slate-800 text-slate-400 text-xs py-2 rounded-xl transition">
-                    Skip & Direct Download
-                </button>
-            </div>
+    <!-- 2. CALCULATORS -->
+    <div id="calculators" class="tool-card">
+        <h2>Dual Calculator (Simple & Scientific)</h2>
+        <div class="calc-display" id="calcDisplay">0</div>
+        
+        <!-- Toggle Simple / Scientific Controls -->
+        <div style="margin: 10px 0;">
+            <label><input type="radio" name="calcType" value="simple" checked onclick="toggleCalcMode()"> Simple Mode</label>
+            <label style="margin-left: 15px;"><input type="radio" name="calcType" value="scientific" onclick="toggleCalcMode()"> Scientific Mode</label>
+        </div>
+
+        <div class="calc-grid">
+            <!-- Scientific Row (Hidden in Simple Mode) -->
+            <button class="calc-btn sci sci-mode" onclick="calcFunc('sqrt')">√x</button>
+            <button class="calc-btn sci sci-mode" onclick="calcFunc('log')">log10</button>
+            <button class="calc-btn sci sci-mode" onclick="calcFunc('ln')">ln</button>
+            <button class="calc-btn sci sci-mode" onclick="appendCalc('**')">x^y</button>
+
+            <!-- Standard Buttons -->
+            <button class="calc-btn" onclick="clearCalc()">C</button>
+            <button class="calc-btn" onclick="backspaceCalc()">DEL</button>
+            <button class="calc-btn op" onclick="appendCalc('/')">/</button>
+            <button class="calc-btn op" onclick="appendCalc('*')">*</button>
+
+            <button class="calc-btn" onclick="appendCalc('7')">7</button>
+            <button class="calc-btn" onclick="appendCalc('8')">8</button>
+            <button class="calc-btn" onclick="appendCalc('9')">9</button>
+            <button class="calc-btn op" onclick="appendCalc('-')">-</button>
+
+            <button class="calc-btn" onclick="appendCalc('4')">4</button>
+            <button class="calc-btn" onclick="appendCalc('5')">5</button>
+            <button class="calc-btn" onclick="appendCalc('6')">6</button>
+            <button class="calc-btn op" onclick="appendCalc('+')">+</button>
+
+            <button class="calc-btn" onclick="appendCalc('1')">1</button>
+            <button class="calc-btn" onclick="appendCalc('2')">2</button>
+            <button class="calc-btn" onclick="appendCalc('3')">3</button>
+            <button class="calc-btn op" onclick="calculateResult()">=</button>
+
+            <button class="calc-btn" onclick="appendCalc('0')" style="grid-column: span 2;">0</button>
+            <button class="calc-btn" onclick="appendCalc('.')">.</button>
         </div>
     </div>
 
-    <!-- JavaScript Core & Tool Engines -->
-    <script>
-        let activeDownloadCallback = null;
-        const MAX_REMINDER_TASKS = 12;
-        let selectedPdfFiles = [];
+    <!-- 3. CONVERTERS -->
+    <div id="converters" class="tool-card">
+        <h2>Document & Image Converters</h2>
+        <div class="form-group">
+            <label>Select Conversion Type:</label>
+            <select id="conversionType">
+                <option value="img2pdf">Image to PDF</option>
+                <option value="pdf2img">PDF to Image (PNG)</option>
+                <option value="word2pdf">Word (.docx) to PDF</option>
+                <option value="pdf2word">PDF to Word (.doc)</option>
+                <option value="img2word">Image to Word (.doc)</option>
+                <option value="word2img">Word (.docx) to Image</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Upload Input File:</label>
+            <input type="file" id="converterInputFile">
+        </div>
+        <button class="action-btn" onclick="processConversion()">Convert & Download</button>
+        <div id="converterStatus" class="status"></div>
+        <div id="canvasContainer" style="display:none;"></div>
+    </div>
+</div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const daysSelect = document.getElementById('rem-days');
-            for (let i = 1; i <= 30; i++) {
-                const opt = document.createElement('option');
-                opt.value = i;
-                opt.textContent = i === 1 ? '1 Day (Remind Daily)' : `${i} Days (Daily Reminders for ${i-1} Days)`;
-                daysSelect.appendChild(opt);
-            }
-            loadReminderTasks();
-            setupUnitCategory();
-            convertCurrency();
-            renderPdfMergeList();
-            generatePassword();
-            switchTab('reminder');
-        });
+<script>
+    // Tab Switcher
+    function switchTab(tabId) {
+        document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            const target = document.getElementById('tab-' + tabId);
-            if(target) target.classList.remove('hidden');
-
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if(btn.dataset.tab === tabId) {
-                    btn.className = "tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600/20 to-cyan-600/20 text-cyan-300 border border-cyan-500/30 font-semibold transition text-left text-xs glow-cyan";
-                } else {
-                    btn.className = "tab-btn w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left text-xs";
-                }
-            });
+    // --- REMINDERS TOOL LOGIC ---
+    function toggleContactInput() {
+        const platform = document.getElementById('remPlatform').value;
+        const label = document.getElementById('contactLabel');
+        const group = document.getElementById('contactGroup');
+        
+        if(platform === 'whatsapp' || platform === 'sms') {
+            group.style.display = 'block';
+            label.innerText = 'Phone Number (with country code e.g. 923001234567):';
+        } else if(platform === 'email') {
+            group.style.display = 'block';
+            label.innerText = 'Target Email Address:';
+        } else {
+            group.style.display = 'none';
         }
+    }
 
-        function copyToClipboard(elementId) {
-            const el = document.getElementById(elementId);
-            if(el) {
-                navigator.clipboard.writeText(el.value);
-                alert('Copied to clipboard!');
-            }
-        }
+    function sendReminder() {
+        const msg = encodeURIComponent(document.getElementById('remText').value);
+        const platform = document.getElementById('remPlatform').value;
+        const contact = document.getElementById('remContact').value.trim();
+        const status = document.getElementById('reminderStatus');
 
-        // --- DOWNLOAD & RATING MODAL ENGINE ---
-        function downloadBlob(data, filename, type) {
-            triggerRatingModal(() => {
-                const blob = new Blob([data], { type: type });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                setTimeout(() => URL.revokeObjectURL(link.href), 1500);
-            });
-        }
+        if (!msg) { status.innerText = "Please enter a reminder message."; return; }
 
-        function triggerRatingModal(callback) {
-            activeDownloadCallback = callback;
-            document.getElementById('rating-modal').classList.remove('hidden');
-        }
-
-        function selectRating(stars) {
-            alert(`Thank you for giving us a ${stars}-Star Rating!`);
-            confirmRatingAndDownload();
-        }
-
-        function confirmRatingAndDownload() {
-            document.getElementById('rating-modal').classList.add('hidden');
-            if (activeDownloadCallback) {
-                activeDownloadCallback();
-                activeDownloadCallback = null;
-            }
-        }
-
-        function bypassRatingAndDownload() {
-            document.getElementById('rating-modal').classList.add('hidden');
-            if (activeDownloadCallback) {
-                activeDownloadCallback();
-                activeDownloadCallback = null;
-            }
-        }
-
-        // --- PDF MERGER ENHANCED SEQUENCE LOGIC ---
-        function handlePdfMergeFilesSelect(event) {
-            const files = Array.from(event.target.files);
-            files.forEach(file => selectedPdfFiles.push(file));
-            renderPdfMergeList();
-            event.target.value = '';
-        }
-
-        function movePdfFile(index, direction) {
-            if (direction === -1 && index > 0) {
-                const temp = selectedPdfFiles[index];
-                selectedPdfFiles[index] = selectedPdfFiles[index - 1];
-                selectedPdfFiles[index - 1] = temp;
-            } else if (direction === 1 && index < selectedPdfFiles.length - 1) {
-                const temp = selectedPdfFiles[index];
-                selectedPdfFiles[index] = selectedPdfFiles[index + 1];
-                selectedPdfFiles[index + 1] = temp;
-            }
-            renderPdfMergeList();
-        }
-
-        function removePdfFile(index) {
-            selectedPdfFiles.splice(index, 1);
-            renderPdfMergeList();
-        }
-
-        function clearAllMergeFiles() {
-            selectedPdfFiles = [];
-            renderPdfMergeList();
-        }
-
-        function renderPdfMergeList() {
-            const listContainer = document.getElementById('pdf-merge-file-list');
-            listContainer.innerHTML = '';
-
-            if (selectedPdfFiles.length === 0) {
-                listContainer.innerHTML = '<div class="text-slate-500 text-center text-xs py-4 bg-slate-900/30 rounded-xl border border-dashed border-slate-800">No PDF files added to sequence yet.</div>';
-                return;
-            }
-
-            selectedPdfFiles.forEach((file, idx) => {
-                const item = document.createElement('div');
-                item.className = "bg-slate-900 px-3 py-2 rounded-xl border border-slate-800 flex justify-between items-center";
-                item.innerHTML = `
-                    <div class="flex items-center space-x-2.5 truncate">
-                        <span class="bg-cyan-500/20 text-cyan-400 text-[10px] font-black px-2 py-0.5 rounded-md border border-cyan-500/30">#${idx + 1}</span>
-                        <span class="text-xs text-slate-200 truncate"><i class="fa-solid fa-file-pdf text-rose-400 mr-2"></i>${file.name}</span>
-                        <span class="text-[10px] text-slate-500">(${(file.size/1024/1024).toFixed(2)} MB)</span>
-                    </div>
-                    <div class="flex items-center space-x-1 ml-2">
-                        <button onclick="movePdfFile(${idx}, -1)" title="Move Up" class="p-1 text-slate-400 hover:text-cyan-400 transition ${idx === 0 ? 'opacity-30 cursor-not-allowed' : ''}"><i class="fa-solid fa-arrow-up text-xs"></i></button>
-                        <button onclick="movePdfFile(${idx}, 1)" title="Move Down" class="p-1 text-slate-400 hover:text-cyan-400 transition ${idx === selectedPdfFiles.length - 1 ? 'opacity-30 cursor-not-allowed' : ''}"><i class="fa-solid fa-arrow-down text-xs"></i></button>
-                        <button onclick="removePdfFile(${idx})" title="Remove File" class="p-1 text-slate-400 hover:text-rose-400 transition ml-1"><i class="fa-solid fa-trash text-xs"></i></button>
-                    </div>
-                `;
-                listContainer.appendChild(item);
-            });
-        }
-
-        async function executePDFMerge() {
-            if (selectedPdfFiles.length < 2) { 
-                alert('Sequence mein kam se kam 2 PDF files ka hona zaroori hai.'); 
-                return; 
-            }
-            
-            try {
-                const mergedPdf = await PDFLib.PDFDocument.create();
-                for (let file of selectedPdfFiles) {
-                    const bytes = await file.arrayBuffer();
-                    const pdf = await PDFLib.PDFDocument.load(bytes);
-                    const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-                    pages.forEach(page => mergedPdf.addPage(page));
-                }
-                const pdfBytes = await mergedPdf.save();
-                downloadBlob(pdfBytes, 'merged_document.pdf', 'application/pdf');
-            } catch (e) { 
-                alert('PDF Merge Error: ' + e.message); 
-            }
-        }
-
-        // --- NEW: IMAGES TO PDF ENGINE ---
-        async function executeImagesToPDF() {
-            const input = document.getElementById('img2pdf-input');
-            if (!input.files || input.files.length === 0) { alert('Please select image files.'); return; }
-
-            try {
-                const pdfDoc = await PDFLib.PDFDocument.create();
-                for (let file of Array.from(input.files)) {
-                    const bytes = await file.arrayBuffer();
-                    let image;
-                    if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
-                        image = await pdfDoc.embedJpg(bytes);
-                    } else {
-                        image = await pdfDoc.embedPng(bytes);
-                    }
-                    const page = pdfDoc.addPage([image.width, image.height]);
-                    page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
-                }
-                const pdfBytes = await pdfDoc.save();
-                downloadBlob(pdfBytes, 'converted_images.pdf', 'application/pdf');
-            } catch (e) { alert('Image to PDF Error: ' + e.message); }
-        }
-
-        // --- NEW: PDF COMPRESSOR ENGINE ---
-        async function executePDFCompress() {
-            const input = document.getElementById('pdf-compress-input');
-            const quality = parseFloat(document.getElementById('pdf-compress-level').value);
-            const status = document.getElementById('compress-status');
-            if (!input.files || input.files.length === 0) { alert('Please select a PDF file.'); return; }
-
-            try {
-                status.classList.remove('hidden');
-                status.textContent = 'Compressing PDF pages... Please wait.';
-
-                const bytes = await input.files[0].arrayBuffer();
-                const pdfDoc = await pdfjsLib.getDocument({ data: bytes }).promise;
-                const newPdf = await PDFLib.PDFDocument.create();
-
-                for (let i = 1; i <= pdfDoc.numPages; i++) {
-                    const page = await pdfDoc.getPage(i);
-                    const viewport = page.getViewport({ scale: 1.0 });
-                    const canvas = document.createElement('canvas');
-                    canvas.width = viewport.width;
-                    canvas.height = viewport.height;
-                    const ctx = canvas.getContext('2d');
-
-                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-                    const imgDataUrl = canvas.toDataURL('image/jpeg', quality);
-                    const imgBytes = await fetch(imgDataUrl).then(res => res.arrayBuffer());
-                    const img = await newPdf.embedJpg(imgBytes);
-
-                    const newPage = newPdf.addPage([viewport.width, viewport.height]);
-                    newPage.drawImage(img, { x: 0, y: 0, width: viewport.width, height: viewport.height });
-                }
-
-                const compressedBytes = await newPdf.save();
-                status.classList.add('hidden');
-                downloadBlob(compressedBytes, 'compressed_document.pdf', 'application/pdf');
-            } catch (e) {
-                status.classList.add('hidden');
-                alert('Compression Error: ' + e.message);
-            }
-        }
-
-        // --- NEW: OCR ENGINE ---
-        async function executeOCR() {
-            const input = document.getElementById('ocr-input');
-            const progress = document.getElementById('ocr-progress');
-            const output = document.getElementById('ocr-output');
-            if (!input.files || input.files.length === 0) { alert('Please select an image file.'); return; }
-
-            try {
-                progress.classList.remove('hidden');
-                progress.textContent = 'Analyzing Image Text... (0%)';
-                output.value = '';
-
-                const result = await Tesseract.recognize(input.files[0], 'eng', {
-                    logger: m => {
-                        if (m.status === 'recognizing text') {
-                            progress.textContent = `Analyzing Image Text... (${Math.round(m.progress * 100)}%)`;
-                        }
-                    }
+        if (platform === 'whatsapp') {
+            window.open(`https://wa.me/${contact}?text=${msg}`, '_blank');
+        } else if (platform === 'sms') {
+            window.open(`sms:${contact}?body=${msg}`, '_blank');
+        } else if (platform === 'email') {
+            window.open(`mailto:${contact}?subject=Reminder&body=${msg}`, '_blank');
+        } else if (platform === 'browser') {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(perm => {
+                    if (perm === "granted") new Notification("Reminder", { body: decodeURIComponent(msg) });
+                    else alert(decodeURIComponent(msg));
                 });
-
-                progress.classList.add('hidden');
-                output.value = result.data.text || 'No text recognized.';
-            } catch (e) {
-                progress.classList.add('hidden');
-                alert('OCR Error: ' + e.message);
-            }
+            } else { alert(decodeURIComponent(msg)); }
         }
+        status.innerText = "Reminder request launched successfully!";
+    }
 
-        // --- NEW: JSON FORMATTER & VALIDATOR ENGINE ---
-        function formatJSON() {
-            const input = document.getElementById('json-input').value;
-            const status = document.getElementById('json-status');
-            try {
-                const parsed = JSON.parse(input);
-                document.getElementById('json-input').value = JSON.stringify(parsed, null, 4);
-                status.className = "text-xs font-semibold p-3 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-                status.textContent = "Valid JSON Structure!";
-                status.classList.remove('hidden');
-            } catch (e) {
-                status.className = "text-xs font-semibold p-3 rounded-xl border bg-rose-500/10 border-rose-500/30 text-rose-400";
-                status.textContent = "Invalid JSON: " + e.message;
-                status.classList.remove('hidden');
-            }
+    // --- CALCULATOR LOGIC ---
+    let calcVal = "";
+    
+    function toggleCalcMode() {
+        const mode = document.querySelector('input[name="calcType"]:checked').value;
+        const sciBtns = document.querySelectorAll('.sci-mode');
+        sciBtns.forEach(btn => btn.style.display = (mode === 'scientific') ? 'block' : 'none');
+    }
+    toggleCalcMode();
+
+    function appendCalc(val) { calcVal += val; updateCalcDisplay(); }
+    function clearCalc() { calcVal = ""; updateCalcDisplay(); }
+    function backspaceCalc() { calcVal = calcVal.slice(0, -1); updateCalcDisplay(); }
+    function updateCalcDisplay() { document.getElementById('calcDisplay').innerText = calcVal || "0"; }
+
+    function calcFunc(fn) {
+        try {
+            let current = eval(calcVal || "0");
+            if (fn === 'sqrt') calcVal = Math.sqrt(current).toString();
+            if (fn === 'log') calcVal = Math.log10(current).toString();
+            if (fn === 'ln') calcVal = Math.log(current).toString();
+            updateCalcDisplay();
+        } catch(e) {
+            document.getElementById('calcDisplay').innerText = "Error";
+            calcVal = "";
         }
+    }
 
-        function minifyJSON() {
-            const input = document.getElementById('json-input').value;
-            const status = document.getElementById('json-status');
-            try {
-                const parsed = JSON.parse(input);
-                document.getElementById('json-input').value = JSON.stringify(parsed);
-                status.className = "text-xs font-semibold p-3 rounded-xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
-                status.textContent = "Valid JSON Minified!";
-                status.classList.remove('hidden');
-            } catch (e) {
-                status.className = "text-xs font-semibold p-3 rounded-xl border bg-rose-500/10 border-rose-500/30 text-rose-400";
-                status.textContent = "Invalid JSON: " + e.message;
-                status.classList.remove('hidden');
-            }
+    function calculateResult() {
+        try {
+            calcVal = eval(calcVal).toString();
+            updateCalcDisplay();
+        } catch(e) {
+            document.getElementById('calcDisplay').innerText = "Error";
+            calcVal = "";
         }
+    }
 
-        // --- NEW: PASSWORD & HASH ENGINE ---
-        function generatePassword() {
-            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=";
-            let pwd = "";
-            for (let i = 0; i < 16; i++) {
-                pwd += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('pwd-output').value = pwd;
-        }
+    // --- FILE CONVERTERS LOGIC ---
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        async function generateSHA256Hash() {
-            const input = document.getElementById('hash-input').value;
-            const output = document.getElementById('hash-output');
-            if (!input) { output.value = ''; return; }
+    async function processConversion() {
+        const type = document.getElementById('conversionType').value;
+        const fileInput = document.getElementById('converterInputFile');
+        const status = document.getElementById('converterStatus');
+        
+        if (!fileInput.files[0]) { status.innerText = "Please select a file first."; return; }
+        const file = fileInput.files[0];
+        status.innerText = "Processing conversion, please wait...";
 
-            const msgUint8 = new TextEncoder().encode(input);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-            output.value = hashHex;
-        }
-
-        // --- SCIENTIFIC CALCULATOR ENGINE ---
-        let calcVal = '';
-        function appendCalc(v) {
-            if (calcVal === 'Error') calcVal = '';
-            calcVal += v;
-            updateCalcScreen();
-        }
-        function clearCalc() {
-            calcVal = '';
-            updateCalcScreen();
-        }
-        function deleteCalc() {
-            if (calcVal === 'Error') calcVal = '';
-            calcVal = calcVal.slice(0, -1);
-            updateCalcScreen();
-        }
-        function calcMathFunc(func) {
-            if (calcVal === 'Error') calcVal = '';
-            calcVal += func + '(';
-            updateCalcScreen();
-        }
-        function updateCalcScreen() {
-            document.getElementById('calc-screen').value = calcVal || '0';
-        }
-        function calculateResult() {
-            try {
-                let expr = calcVal
-                    .replace(/sin\(/g, 'Math.sin(')
-                    .replace(/cos\(/g, 'Math.cos(')
-                    .replace(/tan\(/g, 'Math.tan(')
-                    .replace(/sqrt\(/g, 'Math.sqrt(')
-                    .replace(/log\(/g, 'Math.log10(')
-                    .replace(/\^/g, '**');
-
-                let res = Function('"use strict";return (' + expr + ')')();
-                calcVal = String(Number.isFinite(res) ? Math.round(res * 1e8) / 1e8 : 'Error');
-                updateCalcScreen();
-            } catch (e) {
-                calcVal = 'Error';
-                updateCalcScreen();
-            }
-        }
-
-        // --- UNIVERSAL UNIT CONVERTER ENGINE ---
-        const unitData = {
-            length: {
-                units: { meter: 1, kilometer: 1000, centimeter: 0.01, foot: 0.3048, inch: 0.0254, mile: 1609.34 },
-                labels: { meter: 'Meters', kilometer: 'Kilometers', centimeter: 'Centimeters', foot: 'Feet', inch: 'Inches', mile: 'Miles' }
-            },
-            weight: {
-                units: { kilogram: 1, gram: 0.001, pound: 0.453592, ounce: 0.0283495 },
-                labels: { kilogram: 'Kilograms', gram: 'Grams', pound: 'Pounds', ounce: 'Ounces' }
-            },
-            temp: {
-                units: { celsius: 'C', fahrenheit: 'F', kelvin: 'K' },
-                labels: { celsius: 'Celsius (°C)', fahrenheit: 'Fahrenheit (°F)', kelvin: 'Kelvin (K)' }
-            }
-        };
-
-        function setupUnitCategory() {
-            const cat = document.getElementById('unit-category').value;
-            const fromSel = document.getElementById('unit-from');
-            const toSel = document.getElementById('unit-to');
-            fromSel.innerHTML = '';
-            toSel.innerHTML = '';
-
-            const keys = Object.keys(unitData[cat].labels);
-            keys.forEach((k) => {
-                const opt1 = document.createElement('option');
-                opt1.value = k; opt1.textContent = unitData[cat].labels[k];
-                fromSel.appendChild(opt1);
-
-                const opt2 = document.createElement('option');
-                opt2.value = k; opt2.textContent = unitData[cat].labels[k];
-                toSel.appendChild(opt2);
-            });
-
-            if(keys.length > 1) toSel.selectedIndex = 1;
-            convertUnits();
-        }
-
-        function convertUnits() {
-            const cat = document.getElementById('unit-category').value;
-            const from = document.getElementById('unit-from').value;
-            const to = document.getElementById('unit-to').value;
-            const val = parseFloat(document.getElementById('unit-input').value) || 0;
-            const resText = document.getElementById('unit-result-text');
-
-            if (cat === 'temp') {
-                let celsius = val;
-                if (from === 'fahrenheit') celsius = (val - 32) * 5/9;
-                else if (from === 'kelvin') celsius = val - 273.15;
-
-                let result = celsius;
-                if (to === 'fahrenheit') result = (celsius * 9/5) + 32;
-                else if (to === 'kelvin') result = celsius + 273.15;
-
-                resText.textContent = `${val} ${unitData.temp.labels[from]} = ${result.toFixed(2)} ${unitData.temp.labels[to]}`;
-            } else {
-                const baseInMetersOrKg = val * unitData[cat].units[from];
-                const result = baseInMetersOrKg / unitData[cat].units[to];
-                resText.textContent = `${val} ${unitData[cat].labels[from]} = ${result.toFixed(4)} ${unitData[cat].labels[to]}`;
-            }
-        }
-
-        // --- UNIVERSAL CURRENCY CONVERTER ENGINE ---
-        const currencyRatesVsUSD = {
-            USD: 1, PKR: 278.50, EUR: 0.92, GBP: 0.79,
-            INR: 83.80, AED: 3.67, SAR: 3.75, CAD: 1.36,
-            AUD: 1.51, CNY: 7.15
-        };
-
-        function convertCurrency() {
-            const amount = parseFloat(document.getElementById('curr-amount').value) || 0;
-            const from = document.getElementById('curr-from').value;
-            const to = document.getElementById('curr-to').value;
-
-            const amountInUSD = amount / currencyRatesVsUSD[from];
-            const converted = amountInUSD * currencyRatesVsUSD[to];
-
-            document.getElementById('curr-result').textContent = `${from} ${amount.toLocaleString()} = ${converted.toLocaleString(undefined, {maximumFractionDigits: 2})} ${to}`;
-        }
-
-        // --- OTHER PDF & IMAGE UTILITIES ---
-        async function executePDFSplit() {
-            const files = document.getElementById('pdf-split-input').files;
-            const rangeStr = document.getElementById('pdf-split-range').value || "1-2";
-            if (!files || files.length === 0) { alert('Please select a PDF file.'); return; }
-
-            try {
-                const bytes = await files[0].arrayBuffer();
-                const srcPdf = await PDFLib.PDFDocument.load(bytes);
-                const newPdf = await PDFLib.PDFDocument.create();
-                const totalPages = srcPdf.getPageCount();
-                const pagesToExtract = [];
-                
-                if (rangeStr.includes('-')) {
-                    const [start, end] = rangeStr.split('-').map(n => parseInt(n.trim()));
-                    for (let i = start; i <= Math.min(end, totalPages); i++) pagesToExtract.push(i - 1);
-                } else {
-                    pagesToExtract.push(parseInt(rangeStr) - 1);
-                }
-
-                const copiedPages = await newPdf.copyPages(srcPdf, pagesToExtract);
-                copiedPages.forEach(page => newPdf.addPage(page));
-
-                const pdfBytes = await newPdf.save();
-                downloadBlob(pdfBytes, 'split_document.pdf', 'application/pdf');
-            } catch (e) { alert('Split Error: ' + e.message); }
-        }
-
-        async function executePDFWatermark() {
-            const files = document.getElementById('pdf-wm-input').files;
-            const text = document.getElementById('pdf-wm-text').value || "CONFIDENTIAL";
-            if (!files || files.length === 0) { alert('Please select a PDF file.'); return; }
-
-            try {
-                const bytes = await files[0].arrayBuffer();
-                const pdfDoc = await PDFLib.PDFDocument.load(bytes);
-                const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-                const pages = pdfDoc.getPages();
-
-                pages.forEach(page => {
-                    const { width, height } = page.getSize();
-                    page.drawText(text, {
-                        x: width / 4,
-                        y: height / 2,
-                        size: 36,
-                        font: font,
-                        color: PDFLib.rgb(0.7, 0.7, 0.7),
-                        opacity: 0.35,
-                        rotate: PDFLib.degrees(45),
-                    });
-                });
-
-                const pdfBytes = await pdfDoc.save();
-                downloadBlob(pdfBytes, 'watermarked_document.pdf', 'application/pdf');
-            } catch (e) { alert('Watermark Error: ' + e.message); }
-        }
-
-        function executeImageConverter() {
-            const input = document.getElementById('img-conv-input');
-            const format = document.getElementById('img-conv-format').value;
-            const maxWidth = parseInt(document.getElementById('img-conv-width').value) || 0;
-
-            if (!input.files || input.files.length === 0) { alert('Please select an image file.'); return; }
-
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let targetWidth = img.width;
-                    let targetHeight = img.height;
-
-                    if (maxWidth > 0 && img.width > maxWidth) {
-                        targetWidth = maxWidth;
-                        targetHeight = (img.height * maxWidth) / img.width;
-                    }
-
-                    canvas.width = targetWidth;
-                    canvas.height = targetHeight;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-
-                    const ext = format.split('/')[1];
-                    canvas.toBlob(blob => {
-                        triggerRatingModal(() => {
-                            const link = document.createElement('a');
-                            link.href = URL.createObjectURL(blob);
-                            link.download = `converted_image.${ext}`;
-                            link.click();
-                            setTimeout(() => URL.revokeObjectURL(link.href), 1500);
-                        });
-                    }, format, 0.92);
+        try {
+            if (type === 'img2pdf') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF();
+                    pdf.addImage(e.target.result, 'JPEG', 10, 10, 180, 160);
+                    pdf.save('converted.pdf');
+                    status.innerText = "Completed!";
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // --- 30-DAY REMINDER LOGIC ---
-        function loadReminderTasks() {
-            const tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
-            const grid = document.getElementById('reminder-tasks-grid');
-            const badge = document.getElementById('task-counter-badge');
-            
-            badge.textContent = `${tasks.length} / ${MAX_REMINDER_TASKS} Tasks`;
-            grid.innerHTML = '';
-
-            if (tasks.length === 0) {
-                grid.innerHTML = '<div class="col-span-2 text-center text-xs text-slate-500 py-8 bg-slate-900/40 rounded-2xl border border-slate-800">No active reminder tasks scheduled yet.</div>';
-                return;
+                reader.readAsDataURL(file);
+            } 
+            else if (type === 'word2pdf') {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const result = await mammoth.convertToHtml({arrayBuffer: e.target.result});
+                    const element = document.createElement('div');
+                    element.innerHTML = result.value;
+                    html2pdf().from(element).save('converted.pdf');
+                    status.innerText = "Completed!";
+                };
+                reader.readAsArrayBuffer(file);
             }
-
-            tasks.forEach((task, idx) => {
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-4 border border-slate-800 flex justify-between items-start";
-                
-                const titleEl = document.createElement('h4');
-                titleEl.className = "font-bold text-slate-200 text-sm mb-1";
-                titleEl.textContent = task.title;
-
-                const detailEl = document.createElement('p');
-                detailEl.className = "text-xs text-amber-400 font-medium";
-                detailEl.textContent = `Daily Alert at ${task.time} (${task.days} Days Schedule)`;
-
-                const scheduleEl = document.createElement('p');
-                scheduleEl.className = "text-[10px] text-slate-500 mt-1";
-                scheduleEl.textContent = `Reminding daily for ${task.days - 1 > 0 ? task.days - 1 : 1} days prior to target.`;
-
-                const leftDiv = document.createElement('div');
-                leftDiv.appendChild(titleEl);
-                leftDiv.appendChild(detailEl);
-                leftDiv.appendChild(scheduleEl);
-
-                const delBtn = document.createElement('button');
-                delBtn.className = "text-slate-500 hover:text-rose-400 p-2 text-xs transition";
-                delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
-                delBtn.onclick = () => deleteReminderTask(idx);
-
-                card.appendChild(leftDiv);
-                card.appendChild(delBtn);
-                grid.appendChild(card);
-            });
-        }
-
-        function addReminderTask() {
-            const titleInput = document.getElementById('rem-title');
-            const daysInput = document.getElementById('rem-days');
-            const timeInput = document.getElementById('rem-time');
-
-            const title = titleInput.value.trim();
-            const days = parseInt(daysInput.value);
-            const time = timeInput.value;
-
-            if (!title) { alert('Please enter a valid task title.'); return; }
-
-            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
-            if (tasks.length >= MAX_REMINDER_TASKS) {
-                alert('Maximum 12 tasks reached. Delete an existing task to add a new one.');
-                return;
+            else if (type === 'pdf2word') {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const typedarray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    let fullText = "";
+                    for(let i=1; i<=pdf.numPages; i++){
+                        const page = await pdf.getPage(i);
+                        const textContent = await page.getTextContent();
+                        fullText += textContent.items.map(item => item.str).join(' ') + "\n\n";
+                    }
+                    downloadFile(fullText, 'converted_doc.doc', 'text/plain');
+                    status.innerText = "Completed!";
+                };
+                reader.readAsArrayBuffer(file);
             }
-
-            tasks.push({ title, days, time, createdAt: new Date().toISOString() });
-            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
-            
-            titleInput.value = '';
-            loadReminderTasks();
-            alert(`Task "${title}" scheduled successfully!`);
+            else if (type === 'pdf2img') {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const typedarray = new Uint8Array(e.target.result);
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    const page = await pdf.getPage(1);
+                    const viewport = page.getViewport({scale: 1.5});
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    await page.render({canvasContext: ctx, viewport: viewport}).promise;
+                    
+                    const a = document.createElement('a');
+                    a.href = canvas.toDataURL('image/png');
+                    a.download = 'pdf_page_1.png';
+                    a.click();
+                    status.innerText = "Completed!";
+                };
+                reader.readAsArrayBuffer(file);
+            }
+            else if (type === 'img2word') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const html = `<html><body><img src="${e.target.result}" style="max-width:100%;"></body></html>`;
+                    downloadFile(html, 'image_document.doc', 'text/html');
+                    status.innerText = "Completed!";
+                };
+                reader.readAsDataURL(file);
+            }
+            else if (type === 'word2img') {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const result = await mammoth.convertToHtml({arrayBuffer: e.target.result});
+                    const container = document.createElement('div');
+                    container.style.width = '600px';
+                    container.style.padding = '20px';
+                    container.style.background = '#fff';
+                    container.innerHTML = result.value;
+                    document.body.appendChild(container);
+                    
+                    html2pdf().from(container).toImg().outputImg('dataurl').then(imgData => {
+                        const a = document.createElement('a');
+                        a.href = imgData;
+                        a.download = 'word_as_image.png';
+                        a.click();
+                        document.body.removeChild(container);
+                        status.innerText = "Completed!";
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        } catch(err) {
+            status.innerText = "Error processing file: " + err.message;
         }
+    }
 
-        function deleteReminderTask(idx) {
-            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
-            tasks.splice(idx, 1);
-            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
-            loadReminderTasks();
-        }
-    </script>
+    function downloadFile(content, fileName, mimeType) {
+        const blob = new Blob([content], { type: mimeType });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        a.click();
+    }
+</script>
+
 </body>
 </html>
