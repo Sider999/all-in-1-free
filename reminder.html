@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Reminder - MultiTools</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">⚡ MultiTools Portal</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="unit-converter.html">Converters</a></li>
+      <li><a href="reminder.html" class="active">Reminder</a></li>
+      <li><a href="image-tool.html">Image Tools</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="tool-box">
+      <h2 style="text-align: center; margin-bottom: 20px;">30-Day Daily Task Reminder</h2>
+      
+      <input type="text" id="taskInput" placeholder="Enter task details (e.g. Renew Domain)">
+      <input type="date" id="dateInput">
+      <button class="btn" onclick="addReminder()">Save Reminder</button>
+
+      <div style="margin-top: 30px;">
+        <h3>Saved Reminders</h3>
+        <ul id="reminderList" style="list-style: none; padding: 0; margin-top: 15px;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 MultiTools Portal</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', loadReminders);
+
+    function addReminder() {
+      let task = document.getElementById('taskInput').value.trim();
+      let date = document.getElementById('dateInput').value;
+
+      if (!task || !date) {
+        alert('Please provide both task title and date!');
+        return;
+      }
+
+      let reminders = JSON.parse(localStorage.getItem('my_reminders') || '[]');
+      reminders.push({ task: task, date: date, id: Date.now() });
+      localStorage.setItem('my_reminders', JSON.stringify(reminders));
+
+      document.getElementById('taskInput').value = '';
+      document.getElementById('dateInput').value = '';
+      loadReminders();
+    }
+
+    function loadReminders() {
+      let reminders = JSON.parse(localStorage.getItem('my_reminders') || '[]');
+      let list = document.getElementById('reminderList');
+      list.innerHTML = '';
+
+      if (reminders.length === 0) {
+        list.innerHTML = '<li style="color: #64748b;">No active reminders set.</li>';
+        return;
+      }
+
+      reminders.forEach(item => {
+        let li = document.createElement('li');
+        li.style.cssText = 'background: #0f172a; padding: 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155;';
+        li.innerHTML = `
+          <div>
+            <strong>${item.task}</strong>
+            <div style="font-size: 0.8rem; color: #38bdf8;">Due Date: ${item.date}</div>
+          </div>
+          <button style="background: #dc2626; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;" onclick="deleteReminder(${item.id})">Delete</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function deleteReminder(id) {
+      let reminders = JSON.parse(localStorage.getItem('my_reminders') || '[]');
+      reminders = reminders.filter(item => item.id !== id);
+      localStorage.setItem('my_reminders', JSON.stringify(reminders));
+      loadReminders();
+    }
+  </script>
+</body>
+</html>
