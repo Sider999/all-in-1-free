@@ -1,0 +1,206 @@
+/* ==========================================================================
+   PORTAL CORE JS - Multi-Tool Engine with 5-Star Rating & Download Interceptor
+   ========================================================================== */
+
+let pendingDownloadAction = null;
+
+// Initialize Star Rating System
+document.addEventListener('DOMContentLoaded', () => {
+    initRatingModal();
+});
+
+function initRatingModal() {
+    const modalHTML = `
+    <div id="ratingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 text-center shadow-2xl transform transition-all border border-slate-200 dark:border-slate-700">
+            <div class="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold">★</div>
+            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Rate Your Experience</h3>
+            <p class="text-slate-600 dark:text-slate-300 text-sm mb-4">File download ke liye please feedback dein (5-Star Rating):</p>
+            
+            <div class="flex justify-center space-x-2 mb-6" id="starContainer">
+                <button onclick="setRating(1)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
+                <button onclick="setRating(2)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
+                <button onclick="setRating(3)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
+                <button onclick="setRating(4)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
+                <button onclick="setRating(5)" class="star-btn text-3xl text-slate-300 hover:text-amber-400 transition">★</button>
+            </div>
+
+            <div class="flex space-x-3">
+                <button onclick="skipAndDownload()" class="w-1/2 py-2.5 rounded-xl border border-slate-300 text-slate-600 hover:bg-slate-100 font-medium text-sm transition">Skip & Save</button>
+                <button onclick="submitRatingAndDownload()" id="submitRatingBtn" disabled class="w-1/2 py-2.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-medium text-sm transition disabled:opacity-50">Confirm & Download</button>
+            </div>
+        </div>
+    </div>`;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+let selectedRating = 0;
+
+function setRating(rating) {
+    selectedRating = rating;
+    const stars = document.querySelectorAll('.star-btn');
+    stars.forEach((star, index) => {
+        if (index < rating) {
+            star.classList.remove('text-slate-300');
+            star.classList.add('text-amber-400');
+        } else {
+            star.classList.remove('text-amber-400');
+            star.classList.add('text-slate-300');
+        }
+    });
+    document.getElementById('submitRatingBtn').removeAttribute('disabled');
+}
+
+// Intercepts file downloads to show 5-Star Rating Modal
+function saveFileWithRating(blob, fileName) {
+    pendingDownloadAction = () => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    };
+
+    // Show modal
+    const modal = document.getElementById('ratingModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function submitRatingAndDownload() {
+    closeRatingModal();
+    if (pendingDownloadAction) pendingDownloadAction();
+}
+
+function skipAndDownload() {
+    closeRatingModal();
+    if (pendingDownloadAction) pendingDownloadAction();
+}
+
+function closeRatingModal() {
+    const modal = document.getElementById('ratingModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    selectedRating = 0;
+    setRating(0);
+}
+
+/* --------------------------------------------------------------------------
+   PDF MERGER LOGIC (Fully Functional via PDFLib)
+   -------------------------------------------------------------------------- */
+async function processPDFMerge(files) {
+    if (!files || files.length < 2) {
+        alert("Baraye mehrbani kam az kam 2 PDF files select karein.");
+        return;
+    }
+    
+    try {
+        const mergedPdf = await PDFLib.PDFDocument.create();
+        for (let file of files) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+            const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+            copiedPages.forEach((page) => mergedPdf.addPage(page));
+        }
+        
+        const mergedPdfBytes = await mergedPdf.save();
+        const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+        saveFileWithRating(blob, "Merged-Document-ToolsPortal.pdf");
+    } catch (error) {
+        console.error("PDF Merge Error:", error);
+        alert("PDF merge karte hue koi error aya. File check karein.");
+    }
+}
+
+/* --------------------------------------------------------------------------
+   IMAGE TO PDF LOGIC (Fully Functional via jsPDF)
+   -------------------------------------------------------------------------- */
+async function processImageToPDF(files) {
+    if (!files || files.length === 0) {
+        alert("Kam az kam ek tasveer select karein.");
+        return;
+    }
+
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const imageData = await readAsDataURL(file);
+            
+            if (i > 0) doc.addPage();
+            
+            const imgProps = doc.getImageProperties(imageData);
+            const pdfWidth = doc.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            doc.addImage(imageData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+        }
+
+        const pdfOutput = doc.output('blob');
+        saveFileWithRating(pdfOutput, "Converted-Images-ToolsPortal.pdf");
+    } catch (error) {
+        console.error("Image to PDF Error:", error);
+        alert("Tasveer se PDF banane mein masla aaya.");
+    }
+}
+
+function readAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+/* --------------------------------------------------------------------------
+   SCIENTIFIC CALCULATOR LOGIC
+   -------------------------------------------------------------------------- */
+let calcDisplayValue = "0";
+
+function calcInput(char) {
+    const display = document.getElementById('calcDisplay');
+    if (calcDisplayValue === "0" && char !== '.') {
+        calcDisplayValue = char;
+    } else {
+        calcDisplayValue += char;
+    }
+    display.value = calcDisplayValue;
+}
+
+function calcClear() {
+    calcDisplayValue = "0";
+    document.getElementById('calcDisplay').value = "0";
+}
+
+function calcDelete() {
+    calcDisplayValue = calcDisplayValue.slice(0, -1);
+    if (calcDisplayValue === "") calcDisplayValue = "0";
+    document.getElementById('calcDisplay').value = calcDisplayValue;
+}
+
+function calcCalculate() {
+    const display = document.getElementById('calcDisplay');
+    try {
+        let sanitized = calcDisplayValue
+            .replace(/sin/g, 'Math.sin')
+            .replace(/cos/g, 'Math.cos')
+            .replace(/tan/g, 'Math.tan')
+            .replace(/sqrt/g, 'Math.sqrt')
+            .replace(/log/g, 'Math.log10')
+            .replace(/π/g, 'Math.PI')
+            .replace(/e/g, 'Math.E');
+            
+        let result = Function('"use strict"; return (' + sanitized + ')')();
+        calcDisplayValue = String(result);
+        display.value = calcDisplayValue;
+    } catch (e) {
+        display.value = "Error";
+        calcDisplayValue = "0";
+    }
+}
