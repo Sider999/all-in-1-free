@@ -1,82 +1,554 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All-In-One Free Utility Portal</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Multi-Tools Portal</title>
+    
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Required Client-Side Libraries -->
+    <!-- PDF Lib for Merge/Split -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <!-- Sortable JS for Drag & Drop Reordering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <!-- DOCX library for Image to Word -->
+    <script src="https://unpkg.com/docx@7.3.0/build/index.js"></script>
+    <!-- FileSaver for downloading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Mammoth & HTML2Canvas for Word to Image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        .tool-panel { display: none; }
+        .tool-panel.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .calc-btn { background: #e5e7eb; padding: 15px; text-align: center; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; }
+        .calc-btn:hover { background: #d1d5db; }
+        .calc-btn.op { background: #3b82f6; color: white; }
+        .calc-btn.op:hover { background: #2563eb; }
+        .calc-btn.eq { background: #10b981; color: white; grid-column: span 2; }
+        
+        .file-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; margin-bottom: 8px; background: #f9fafb; border: 1px solid #d1d5db; border-radius: 6px; cursor: grab; }
+        .file-list-item:active { cursor: grabbing; }
+        .delete-btn { color: #ef4444; cursor: pointer; font-weight: bold; }
+        
+        #word-render-area { padding: 20px; background: white; color: black; border: 1px solid #ccc; max-width: 800px; margin: auto; }
+    </style>
 </head>
-<body>
+<body class="bg-gray-100 flex h-screen overflow-hidden text-gray-800 font-sans">
 
-  <nav class="navbar">
-    <a href="index.html" class="logo">⚡ MultiTools Portal</a>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="calculator.html">Calculator</a></li>
-      <li><a href="currency-converter.html">Currencies</a></li>
-      <li><a href="reminder.html">Reminders</a></li>
-      <li><a href="document-tools.html">PDF & Word</a></li>
-      <li><a href="image-tools.html">Image Tools</a></li>
-    </ul>
-  </nav>
-
-  <div class="container">
-    <section class="hero">
-      <h1>Universal Web Utilities Suite</h1>
-      <p>100% Client-Side, Ultra-Fast, Secure & Fully Operational Online Tools</p>
-    </section>
-
-    <div class="grid">
-      <div class="card">
-        <div>
-          <div class="card-icon">🧮</div>
-          <h3>Scientific & Math Calculator</h3>
-          <p>Perform scientific calculations, trigonometry, and advanced math functions.</p>
+    <!-- Sidebar Navigation -->
+    <div class="w-64 bg-gray-900 text-white flex flex-col shadow-lg">
+        <div class="p-6 text-2xl font-bold border-b border-gray-700 tracking-wide">Multi-Tools</div>
+        <div class="flex-1 overflow-y-auto mt-4">
+            <button onclick="switchTool('home')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">🏠 Home Dashboard</button>
+            <button onclick="switchTool('calc')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">🖩 Calculator</button>
+            <button onclick="switchTool('pdf-merge')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">📄 PDF Merger</button>
+            <button onclick="switchTool('pdf-split')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">✂️ PDF Splitter</button>
+            <button onclick="switchTool('img2word')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">🖼️ Image to Word</button>
+            <button onclick="switchTool('word2img')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">📝 Word to Image</button>
+            <button onclick="switchTool('converter')" class="w-full text-left px-6 py-3 hover:bg-gray-700 transition">⚖️ Unit Converter</button>
         </div>
-        <a href="calculator.html" class="btn">Launch Calculator</a>
-      </div>
-
-      <div class="card">
-        <div>
-          <div class="card-icon">💱</div>
-          <h3>Universal Currency Converter</h3>
-          <p>Real-time live exchange rates for 150+ world currencies with instant conversion.</p>
-        </div>
-        <a href="currency-converter.html" class="btn">Launch Converter</a>
-      </div>
-
-      <div class="card">
-        <div>
-          <div class="card-icon">⏰</div>
-          <h3>Task & Event Reminder Suite</h3>
-          <p>Set 2 to 30 day daily reminders with WhatsApp, Email & SMS notification links.</p>
-        </div>
-        <a href="reminder.html" class="btn">Launch Reminders</a>
-      </div>
-
-      <div class="card">
-        <div>
-          <div class="card-icon">📄</div>
-          <h3>PDF & Word Document Suite</h3>
-          <p>PDF Merger, Splitter, Word to PDF, PDF to Image, and Image to PDF tools.</p>
-        </div>
-        <a href="document-tools.html" class="btn">Launch PDF Suite</a>
-      </div>
-
-      <div class="card">
-        <div>
-          <div class="card-icon">🖼️</div>
-          <h3>Image AI & Resizer Studio</h3>
-          <p>Image OCR (Text Extraction to Word), Upscaling (400%), Resizing & Format Conversion.</p>
-        </div>
-        <a href="image-tools.html" class="btn">Launch Image Studio</a>
-      </div>
     </div>
-  </div>
 
-  <footer>
-    <p>&copy; 2026 MultiTools Portal | Safe, Fast & Completely Free</p>
-  </footer>
+    <!-- Main Content Area -->
+    <div class="flex-1 p-8 overflow-y-auto">
+        
+        <!-- Home Dashboard -->
+        <div id="home" class="tool-panel active">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Welcome to Universal Multi-Tools Portal</h1>
+            <p class="text-gray-600 text-lg">Select a tool from the sidebar to get started. All tools run 100% securely in your browser.</p>
+        </div>
 
+        <!-- Calculator (Simple & Scientific) -->
+        <div id="calc" class="tool-panel max-w-xl mx-auto bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-4">Smart Calculator</h2>
+            <div class="flex space-x-2 mb-4">
+                <button onclick="toggleCalc('simple')" id="tab-simple" class="flex-1 py-2 bg-blue-600 text-white rounded">Simple</button>
+                <button onclick="toggleCalc('scientific')" id="tab-scientific" class="flex-1 py-2 bg-gray-200 text-gray-800 rounded">Scientific</button>
+            </div>
+            
+            <input type="text" id="calc-display" class="w-full bg-gray-100 text-right text-3xl p-4 rounded mb-4 focus:outline-none" disabled placeholder="0">
+            
+            <!-- Simple Grid -->
+            <div id="calc-simple" class="grid grid-cols-4 gap-2">
+                <div class="calc-btn op" onclick="calcAction('C')">C</div>
+                <div class="calc-btn op" onclick="calcAction('DEL')">DEL</div>
+                <div class="calc-btn op" onclick="calcAction('%')">%</div>
+                <div class="calc-btn op" onclick="calcAction('/')">÷</div>
+                
+                <div class="calc-btn" onclick="calcAction('7')">7</div>
+                <div class="calc-btn" onclick="calcAction('8')">8</div>
+                <div class="calc-btn" onclick="calcAction('9')">9</div>
+                <div class="calc-btn op" onclick="calcAction('*')">×</div>
+                
+                <div class="calc-btn" onclick="calcAction('4')">4</div>
+                <div class="calc-btn" onclick="calcAction('5')">5</div>
+                <div class="calc-btn" onclick="calcAction('6')">6</div>
+                <div class="calc-btn op" onclick="calcAction('-')">-</div>
+                
+                <div class="calc-btn" onclick="calcAction('1')">1</div>
+                <div class="calc-btn" onclick="calcAction('2')">2</div>
+                <div class="calc-btn" onclick="calcAction('3')">3</div>
+                <div class="calc-btn op" onclick="calcAction('+')">+</div>
+                
+                <div class="calc-btn" onclick="calcAction('0')">0</div>
+                <div class="calc-btn" onclick="calcAction('.')">.</div>
+                <div class="calc-btn eq" onclick="calcAction('=')">=</div>
+            </div>
+
+            <!-- Scientific Grid (Hidden initially) -->
+            <div id="calc-scientific" class="grid grid-cols-5 gap-2 hidden">
+                <div class="calc-btn op text-sm" onclick="calcAction('sin(')">sin</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('cos(')">cos</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('tan(')">tan</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('C')">C</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('DEL')">DEL</div>
+
+                <div class="calc-btn op text-sm" onclick="calcAction('log(')">log</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('ln(')">ln</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('sqrt(')">√</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('(')">(</div>
+                <div class="calc-btn op text-sm" onclick="calcAction(')')">)</div>
+
+                <div class="calc-btn op text-sm" onclick="calcAction('pi')">π</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('e')">e</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('^')">^</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('%')">%</div>
+                <div class="calc-btn op text-sm" onclick="calcAction('/')">÷</div>
+
+                <div class="calc-btn" onclick="calcAction('7')">7</div>
+                <div class="calc-btn" onclick="calcAction('8')">8</div>
+                <div class="calc-btn" onclick="calcAction('9')">9</div>
+                <div class="calc-btn op" onclick="calcAction('*')">×</div>
+                <div class="calc-btn op" onclick="calcAction('-')">-</div>
+
+                <div class="calc-btn" onclick="calcAction('4')">4</div>
+                <div class="calc-btn" onclick="calcAction('5')">5</div>
+                <div class="calc-btn" onclick="calcAction('6')">6</div>
+                <div class="calc-btn op" onclick="calcAction('+')">+</div>
+                <div class="calc-btn eq" onclick="calcAction('=')" style="grid-row: span 2;">=</div>
+
+                <div class="calc-btn" onclick="calcAction('1')">1</div>
+                <div class="calc-btn" onclick="calcAction('2')">2</div>
+                <div class="calc-btn" onclick="calcAction('3')">3</div>
+                <div class="calc-btn" onclick="calcAction('0')">0</div>
+                <div class="calc-btn" onclick="calcAction('.')">.</div>
+            </div>
+        </div>
+
+        <!-- PDF Merger -->
+        <div id="pdf-merge" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold mb-2">Advanced PDF Merger</h2>
+            <p class="mb-4 text-gray-500">Upload multiple PDFs. Drag and drop to re-order them, then merge.</p>
+            
+            <input type="file" id="pdf-merge-input" multiple accept="application/pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4" onchange="addMergeFiles(event)">
+            
+            <div id="merge-file-list" class="min-h-[100px] border-2 border-dashed border-gray-300 rounded p-2 mb-4">
+                <p class="text-gray-400 text-center mt-4" id="merge-empty-msg">No files added yet.</p>
+            </div>
+            
+            <button onclick="executePdfMerge()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Merge & Download PDF</button>
+            <p id="merge-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
+        </div>
+
+        <!-- PDF Splitter -->
+        <div id="pdf-split" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold mb-2">PDF Splitter</h2>
+            <p class="mb-4 text-gray-500">Select a PDF file and specify the page range to extract.</p>
+            
+            <input type="file" id="pdf-split-input" accept="application/pdf" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4">
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 mb-1">Start Page</label>
+                    <input type="number" id="split-start" min="1" class="w-full border p-2 rounded" placeholder="e.g. 1">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-1">End Page</label>
+                    <input type="number" id="split-end" min="1" class="w-full border p-2 rounded" placeholder="e.g. 5">
+                </div>
+            </div>
+            
+            <button onclick="executePdfSplit()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Split & Download PDF</button>
+            <p id="split-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
+        </div>
+
+        <!-- Image to Word -->
+        <div id="img2word" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold mb-2">Image to Word (DOCX)</h2>
+            <p class="mb-4 text-gray-500">Select images to insert them into a Word Document.</p>
+            
+            <input type="file" id="img2word-input" multiple accept="image/png, image/jpeg, image/jpg" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4">
+            
+            <button onclick="executeImgToWord()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Convert to DOCX</button>
+            <p id="i2w-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
+        </div>
+
+        <!-- Word to Image -->
+        <div id="word2img" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto">
+            <h2 class="text-2xl font-bold mb-2">Word (DOCX) to Image</h2>
+            <p class="mb-4 text-gray-500">Upload a Word document to convert its content into an Image (PNG).</p>
+            
+            <input type="file" id="word2img-input" accept=".docx" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4">
+            
+            <button onclick="executeWordToImg()" class="w-full bg-blue-600 text-white py-3 rounded font-bold hover:bg-blue-700 transition">Convert to Image</button>
+            <p id="w2i-status" class="mt-2 text-center text-sm font-bold text-green-600"></p>
+            
+            <!-- Hidden area for rendering DOCX to HTML for image capture -->
+            <div id="word-render-container" style="position: absolute; left: -9999px; top: 0;">
+                <div id="word-render-area"></div>
+            </div>
+        </div>
+
+        <!-- Universal Unit Converter -->
+        <div id="converter" class="tool-panel bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+            <h2 class="text-2xl font-bold mb-4">Universal Unit Converter</h2>
+            
+            <label class="block text-gray-700 mb-1">Select Category</label>
+            <select id="conv-category" class="w-full border p-2 rounded mb-4" onchange="updateConvOptions()">
+                <option value="length">Length</option>
+                <option value="weight">Weight / Mass</option>
+                <option value="temp">Temperature</option>
+            </select>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-gray-700 mb-1">From</label>
+                    <select id="conv-from" class="w-full border p-2 rounded" onchange="calculateConversion()"></select>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-1">To</label>
+                    <select id="conv-to" class="w-full border p-2 rounded" onchange="calculateConversion()"></select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 mb-1">Value</label>
+                    <input type="number" id="conv-input" value="1" class="w-full border p-2 rounded" oninput="calculateConversion()">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-1">Result</label>
+                    <input type="text" id="conv-result" class="w-full border p-2 rounded bg-gray-100 font-bold text-blue-600" disabled>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Core Navigation ---
+        function switchTool(toolId) {
+            document.querySelectorAll('.tool-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(toolId).classList.add('active');
+        }
+
+        // --- Calculator Logic ---
+        let calcExpr = "";
+        
+        function toggleCalc(type) {
+            document.getElementById('calc-simple').classList.add('hidden');
+            document.getElementById('calc-scientific').classList.add('hidden');
+            document.getElementById('tab-simple').classList.replace('bg-blue-600', 'bg-gray-200');
+            document.getElementById('tab-simple').classList.replace('text-white', 'text-gray-800');
+            document.getElementById('tab-scientific').classList.replace('bg-blue-600', 'bg-gray-200');
+            document.getElementById('tab-scientific').classList.replace('text-white', 'text-gray-800');
+            
+            if(type === 'simple') {
+                document.getElementById('calc-simple').classList.remove('hidden');
+                document.getElementById('tab-simple').classList.replace('bg-gray-200', 'bg-blue-600');
+                document.getElementById('tab-simple').classList.replace('text-gray-800', 'text-white');
+            } else {
+                document.getElementById('calc-scientific').classList.remove('hidden');
+                document.getElementById('tab-scientific').classList.replace('bg-gray-200', 'bg-blue-600');
+                document.getElementById('tab-scientific').classList.replace('text-gray-800', 'text-white');
+            }
+        }
+
+        function calcAction(val) {
+            const display = document.getElementById('calc-display');
+            if(val === 'C') {
+                calcExpr = "";
+                display.value = "";
+            } else if(val === 'DEL') {
+                calcExpr = calcExpr.slice(0, -1);
+                display.value = calcExpr;
+            } else if(val === '=') {
+                try {
+                    // Replacements for eval safety and JS Math functions
+                    let evalExpr = calcExpr
+                        .replace(/×/g, '*')
+                        .replace(/÷/g, '/')
+                        .replace(/\^/g, '**')
+                        .replace(/pi/g, 'Math.PI')
+                        .replace(/e/g, 'Math.E')
+                        .replace(/sin\(/g, 'Math.sin(')
+                        .replace(/cos\(/g, 'Math.cos(')
+                        .replace(/tan\(/g, 'Math.tan(')
+                        .replace(/sqrt\(/g, 'Math.sqrt(')
+                        .replace(/log\(/g, 'Math.log10(')
+                        .replace(/ln\(/g, 'Math.log(');
+                    
+                    let result = Function('"use strict";return (' + evalExpr + ')')();
+                    // Fix float issues
+                    result = Math.round(result * 10000000000) / 10000000000;
+                    display.value = result;
+                    calcExpr = result.toString();
+                } catch(e) {
+                    display.value = "Error";
+                    calcExpr = "";
+                }
+            } else {
+                calcExpr += val;
+                display.value = calcExpr;
+            }
+        }
+
+        // --- PDF Merger Logic ---
+        let pdfMergeFiles = [];
+        const mergeListEl = document.getElementById('merge-file-list');
+        
+        // Initialize Sortable for Drag and Drop
+        new Sortable(mergeListEl, {
+            animation: 150,
+            onEnd: function (evt) {
+                // Reorder array based on DOM changes
+                const itemEl = pdfMergeFiles.splice(evt.oldIndex, 1)[0];
+                pdfMergeFiles.splice(evt.newIndex, 0, itemEl);
+            },
+        });
+
+        function addMergeFiles(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(f => pdfMergeFiles.push(f));
+            renderMergeList();
+            event.target.value = ''; // Reset input
+        }
+
+        function renderMergeList() {
+            if(pdfMergeFiles.length === 0) {
+                mergeListEl.innerHTML = '<p class="text-gray-400 text-center mt-4" id="merge-empty-msg">No files added yet.</p>';
+                return;
+            }
+            mergeListEl.innerHTML = '';
+            pdfMergeFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'file-list-item';
+                div.innerHTML = `<span>${file.name}</span> <span class="delete-btn" onclick="removeMergeFile(${index})">✕</span>`;
+                mergeListEl.appendChild(div);
+            });
+        }
+
+        function removeMergeFile(index) {
+            pdfMergeFiles.splice(index, 1);
+            renderMergeList();
+        }
+
+        async function executePdfMerge() {
+            if(pdfMergeFiles.length < 2) {
+                alert("Please add at least 2 PDF files to merge.");
+                return;
+            }
+            const status = document.getElementById('merge-status');
+            status.innerText = "Merging... Please wait.";
+            try {
+                const { PDFDocument } = PDFLib;
+                const mergedPdf = await PDFDocument.create();
+                
+                for(let file of pdfMergeFiles) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFDocument.load(arrayBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    copiedPages.forEach(page => mergedPdf.addPage(page));
+                }
+                
+                const pdfBytes = await mergedPdf.save();
+                const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                saveAs(blob, "Merged_Document.pdf");
+                status.innerText = "Merged PDF downloaded successfully!";
+                setTimeout(() => status.innerText = "", 4000);
+            } catch(e) {
+                status.innerText = "Error merging files. Ensure they are valid PDFs.";
+                console.error(e);
+            }
+        }
+
+        // --- PDF Splitter Logic ---
+        async function executePdfSplit() {
+            const fileInput = document.getElementById('pdf-split-input');
+            const startStr = document.getElementById('split-start').value;
+            const endStr = document.getElementById('split-end').value;
+            const status = document.getElementById('split-status');
+
+            if(!fileInput.files.length) return alert("Please select a PDF file.");
+            if(!startStr || !endStr) return alert("Please enter start and end pages.");
+
+            let start = parseInt(startStr) - 1; // 0-indexed
+            let end = parseInt(endStr) - 1;
+
+            status.innerText = "Splitting... Please wait.";
+            try {
+                const { PDFDocument } = PDFLib;
+                const arrayBuffer = await fileInput.files[0].arrayBuffer();
+                const originalPdf = await PDFDocument.load(arrayBuffer);
+                const totalPages = originalPdf.getPageCount();
+
+                if(start < 0 || end >= totalPages || start > end) {
+                    status.innerText = "";
+                    return alert(`Invalid page range. File has ${totalPages} pages.`);
+                }
+
+                const newPdf = await PDFDocument.create();
+                const pageIndices = [];
+                for(let i = start; i <= end; i++) pageIndices.push(i);
+                
+                const copiedPages = await newPdf.copyPages(originalPdf, pageIndices);
+                copiedPages.forEach(page => newPdf.addPage(page));
+
+                const pdfBytes = await newPdf.save();
+                const blob = new Blob([pdfBytes], { type: "application/pdf" });
+                saveAs(blob, "Split_Pages.pdf");
+                status.innerText = "Split PDF downloaded successfully!";
+                setTimeout(() => status.innerText = "", 4000);
+            } catch (e) {
+                status.innerText = "Error splitting PDF.";
+                console.error(e);
+            }
+        }
+
+        // --- Image to Word Logic ---
+        async function executeImgToWord() {
+            const input = document.getElementById('img2word-input');
+            const status = document.getElementById('i2w-status');
+            if(!input.files.length) return alert("Please select images.");
+            
+            status.innerText = "Converting... Please wait.";
+            try {
+                const { Document, Packer, Paragraph, ImageRun } = docx;
+                const children = [];
+
+                for (let file of input.files) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    children.push(
+                        new Paragraph({
+                            children: [
+                                new ImageRun({
+                                    data: arrayBuffer,
+                                    transformation: {
+                                        width: 500, // Fixed safe width for Word doc
+                                        height: 500
+                                    },
+                                })
+                            ]
+                        })
+                    );
+                }
+
+                const doc = new Document({ sections: [{ properties: {}, children: children }] });
+                Packer.toBlob(doc).then(blob => {
+                    saveAs(blob, "Images_to_Word.docx");
+                    status.innerText = "Word Document downloaded successfully!";
+                    setTimeout(() => status.innerText = "", 4000);
+                });
+            } catch(e) {
+                status.innerText = "Error converting to Word.";
+                console.error(e);
+            }
+        }
+
+        // --- Word to Image Logic ---
+        async function executeWordToImg() {
+            const input = document.getElementById('word2img-input');
+            const status = document.getElementById('w2i-status');
+            if(!input.files.length) return alert("Please select a DOCX file.");
+
+            status.innerText = "Extracting & Rendering... Please wait.";
+            try {
+                const arrayBuffer = await input.files[0].arrayBuffer();
+                // Extract HTML using Mammoth
+                const result = await mammoth.convertToHtml({arrayBuffer: arrayBuffer});
+                const html = result.value;
+                
+                const renderArea = document.getElementById('word-render-area');
+                renderArea.innerHTML = html; // Render it invisibly
+                
+                // Convert Rendered HTML to Canvas
+                html2canvas(renderArea).then(canvas => {
+                    canvas.toBlob(function(blob) {
+                        saveAs(blob, "Word_to_Image.png");
+                        status.innerText = "Image downloaded successfully!";
+                        renderArea.innerHTML = ""; // clean up
+                        setTimeout(() => status.innerText = "", 4000);
+                    });
+                });
+            } catch(e) {
+                status.innerText = "Error generating image from Word.";
+                console.error(e);
+            }
+        }
+
+        // --- Unit Converter Logic ---
+        const units = {
+            length: {
+                Meter: 1, Kilometer: 1000, Centimeter: 0.01, Millimeter: 0.001, Mile: 1609.34, Yard: 0.9144, Foot: 0.3048, Inch: 0.0254
+            },
+            weight: {
+                Kilogram: 1, Gram: 0.001, Milligram: 0.000001, Pound: 0.453592, Ounce: 0.0283495
+            },
+            temp: {
+                Celsius: 'C', Fahrenheit: 'F', Kelvin: 'K'
+            }
+        };
+
+        function updateConvOptions() {
+            const cat = document.getElementById('conv-category').value;
+            const from = document.getElementById('conv-from');
+            const to = document.getElementById('conv-to');
+            from.innerHTML = ''; to.innerHTML = '';
+            
+            for (let key in units[cat]) {
+                from.add(new Option(key, key));
+                to.add(new Option(key, key));
+            }
+            if(to.options.length > 1) to.selectedIndex = 1;
+            calculateConversion();
+        }
+
+        function calculateConversion() {
+            const cat = document.getElementById('conv-category').value;
+            const val = parseFloat(document.getElementById('conv-input').value);
+            const from = document.getElementById('conv-from').value;
+            const to = document.getElementById('conv-to').value;
+            const resultEl = document.getElementById('conv-result');
+
+            if(isNaN(val)) { resultEl.value = ''; return; }
+
+            if(cat === 'temp') {
+                let celsius;
+                if(from === 'Celsius') celsius = val;
+                else if(from === 'Fahrenheit') celsius = (val - 32) * 5/9;
+                else if(from === 'Kelvin') celsius = val - 273.15;
+
+                let res;
+                if(to === 'Celsius') res = celsius;
+                else if(to === 'Fahrenheit') res = (celsius * 9/5) + 32;
+                else if(to === 'Kelvin') res = celsius + 273.15;
+                
+                resultEl.value = res.toFixed(4);
+            } else {
+                const baseVal = val * units[cat][from]; // Convert to base unit
+                const res = baseVal / units[cat][to]; // Convert from base to target
+                resultEl.value = res.toFixed(6).replace(/\.?0+$/, ''); // Clean trailing zeros
+            }
+        }
+
+        // Initialize Converter on load
+        updateConvOptions();
+    </script>
 </body>
 </html>
