@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Reminder - MultiTools</title>
+  <title>Task & Event Reminder Suite - MultiTools</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -13,23 +13,50 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="calculator.html">Calculator</a></li>
-      <li><a href="unit-converter.html">Converters</a></li>
-      <li><a href="reminder.html" class="active">Reminder</a></li>
-      <li><a href="image-tool.html">Image Tools</a></li>
+      <li><a href="currency-converter.html">Currencies</a></li>
+      <li><a href="reminder.html" class="active">Reminders</a></li>
+      <li><a href="document-tools.html">PDF & Word</a></li>
+      <li><a href="image-tools.html">Image Tools</a></li>
     </ul>
   </nav>
 
   <div class="container">
     <div class="tool-box">
-      <h2 style="text-align: center; margin-bottom: 20px;">30-Day Daily Task Reminder</h2>
-      
-      <input type="text" id="taskInput" placeholder="Enter task details (e.g. Renew Domain)">
-      <input type="date" id="dateInput">
-      <button class="btn" onclick="addReminder()">Save Reminder</button>
+      <h2 class="tool-title">Advanced Task & Multi-Channel Reminder</h2>
 
-      <div style="margin-top: 30px;">
-        <h3>Saved Reminders</h3>
-        <ul id="reminderList" style="list-style: none; padding: 0; margin-top: 15px;"></ul>
+      <label>Task Title / Subject:</label>
+      <input type="text" id="taskTitle" placeholder="e.g. Server Renewal Payment">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+        <div>
+          <label>Due Date & Time:</label>
+          <input type="datetime-local" id="taskDate">
+        </div>
+        <div>
+          <label>Recurrence / Repeat Option:</label>
+          <select id="taskRepeat">
+            <option value="Single Event">Single Event (No Repeat)</option>
+            <option value="Every 2 Days">Every 2 Days</option>
+            <option value="Every 3 Days">Every 3 Days</option>
+            <option value="Every 5 Days">Every 5 Days</option>
+            <option value="Every 7 Days">Every 7 Days (Weekly)</option>
+            <option value="Every 15 Days">Every 15 Days</option>
+            <option value="Every 30 Days">Every 30 Days (Monthly)</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Target Phone Number (For WhatsApp / SMS Alerts):</label>
+      <input type="text" id="taskPhone" placeholder="e.g. +923001234567">
+
+      <label>Target Email Address (For Email Alerts):</label>
+      <input type="email" id="taskEmail" placeholder="e.g. client@example.com">
+
+      <button class="btn btn-success" style="margin-top: 15px;" onclick="saveTask()">➕ Add & Save Task</button>
+
+      <div style="margin-top: 35px;">
+        <h3>Saved Reminders List</h3>
+        <div id="taskList" style="margin-top: 15px;"></div>
       </div>
     </div>
   </div>
@@ -39,55 +66,69 @@
   </footer>
 
   <script>
-    document.addEventListener('DOMContentLoaded', loadReminders);
+    document.addEventListener("DOMContentLoaded", loadTasks);
 
-    function addReminder() {
-      let task = document.getElementById('taskInput').value.trim();
-      let date = document.getElementById('dateInput').value;
+    function saveTask() {
+      let title = document.getElementById('taskTitle').value.trim();
+      let date = document.getElementById('taskDate').value;
+      let repeat = document.getElementById('taskRepeat').value;
+      let phone = document.getElementById('taskPhone').value.trim();
+      let email = document.getElementById('taskEmail').value.trim();
 
-      if (!task || !date) {
-        alert('Please provide both task title and date!');
+      if (!title || !date) {
+        alert("Please enter both Task Title and Date/Time!");
         return;
       }
 
-      let reminders = JSON.parse(localStorage.getItem('my_reminders') || '[]');
-      reminders.push({ task: task, date: date, id: Date.now() });
-      localStorage.setItem('my_reminders', JSON.stringify(reminders));
+      let tasks = JSON.parse(localStorage.getItem('portal_tasks') || '[]');
+      tasks.push({ id: Date.now(), title, date, repeat, phone, email });
+      localStorage.setItem('portal_tasks', JSON.stringify(tasks));
 
-      document.getElementById('taskInput').value = '';
-      document.getElementById('dateInput').value = '';
-      loadReminders();
+      document.getElementById('taskTitle').value = '';
+      loadTasks();
     }
 
-    function loadReminders() {
-      let reminders = JSON.parse(localStorage.getItem('my_reminders') || '[]');
-      let list = document.getElementById('reminderList');
-      list.innerHTML = '';
+    function loadTasks() {
+      let tasks = JSON.parse(localStorage.getItem('portal_tasks') || '[]');
+      let container = document.getElementById('taskList');
+      container.innerHTML = '';
 
-      if (reminders.length === 0) {
-        list.innerHTML = '<li style="color: #64748b;">No active reminders set.</li>';
+      if (tasks.length === 0) {
+        container.innerHTML = '<p style="color: #64748b;">No active tasks found. Create one above!</p>';
         return;
       }
 
-      reminders.forEach(item => {
-        let li = document.createElement('li');
-        li.style.cssText = 'background: #0f172a; padding: 12px; border-radius: 6px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155;';
-        li.innerHTML = `
-          <div>
-            <strong>${item.task}</strong>
-            <div style="font-size: 0.8rem; color: #38bdf8;">Due Date: ${item.date}</div>
+      tasks.forEach(t => {
+        let waText = encodeURIComponent(`⏰ REMINDER ALERT: ${t.title}\nDue Date: ${t.date}\nRepeat Cycle: ${t.repeat}`);
+        let waUrl = t.phone ? `https://wa.me/${t.phone.replace(/[^0-9]/g, '')}?text=${waText}` : `https://wa.me/?text=${waText}`;
+        let smsUrl = `sms:${t.phone}?body=${waText}`;
+        let mailUrl = `mailto:${t.email}?subject=${encodeURIComponent("Task Reminder: " + t.title)}&body=${waText}`;
+
+        let div = document.createElement('div');
+        div.style.cssText = "background: #0f172a; border: 1px solid #334155; padding: 15px; border-radius: 10px; margin-bottom: 15px;";
+        div.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+            <div>
+              <h4 style="color: #38bdf8; font-size: 1.1rem;">${t.title}</h4>
+              <p style="font-size: 0.85rem; color: #94a3b8; margin: 4px 0;">📅 Due: <b>${t.date.replace('T', ' ')}</b> | 🔁 Interval: <b>${t.repeat}</b></p>
+            </div>
+            <button class="btn btn-danger" style="width: auto; padding: 4px 10px; font-size: 0.8rem;" onclick="deleteTask(${t.id})">Delete</button>
           </div>
-          <button style="background: #dc2626; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;" onclick="deleteReminder(${item.id})">Delete</button>
+          <div class="btn-group">
+            <a href="${waUrl}" target="_blank" class="btn btn-whatsapp" style="width: auto; padding: 6px 12px; font-size: 0.85rem;">💬 WhatsApp Alert</a>
+            <a href="${smsUrl}" class="btn" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: #0284c7;">📱 SMS Alert</a>
+            <a href="${mailUrl}" class="btn" style="width: auto; padding: 6px 12px; font-size: 0.85rem; background: #7c3aed;">✉️ Email Alert</a>
+          </div>
         `;
-        list.appendChild(li);
+        container.appendChild(div);
       });
     }
 
-    function deleteReminder(id) {
-      let reminders = JSON.parse(localStorage.getItem('my_reminders') || '[]');
-      reminders = reminders.filter(item => item.id !== id);
-      localStorage.setItem('my_reminders', JSON.stringify(reminders));
-      loadReminders();
+    function deleteTask(id) {
+      let tasks = JSON.parse(localStorage.getItem('portal_tasks') || '[]');
+      tasks = tasks.filter(t => t.id !== id);
+      localStorage.setItem('portal_tasks', JSON.stringify(tasks));
+      loadTasks();
     }
   </script>
 </body>
