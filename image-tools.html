@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image AI & Upscaler Studio - MultiTools</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="logo">⚡ MultiTools Portal</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="calculator.html">Calculator</a></li>
+      <li><a href="currency-converter.html">Currencies</a></li>
+      <li><a href="reminder.html">Reminders</a></li>
+      <li><a href="document-tools.html">PDF & Word</a></li>
+      <li><a href="image-tools.html" class="active">Image Tools</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="tool-box">
+      <h2 class="tool-title">Image AI Studio & Upscaler</h2>
+
+      <div class="tab-container">
+        <button class="tab-btn active" onclick="switchImgTab('ocr')">Image to Word (OCR Text Extract)</button>
+        <button class="tab-btn" onclick="switchImgTab('upscale')">Image Upscaler & Resizer</button>
+      </div>
+
+      <!-- OCR IMAGE TO WORD -->
+      <div id="imgtab-ocr" class="img-tab-content">
+        <h3>Image to Word / Text Extraction</h3>
+        <label>Select Image with Text:</label>
+        <input type="file" id="ocrInput" accept="image/*">
+        <button class="btn" onclick="runOCR()">Extract Text & Convert to Word</button>
+
+        <div style="margin-top: 20px;">
+          <label>Extracted Result:</label>
+          <textarea id="ocrOutput" rows="8" readonly placeholder="Extracted text will appear here..."></textarea>
+          <button class="btn btn-success" style="margin-top: 10px;" onclick="downloadAsDoc()">Download as Word Document (.doc)</button>
+        </div>
+      </div>
+
+      <!-- IMAGE UPSCALER -->
+      <div id="imgtab-upscale" class="img-tab-content" style="display: none;">
+        <h3>Image Resizer & Quality Upscaler</h3>
+        <label>Select Image:</label>
+        <input type="file" id="upscaleInput" accept="image/*">
+
+        <label>Upscale Scale Factor:</label>
+        <select id="scaleFactor">
+          <option value="1.5">150% Resolution</option>
+          <option value="2">200% High Definition (2x)</option>
+          <option value="4">400% Ultra HD (4x)</option>
+        </select>
+
+        <button class="btn" onclick="processUpscale()">Upscale Image & Download</button>
+      </div>
+
+      <div id="imgStatus" style="margin-top: 20px; text-align: center; color: #38bdf8; font-weight: 600;"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 MultiTools Portal</p>
+  </footer>
+
+  <script>
+    function switchImgTab(tab) {
+      document.querySelectorAll('.img-tab-content').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('imgtab-' + tab).style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    async function runOCR() {
+      let file = document.getElementById('ocrInput').files[0];
+      if(!file) { alert("Please upload an image first!"); return; }
+
+      document.getElementById('imgStatus').innerText = "Extracting Text via Tesseract AI Engine...";
+      let result = await Tesseract.recognize(file, 'eng');
+      document.getElementById('ocrOutput').value = result.data.text;
+      document.getElementById('imgStatus').innerText = "✔ Text Extraction Completed!";
+    }
+
+    function downloadAsDoc() {
+      let text = document.getElementById('ocrOutput').value;
+      if(!text) return;
+      let blob = new Blob(['\ufeff' + text], { type: 'application/msword' });
+      let link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'extracted_text.doc';
+      link.click();
+    }
+
+    function processUpscale() {
+      let file = document.getElementById('upscaleInput').files[0];
+      let factor = parseFloat(document.getElementById('scaleFactor').value);
+      if(!file) { alert("Please select an image!"); return; }
+
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        let img = new Image();
+        img.onload = function() {
+          let canvas = document.createElement('canvas');
+          canvas.width = img.width * factor;
+          canvas.height = img.height * factor;
+
+          let ctx = canvas.getContext('2d');
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          let link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png');
+          link.download = `upscaled_${factor}x.png`;
+          link.click();
+          document.getElementById('imgStatus').innerText = "✔ Image Upscaled and Downloaded!";
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
