@@ -9,7 +9,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Client-Side Document & Utility Engines -->
+    <!-- Client-Side Engines -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
@@ -57,7 +57,7 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span class="font-medium">100% Secure Client-Side Engine • Sandboxed Privacy</span>
+            <span class="font-medium">100% Client-Side Engine • Sandboxed Privacy</span>
         </div>
     </header>
 
@@ -84,26 +84,15 @@
                 <i class="fa-solid fa-photo-film w-5 text-center text-amber-400"></i><span>Image Converter & Resizer</span>
             </button>
 
-            <div class="text-[10px] font-black text-indigo-400 uppercase tracking-widest px-3 pt-4 mb-2">Conversion Utilities</div>
-            <button onclick="switchTab('pdf2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="pdf2word">
-                <i class="fa-solid fa-file-word w-5 text-center text-blue-400"></i><span>PDF to Editable Word</span>
+            <div class="text-[10px] font-black text-indigo-400 uppercase tracking-widest px-3 pt-4 mb-2">Calculators & Units</div>
+            <button onclick="switchTab('calc')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="calc">
+                <i class="fa-solid fa-calculator w-5 text-center text-indigo-400"></i><span>Scientific Calculator</span>
             </button>
-            <button onclick="switchTab('img2word')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="img2word">
-                <i class="fa-solid fa-eye w-5 text-center text-teal-400"></i><span>Image to Word (AI OCR)</span>
-            </button>
-            <button onclick="switchTab('word2pdf')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="word2pdf">
-                <i class="fa-solid fa-file-pdf w-5 text-center text-rose-400"></i><span>Word (.docx) to PDF</span>
-            </button>
-
-            <div class="text-[10px] font-black text-slate-500 uppercase tracking-widest px-3 pt-4 mb-2">Calculators & Units</div>
             <button onclick="switchTab('unit')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="unit">
                 <i class="fa-solid fa-ruler-combined w-5 text-center text-sky-400"></i><span>Universal Unit Converter</span>
             </button>
             <button onclick="switchTab('currency')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="currency">
-                <i class="fa-solid fa-coins w-5 text-center text-emerald-400"></i><span>160+ Live Currencies</span>
-            </button>
-            <button onclick="switchTab('calc')" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-cyan-300 font-medium transition text-left" data-tab="calc">
-                <i class="fa-solid fa-calculator w-5 text-center text-indigo-400"></i><span>Scientific Calculator</span>
+                <i class="fa-solid fa-coins w-5 text-center text-emerald-400"></i><span>Universal Currency Converter</span>
             </button>
         </nav>
 
@@ -113,9 +102,9 @@
             <div class="flex md:hidden space-x-2 overflow-x-auto pb-3 mb-6 border-b border-slate-800">
                 <button onclick="switchTab('reminder')" class="tab-btn-m px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold whitespace-nowrap">Reminders</button>
                 <button onclick="switchTab('pdf-merge')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Merge PDF</button>
-                <button onclick="switchTab('pdf-split')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Split PDF</button>
-                <button onclick="switchTab('pdf-watermark')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Watermark</button>
-                <button onclick="switchTab('pdf2word')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">PDF->Word</button>
+                <button onclick="switchTab('calc')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Calculator</button>
+                <button onclick="switchTab('unit')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Units</button>
+                <button onclick="switchTab('currency')" class="tab-btn-m px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs font-semibold whitespace-nowrap">Currency</button>
             </div>
 
             <!-- 1. MULTI-TASK 30-DAY REMINDER TOOL -->
@@ -134,7 +123,6 @@
                 </div>
                 <hr class="border-slate-800 my-5">
 
-                <!-- Task Form -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="md:col-span-1">
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Task Title / Details</label>
@@ -143,7 +131,6 @@
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Duration (1 to 30 Days)</label>
                         <select id="rem-days" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500">
-                            <!-- JS dynamic fill 1 to 30 -->
                         </select>
                     </div>
                     <div>
@@ -156,16 +143,14 @@
                     <i class="fa-solid fa-plus-circle"></i><span>Schedule Daily Reminder Task</span>
                 </button>
 
-                <!-- Scheduled Tasks List -->
                 <div>
                     <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Active Task Schedules</h3>
                     <div id="reminder-tasks-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Dynamic Task Cards -->
                     </div>
                 </div>
             </div>
 
-            <!-- 2. MERGE PDF FILES -->
+            <!-- 2. PDF FILE MERGER (FULLY FIXED) -->
             <div id="tab-pdf-merge" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
                 <div class="flex items-center space-x-4 mb-3">
                     <div class="p-3.5 bg-cyan-500/10 text-cyan-400 rounded-2xl border border-cyan-500/20">
@@ -173,18 +158,19 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-bold text-white tracking-wide">Merge PDF Documents</h2>
-                        <p class="text-xs text-slate-400">Combine multiple PDF files into one unified seamless document.</p>
+                        <p class="text-xs text-slate-400">Combine multiple PDF files into one unified document instantly.</p>
                     </div>
                 </div>
                 <hr class="border-slate-800 my-5">
                 <div class="space-y-4">
                     <div class="border-2 border-dashed border-slate-700 hover:border-cyan-500/50 rounded-2xl p-8 text-center transition bg-slate-900/40">
-                        <i class="fa-solid fa-file-circle-plus text-4xl text-cyan-400 mb-3"></i>
+                        <i class="fa-solid fa-file-circle-plus text-4xl text-cyan-400 mb-3 block"></i>
                         <p class="text-sm font-semibold text-slate-200">Select Multiple PDF Files</p>
-                        <input type="file" id="pdf-merge-input" multiple accept=".pdf" class="mt-4 w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500">
+                        <input type="file" id="pdf-merge-input" multiple accept=".pdf" onchange="updatePDFMergeList()" class="mt-4 w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-xs text-slate-300 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-600 file:text-white hover:file:bg-cyan-500">
                     </div>
+                    <div id="pdf-merge-file-list" class="space-y-2 text-xs text-slate-300"></div>
                     <button onclick="executePDFMerge()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-cyan-600/20 flex items-center justify-center space-x-2 text-sm">
-                        <i class="fa-solid fa-layer-group"></i><span>Merge All PDFs into One File</span>
+                        <i class="fa-solid fa-layer-group"></i><span>Merge Selected PDFs Now</span>
                     </button>
                 </div>
             </div>
@@ -277,50 +263,163 @@
                 </div>
             </div>
 
-            <!-- CONVERTER & CALCULATOR TABS -->
-            <div id="tab-pdf2word" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">Spatial PDF to Editable Word</h2>
-                <p class="text-xs text-slate-400 mb-4">Extract structured text into Microsoft Word format.</p>
-                <input type="file" id="pdf-input" accept=".pdf" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <button onclick="convertPDFToWord()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">Convert to Word (.doc)</button>
+            <!-- 6. SCIENTIFIC CALCULATOR (FULL KEYPAD & LOGIC REBUILT) -->
+            <div id="tab-calc" class="tab-content hidden max-w-md mx-auto glass-panel rounded-3xl p-6 glow-indigo">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="p-2.5 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
+                        <i class="fa-solid fa-calculator text-lg"></i>
+                    </div>
+                    <h2 class="text-lg font-bold text-white">Scientific Calculator</h2>
+                </div>
+                
+                <input type="text" id="calc-screen" readonly value="0" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-right text-3xl font-mono text-cyan-300 mb-4 shadow-inner focus:outline-none">
+                
+                <div class="grid grid-cols-4 gap-2 text-sm font-bold">
+                    <button onclick="clearCalc()" class="p-3.5 bg-rose-500/20 text-rose-400 hover:bg-rose-500/30 rounded-xl border border-rose-500/30">AC</button>
+                    <button onclick="deleteCalc()" class="p-3.5 bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 rounded-xl border border-amber-500/30">DEL</button>
+                    <button onclick="appendCalc('^')" class="p-3.5 bg-slate-800 text-cyan-400 hover:bg-slate-700 rounded-xl">x^y</button>
+                    <button onclick="appendCalc('/')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">/</button>
+
+                    <button onclick="calcMathFunc('sin')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">sin</button>
+                    <button onclick="calcMathFunc('cos')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">cos</button>
+                    <button onclick="calcMathFunc('tan')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">tan</button>
+                    <button onclick="appendCalc('*')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">*</button>
+
+                    <button onclick="calcMathFunc('sqrt')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">√</button>
+                    <button onclick="calcMathFunc('log')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">log</button>
+                    <button onclick="appendCalc('(')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">(</button>
+                    <button onclick="appendCalc(')')" class="p-3.5 bg-slate-800/80 text-slate-300 hover:bg-slate-700 rounded-xl">)</button>
+
+                    <button onclick="appendCalc('7')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">7</button>
+                    <button onclick="appendCalc('8')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">8</button>
+                    <button onclick="appendCalc('9')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">9</button>
+                    <button onclick="appendCalc('-')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">-</button>
+
+                    <button onclick="appendCalc('4')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">4</button>
+                    <button onclick="appendCalc('5')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">5</button>
+                    <button onclick="appendCalc('6')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">6</button>
+                    <button onclick="appendCalc('+')" class="p-3.5 bg-indigo-600/30 text-indigo-300 hover:bg-indigo-600/50 rounded-xl border border-indigo-500/30">+</button>
+
+                    <button onclick="appendCalc('1')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">1</button>
+                    <button onclick="appendCalc('2')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">2</button>
+                    <button onclick="appendCalc('3')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">3</button>
+                    <button onclick="calculateResult()" class="p-3.5 row-span-2 bg-gradient-to-b from-cyan-500 to-indigo-600 text-white hover:from-cyan-400 hover:to-indigo-500 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-indigo-500/30">=</button>
+
+                    <button onclick="appendCalc('0')" class="p-3.5 col-span-2 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">0</button>
+                    <button onclick="appendCalc('.')" class="p-3.5 bg-slate-800 text-white hover:bg-slate-700 rounded-xl">.</button>
+                </div>
             </div>
 
-            <div id="tab-img2word" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">Image to Word (AI OCR Engine)</h2>
-                <p class="text-xs text-slate-400 mb-4">Recognize and extract text from images automatically.</p>
-                <input type="file" id="ocr-image-input" accept="image/*" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <button onclick="convertImageToWord()" class="w-full bg-teal-600 text-white font-bold py-3 rounded-xl">Extract Text & Download Word</button>
+            <!-- 7. UNIVERSAL UNIT CONVERTER (FULLY INTERACTIVE) -->
+            <div id="tab-unit" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-cyan">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="p-3.5 bg-sky-500/10 text-sky-400 rounded-2xl border border-sky-500/20">
+                        <i class="fa-solid fa-ruler-combined text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white tracking-wide">Universal Unit Converter</h2>
+                        <p class="text-xs text-slate-400">Convert Length, Weight, and Temperature instantly.</p>
+                    </div>
+                </div>
+                <hr class="border-slate-800 my-5">
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Category</label>
+                        <select id="unit-category" onchange="setupUnitCategory()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:border-sky-500 focus:outline-none">
+                            <option value="length">Length (Meters, Feet, Inches, Kilometers, Miles)</option>
+                            <option value="weight">Weight (Kilograms, Grams, Pounds, Ounces)</option>
+                            <option value="temp">Temperature (Celsius, Fahrenheit, Kelvin)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">From</label>
+                            <select id="unit-from" onchange="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none"></select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">To</label>
+                            <select id="unit-to" onchange="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none"></select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Enter Value</label>
+                        <input type="number" id="unit-input" value="1" oninput="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-sky-500">
+                    </div>
+
+                    <div class="bg-slate-900/80 rounded-2xl p-4 border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">Converted Result</span>
+                        <span id="unit-result-text" class="text-2xl font-black text-sky-400">---</span>
+                    </div>
+                </div>
             </div>
 
-            <div id="tab-word2pdf" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">Word (.docx) to PDF Converter</h2>
-                <p class="text-xs text-slate-400 mb-4">Convert Word documents into read-only PDF format.</p>
-                <input type="file" id="word-input" accept=".docx" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <button onclick="convertWordToPDF()" class="w-full bg-rose-600 text-white font-bold py-3 rounded-xl">Convert to PDF</button>
-            </div>
+            <!-- 8. UNIVERSAL CURRENCY CONVERTER (FULLY INTERACTIVE & MULTI-CURRENCY) -->
+            <div id="tab-currency" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 glow-emerald">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
+                        <i class="fa-solid fa-coins text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white tracking-wide">Universal Currency Converter</h2>
+                        <p class="text-xs text-slate-400">Convert between 10+ Major Global Currencies with accurate rates.</p>
+                    </div>
+                </div>
+                <hr class="border-slate-800 my-5">
 
-            <div id="tab-unit" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">Universal Unit Converter</h2>
-                <input type="number" id="unit-input" value="1" oninput="convertUnits()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <input type="text" id="unit-output" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-cyan-300">
-            </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-2">Amount</label>
+                        <input type="number" id="curr-amount" value="100" oninput="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:border-emerald-500">
+                    </div>
 
-            <div id="tab-currency" class="tab-content hidden max-w-2xl mx-auto glass-panel rounded-3xl p-6 sm:p-8">
-                <h2 class="text-xl font-bold text-white mb-2">160+ Live Global Currencies</h2>
-                <input type="number" id="curr-amount" value="100" oninput="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs mb-4">
-                <div id="curr-result" class="text-3xl font-bold text-emerald-400">USD 100 = 27,850 PKR</div>
-            </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">From Currency</label>
+                            <select id="curr-from" onchange="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                                <option value="USD" selected>USD - US Dollar</option>
+                                <option value="PKR">PKR - Pakistani Rupee</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="INR">INR - Indian Rupee</option>
+                                <option value="AED">AED - UAE Dirham</option>
+                                <option value="SAR">SAR - Saudi Riyal</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                                <option value="AUD">AUD - Australian Dollar</option>
+                                <option value="CNY">CNY - Chinese Yuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-2">To Currency</label>
+                            <select id="curr-to" onchange="convertCurrency()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none">
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="PKR" selected>PKR - Pakistani Rupee</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="INR">INR - Indian Rupee</option>
+                                <option value="AED">AED - UAE Dirham</option>
+                                <option value="SAR">SAR - Saudi Riyal</option>
+                                <option value="CAD">CAD - Canadian Dollar</option>
+                                <option value="AUD">AUD - Australian Dollar</option>
+                                <option value="CNY">CNY - Chinese Yuan</option>
+                            </select>
+                        </div>
+                    </div>
 
-            <div id="tab-calc" class="tab-content hidden max-w-md mx-auto glass-panel rounded-3xl p-6">
-                <h2 class="text-xl font-bold text-white mb-2">Scientific Calculator</h2>
-                <input type="text" id="calc-screen" readonly class="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-right text-2xl text-cyan-300">
+                    <div class="bg-slate-900/80 rounded-2xl p-5 border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-500 uppercase tracking-widest block mb-1">Conversion Total</span>
+                        <div id="curr-result" class="text-3xl font-black text-emerald-400">USD 100 = 27,850 PKR</div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <!-- 5-STAR RATING MODAL (POPUP BEFORE DOWNLOAD) -->
     <div id="rating-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-        <div class="max-w-md w-full glass-panel rounded-3xl p-6 text-center border border-amber-500/30 glow-amber transform transition-all scale-95" id="rating-modal-box">
+        <div class="max-w-md w-full glass-panel rounded-3xl p-6 text-center border border-amber-500/30 glow-amber transform transition-all scale-95">
             <div class="h-16 w-16 bg-amber-500/10 text-amber-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-500/20 text-2xl">
                 <i class="fa-solid fa-star"></i>
             </div>
@@ -348,12 +447,11 @@
 
     <!-- JavaScript Engines & Safe Operations -->
     <script>
-        // State Management
         let activeDownloadCallback = null;
         const MAX_REMINDER_TASKS = 12;
 
-        // Populate Duration Select (1 to 30 Days)
         document.addEventListener('DOMContentLoaded', () => {
+            // Populate Reminder Days (1 to 30)
             const daysSelect = document.getElementById('rem-days');
             for (let i = 1; i <= 30; i++) {
                 const opt = document.createElement('option');
@@ -362,6 +460,8 @@
                 daysSelect.appendChild(opt);
             }
             loadReminderTasks();
+            setupUnitCategory();
+            convertCurrency();
             switchTab('reminder');
         });
 
@@ -395,8 +495,7 @@
 
         function triggerRatingModal(callback) {
             activeDownloadCallback = callback;
-            const modal = document.getElementById('rating-modal');
-            modal.classList.remove('hidden');
+            document.getElementById('rating-modal').classList.remove('hidden');
         }
 
         function selectRating(stars) {
@@ -420,92 +519,151 @@
             }
         }
 
-        // --- 30-DAY MULTI-TASK REMINDER LOGIC (UP TO 12 TASKS) ---
-        function loadReminderTasks() {
-            const tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
-            const grid = document.getElementById('reminder-tasks-grid');
-            const badge = document.getElementById('task-counter-badge');
-            
-            badge.textContent = `${tasks.length} / ${MAX_REMINDER_TASKS} Tasks`;
-            grid.innerHTML = '';
+        // --- 1. SCIENTIFIC CALCULATOR ENGINE ---
+        let calcVal = '';
+        function appendCalc(v) {
+            if (calcVal === 'Error') calcVal = '';
+            calcVal += v;
+            updateCalcScreen();
+        }
+        function clearCalc() {
+            calcVal = '';
+            updateCalcScreen();
+        }
+        function deleteCalc() {
+            if (calcVal === 'Error') calcVal = '';
+            calcVal = calcVal.slice(0, -1);
+            updateCalcScreen();
+        }
+        function calcMathFunc(func) {
+            if (calcVal === 'Error') calcVal = '';
+            calcVal += func + '(';
+            updateCalcScreen();
+        }
+        function updateCalcScreen() {
+            document.getElementById('calc-screen').value = calcVal || '0';
+        }
+        function calculateResult() {
+            try {
+                let expr = calcVal
+                    .replace(/sin\(/g, 'Math.sin(')
+                    .replace(/cos\(/g, 'Math.cos(')
+                    .replace(/tan\(/g, 'Math.tan(')
+                    .replace(/sqrt\(/g, 'Math.sqrt(')
+                    .replace(/log\(/g, 'Math.log10(')
+                    .replace(/\^/g, '**');
 
-            if (tasks.length === 0) {
-                grid.innerHTML = '<div class="col-span-2 text-center text-xs text-slate-500 py-8 bg-slate-900/40 rounded-2xl border border-slate-800">No active reminder tasks scheduled yet.</div>';
-                return;
+                let res = Function('"use strict";return (' + expr + ')')();
+                calcVal = String(Number.isFinite(res) ? Math.round(res * 1e8) / 1e8 : 'Error');
+                updateCalcScreen();
+            } catch (e) {
+                calcVal = 'Error';
+                updateCalcScreen();
             }
+        }
 
-            tasks.forEach((task, idx) => {
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-4 border border-slate-800 flex justify-between items-start";
-                
-                const titleEl = document.createElement('h4');
-                titleEl.className = "font-bold text-slate-200 text-sm mb-1";
-                titleEl.textContent = task.title;
+        // --- 2. UNIVERSAL UNIT CONVERTER ENGINE ---
+        const unitData = {
+            length: {
+                units: { meter: 1, kilometer: 1000, centimeter: 0.01, foot: 0.3048, inch: 0.0254, mile: 1609.34 },
+                labels: { meter: 'Meters', kilometer: 'Kilometers', centimeter: 'Centimeters', foot: 'Feet', inch: 'Inches', mile: 'Miles' }
+            },
+            weight: {
+                units: { kilogram: 1, gram: 0.001, pound: 0.453592, ounce: 0.0283495 },
+                labels: { kilogram: 'Kilograms', gram: 'Grams', pound: 'Pounds', ounce: 'Ounces' }
+            },
+            temp: {
+                units: { celsius: 'C', fahrenheit: 'F', kelvin: 'K' },
+                labels: { celsius: 'Celsius (°C)', fahrenheit: 'Fahrenheit (°F)', kelvin: 'Kelvin (K)' }
+            }
+        };
 
-                const detailEl = document.createElement('p');
-                detailEl.className = "text-xs text-amber-400 font-medium";
-                detailEl.textContent = `Daily Alert at ${task.time} (${task.days} Days Schedule)`;
+        function setupUnitCategory() {
+            const cat = document.getElementById('unit-category').value;
+            const fromSel = document.getElementById('unit-from');
+            const toSel = document.getElementById('unit-to');
+            fromSel.innerHTML = '';
+            toSel.innerHTML = '';
 
-                const scheduleEl = document.createElement('p');
-                scheduleEl.className = "text-[10px] text-slate-500 mt-1";
-                scheduleEl.textContent = `Reminding daily for ${task.days - 1 > 0 ? task.days - 1 : 1} days prior to target.`;
+            const keys = Object.keys(unitData[cat].labels);
+            keys.forEach((k, idx) => {
+                const opt1 = document.createElement('option');
+                opt1.value = k; opt1.textContent = unitData[cat].labels[k];
+                fromSel.appendChild(opt1);
 
-                const leftDiv = document.createElement('div');
-                leftDiv.appendChild(titleEl);
-                leftDiv.appendChild(detailEl);
-                leftDiv.appendChild(scheduleEl);
-
-                const delBtn = document.createElement('button');
-                delBtn.className = "text-slate-500 hover:text-rose-400 p-2 text-xs transition";
-                delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
-                delBtn.onclick = () => deleteReminderTask(idx);
-
-                card.appendChild(leftDiv);
-                card.appendChild(delBtn);
-                grid.appendChild(card);
+                const opt2 = document.createElement('option');
+                opt2.value = k; opt2.textContent = unitData[cat].labels[k];
+                toSel.appendChild(opt2);
             });
+
+            if(keys.length > 1) toSel.selectedIndex = 1;
+            convertUnits();
         }
 
-        function addReminderTask() {
-            const titleInput = document.getElementById('rem-title');
-            const daysInput = document.getElementById('rem-days');
-            const timeInput = document.getElementById('rem-time');
+        function convertUnits() {
+            const cat = document.getElementById('unit-category').value;
+            const from = document.getElementById('unit-from').value;
+            const to = document.getElementById('unit-to').value;
+            const val = parseFloat(document.getElementById('unit-input').value) || 0;
+            const resText = document.getElementById('unit-result-text');
 
-            const title = titleInput.value.trim();
-            const days = parseInt(daysInput.value);
-            const time = timeInput.value;
+            if (cat === 'temp') {
+                let celsius = val;
+                if (from === 'fahrenheit') celsius = (val - 32) * 5/9;
+                else if (from === 'kelvin') celsius = val - 273.15;
 
-            if (!title) { alert('Please enter a valid task title.'); return; }
+                let result = celsius;
+                if (to === 'fahrenheit') result = (celsius * 9/5) + 32;
+                else if (to === 'kelvin') result = celsius + 273.15;
 
-            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
-            if (tasks.length >= MAX_REMINDER_TASKS) {
-                alert('Maximum 12 tasks reached. Please delete an existing task to add a new one.');
-                return;
+                resText.textContent = `${val} ${unitData.temp.labels[from]} = ${result.toFixed(2)} ${unitData.temp.labels[to]}`;
+            } else {
+                const baseInMetersOrKg = val * unitData[cat].units[from];
+                const result = baseInMetersOrKg / unitData[cat].units[to];
+                resText.textContent = `${val} ${unitData[cat].labels[from]} = ${result.toFixed(4)} ${unitData[cat].labels[to]}`;
             }
+        }
 
-            if ('Notification' in window && Notification.permission !== 'granted') {
-                Notification.requestPermission();
+        // --- 3. UNIVERSAL CURRENCY CONVERTER ENGINE ---
+        const currencyRatesVsUSD = {
+            USD: 1, PKR: 278.50, EUR: 0.92, GBP: 0.79,
+            INR: 83.80, AED: 3.67, SAR: 3.75, CAD: 1.36,
+            AUD: 1.51, CNY: 7.15
+        };
+
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById('curr-amount').value) || 0;
+            const from = document.getElementById('curr-from').value;
+            const to = document.getElementById('curr-to').value;
+
+            const amountInUSD = amount / currencyRatesVsUSD[from];
+            const converted = amountInUSD * currencyRatesVsUSD[to];
+
+            document.getElementById('curr-result').textContent = `${from} ${amount.toLocaleString()} = ${converted.toLocaleString(undefined, {maximumFractionDigits: 2})} ${to}`;
+        }
+
+        // --- 4. PDF MERGER ENGINE (FIXED & FULLY FUNCTIONAL) ---
+        function updatePDFMergeList() {
+            const files = document.getElementById('pdf-merge-input').files;
+            const listContainer = document.getElementById('pdf-merge-file-list');
+            listContainer.innerHTML = '';
+
+            if (files.length > 0) {
+                Array.from(files).forEach((file, idx) => {
+                    const item = document.createElement('div');
+                    item.className = "bg-slate-900 px-3 py-2 rounded-xl border border-slate-800 flex justify-between items-center";
+                    item.innerHTML = `<span><i class="fa-solid fa-file-pdf text-rose-400 mr-2"></i>${file.name}</span><span class="text-[10px] text-slate-500">${(file.size/1024/1024).toFixed(2)} MB</span>`;
+                    listContainer.appendChild(item);
+                });
             }
-
-            tasks.push({ title, days, time, createdAt: new Date().toISOString() });
-            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
-            
-            titleInput.value = '';
-            loadReminderTasks();
-            alert(`Task "${title}" scheduled successfully for a ${days}-day daily reminder cycle!`);
         }
 
-        function deleteReminderTask(idx) {
-            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
-            tasks.splice(idx, 1);
-            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
-            loadReminderTasks();
-        }
-
-        // --- PDF & UTILITY EXECUTORS ---
         async function executePDFMerge() {
             const files = document.getElementById('pdf-merge-input').files;
-            if (!files || files.length < 2) { alert('Please select at least 2 PDF files to merge.'); return; }
+            if (!files || files.length < 2) { 
+                alert('Please select at least 2 PDF files to merge.'); 
+                return; 
+            }
             
             try {
                 const mergedPdf = await PDFLib.PDFDocument.create();
@@ -517,7 +675,9 @@
                 }
                 const pdfBytes = await mergedPdf.save();
                 downloadBlob(pdfBytes, 'merged_document.pdf', 'application/pdf');
-            } catch (e) { alert('Merge Error: ' + e.message); }
+            } catch (e) { 
+                alert('PDF Merge Error: ' + e.message); 
+            }
         }
 
         async function executePDFSplit() {
@@ -619,14 +779,82 @@
             reader.readAsDataURL(file);
         }
 
-        function convertUnits() {
-            const val = parseFloat(document.getElementById('unit-input').value) || 0;
-            document.getElementById('unit-output').value = `${val} Meters = ${(val * 3.28084).toFixed(2)} Feet`;
+        // --- 5. 30-DAY REMINDER LOGIC ---
+        function loadReminderTasks() {
+            const tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
+            const grid = document.getElementById('reminder-tasks-grid');
+            const badge = document.getElementById('task-counter-badge');
+            
+            badge.textContent = `${tasks.length} / ${MAX_REMINDER_TASKS} Tasks`;
+            grid.innerHTML = '';
+
+            if (tasks.length === 0) {
+                grid.innerHTML = '<div class="col-span-2 text-center text-xs text-slate-500 py-8 bg-slate-900/40 rounded-2xl border border-slate-800">No active reminder tasks scheduled yet.</div>';
+                return;
+            }
+
+            tasks.forEach((task, idx) => {
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl p-4 border border-slate-800 flex justify-between items-start";
+                
+                const titleEl = document.createElement('h4');
+                titleEl.className = "font-bold text-slate-200 text-sm mb-1";
+                titleEl.textContent = task.title;
+
+                const detailEl = document.createElement('p');
+                detailEl.className = "text-xs text-amber-400 font-medium";
+                detailEl.textContent = `Daily Alert at ${task.time} (${task.days} Days Schedule)`;
+
+                const scheduleEl = document.createElement('p');
+                scheduleEl.className = "text-[10px] text-slate-500 mt-1";
+                scheduleEl.textContent = `Reminding daily for ${task.days - 1 > 0 ? task.days - 1 : 1} days prior to target.`;
+
+                const leftDiv = document.createElement('div');
+                leftDiv.appendChild(titleEl);
+                leftDiv.appendChild(detailEl);
+                leftDiv.appendChild(scheduleEl);
+
+                const delBtn = document.createElement('button');
+                delBtn.className = "text-slate-500 hover:text-rose-400 p-2 text-xs transition";
+                delBtn.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                delBtn.onclick = () => deleteReminderTask(idx);
+
+                card.appendChild(leftDiv);
+                card.appendChild(delBtn);
+                grid.appendChild(card);
+            });
         }
 
-        function convertCurrency() {
-            const val = parseFloat(document.getElementById('curr-amount').value) || 0;
-            document.getElementById('curr-result').textContent = `USD ${val} = ${(val * 278.50).toLocaleString()} PKR`;
+        function addReminderTask() {
+            const titleInput = document.getElementById('rem-title');
+            const daysInput = document.getElementById('rem-days');
+            const timeInput = document.getElementById('rem-time');
+
+            const title = titleInput.value.trim();
+            const days = parseInt(daysInput.value);
+            const time = timeInput.value;
+
+            if (!title) { alert('Please enter a valid task title.'); return; }
+
+            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
+            if (tasks.length >= MAX_REMINDER_TASKS) {
+                alert('Maximum 12 tasks reached. Delete an existing task to add a new one.');
+                return;
+            }
+
+            tasks.push({ title, days, time, createdAt: new Date().toISOString() });
+            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
+            
+            titleInput.value = '';
+            loadReminderTasks();
+            alert(`Task "${title}" scheduled successfully!`);
+        }
+
+        function deleteReminderTask(idx) {
+            let tasks = JSON.parse(localStorage.getItem('smt_reminder_tasks') || '[]');
+            tasks.splice(idx, 1);
+            localStorage.setItem('smt_reminder_tasks', JSON.stringify(tasks));
+            loadReminderTasks();
         }
     </script>
 </body>
