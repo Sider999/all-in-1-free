@@ -1,1013 +1,638 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All-In-1 Multi-Tool Suite</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All-in-One Tools</title>
+
   <style>
     :root {
-      --bg-dark: #0f172a;
-      --card-dark: #1e293b;
-      --card-border: #334155;
-      --accent-blue: #3b82f6;
-      --accent-purple: #8b5cf6;
-      --accent-gold: #eab308;
-      --text-light: #f8fafc;
-      --text-muted: #94a3b8;
-      --danger: #ef4444;
-      --success: #22c55e;
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #687386;
+      --primary: #635bff;
+      --gold: #e7ad35;
+      --border: #e3e8f0;
+      --danger: #d64545;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-    body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+    * {
+      box-sizing: border-box;
+    }
 
-    /* Top Navigation */
-    header {
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      width: 260px;
+      min-height: 100vh;
       background: #111827;
-      border-bottom: 1px solid var(--card-border);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
-    .brand-title { color: var(--accent-blue); font-size: 1.4rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-    .brand-title span { color: var(--accent-purple); }
-
-    nav { display: flex; gap: 8px; flex-wrap: wrap; }
-    nav button {
-      background: #1f2937;
-      border: 1px solid var(--card-border);
-      color: var(--text-light);
-      padding: 0.5rem 0.9rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    nav button:hover, nav button.active {
-      background: var(--accent-blue);
-      color: #fff;
-      border-color: var(--accent-blue);
-    }
-    nav button.nav-gold {
-      border-color: var(--accent-gold);
-      color: var(--accent-gold);
-      background: rgba(234, 179, 8, 0.1);
-    }
-    nav button.nav-gold:hover, nav button.nav-gold.active {
-      background: var(--accent-gold);
-      color: #111;
-      box-shadow: 0 0 12px rgba(234, 179, 8, 0.6);
-    }
-
-    /* Layout Containers */
-    .container { width: 92%; max-width: 1180px; margin: 2rem auto; flex: 1; }
-    .page { display: none; }
-    .page.active { display: block; }
-    
-    .section-header { text-align: center; margin-bottom: 2rem; }
-    .section-header h1 { font-size: 2.2rem; margin-bottom: 0.4rem; color: var(--text-light); }
-    .section-header p { color: var(--text-muted); font-size: 0.95rem; }
-
-    /* Tool Grid Layout */
-    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    
-    .tool-card {
-      background: var(--card-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .tool-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent-blue);
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
-    }
-    .tool-card h3 { color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 1.2rem; }
-    .tool-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.4; }
-
-    /* Standalone Gold Glowing Reminder Card */
-    .gold-glow-card {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);
-      border: 2px solid var(--accent-gold);
-      border-radius: 14px;
-      padding: 1.8rem;
-      box-shadow: 0 0 25px rgba(234, 179, 8, 0.35);
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 1rem;
-    }
-    .gold-glow-card h2 { color: var(--accent-gold); font-size: 1.6rem; margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: space-between; }
-    .gold-glow-card p { color: #cbd5e1; font-size: 0.95rem; }
-    .task-badge {
-      background: var(--accent-gold);
-      color: #111;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 700;
-    }
-
-    /* Common Form UI */
-    .tool-box {
-      background: var(--card-dark);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 800px;
-      margin: 0 auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-    .form-group { margin-bottom: 1.2rem; }
-    label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.8rem;
-      background: #0f172a;
-      border: 1px solid var(--card-border);
-      border-radius: 8px;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-    }
-    input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); }
-    textarea { min-height: 140px; resize: vertical; }
-
-    .btn-group { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.2rem; }
-    .btn {
-      background: var(--accent-blue);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.4rem;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .btn:hover { background: #2563eb; box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); }
-    .btn-gold { background: var(--accent-gold); color: #111; }
-    .btn-gold:hover { background: #ca8a04; box-shadow: 0 0 12px rgba(234, 179, 8, 0.5); }
-    .btn-sec { background: #475569; color: #fff; }
-    .btn-sec:hover { background: #64748b; }
-    .btn-danger { background: var(--danger); }
-    .btn-danger:hover { background: #dc2626; }
-
-    /* Scientific Calculator */
-    .calc-wrapper { max-width: 440px; margin: 0 auto; background: #111827; border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; }
-    .calc-screen { background: #030712; border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem; text-align: right; margin-bottom: 1.2rem; }
-    .calc-screen .expr { color: var(--text-muted); font-size: 0.95rem; min-height: 1.3rem; }
-    .calc-screen .val { color: var(--accent-blue); font-size: 2rem; font-weight: bold; min-height: 2.5rem; word-break: break-all; }
-    .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
-    .calc-btn { padding: 0.9rem 0.2rem; font-size: 0.95rem; font-weight: bold; border-radius: 8px; border: 1px solid var(--card-border); background: #1f2937; color: #fff; cursor: pointer; }
-    .calc-btn:hover { border-color: var(--accent-blue); background: #374151; }
-    .calc-btn.op { background: #1e3a8a; color: #60a5fa; }
-    .calc-btn.func { background: #312e81; color: #c084fc; }
-    .calc-btn.act { background: #881337; color: #fda4af; }
-    .calc-btn.eq { background: var(--success); color: #111; grid-column: span 2; font-size: 1.1rem; }
-
-    /* Task Cards */
-    .task-item {
-      background: #0f172a;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-    .task-info h4 { color: var(--accent-gold); margin-bottom: 0.2rem; }
-    .task-info p { color: var(--text-muted); font-size: 0.85rem; }
-    .trigger-links { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
-    .trigger-btn { font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 4px; text-decoration: none; color: #fff; font-weight: bold; display: inline-block; }
-    .trig-wa { background: #25d366; }
-    .trig-sms { background: #0284c7; }
-    .trig-mail { background: #ea4335; }
-    .trig-alert { background: #8b5cf6; }
-
-    /* Mandatory 5-Star Rating Modal */
-    .modal-overlay {
+      color: white;
+      padding: 20px 14px;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(6px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      inset: 0 auto 0 0;
+      overflow-y: auto;
     }
-    .modal-card {
-      background: var(--card-dark);
-      border: 2px solid var(--accent-gold);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 450px;
-      width: 90%;
-      text-align: center;
-      box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
-    }
-    .modal-card h2 { color: var(--accent-gold); margin-bottom: 0.5rem; }
-    .modal-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-    .star-rating { display: flex; justify-content: center; gap: 10px; font-size: 2.5rem; cursor: pointer; margin-bottom: 1.5rem; }
-    .star { color: #475569; transition: color 0.2s; }
-    .star.hovered, .star.selected { color: var(--accent-gold); text-shadow: 0 0 10px rgba(234, 179, 8, 0.8); }
 
-    footer { text-align: center; padding: 1.5rem; background: #111827; border-top: 1px solid var(--card-border); color: var(--text-muted); font-size: 0.85rem; }
+    .sidebar h1 {
+      font-size: 20px;
+      margin: 0 10px 24px;
+    }
+
+    .nav-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #d8deea;
+      text-align: left;
+      border-radius: 9px;
+      padding: 12px;
+      margin: 3px 0;
+    }
+
+    .nav-button:hover,
+    .nav-button.active {
+      background: #293449;
+      color: white;
+    }
+
+    .nav-button.reminder {
+      border: 1px solid var(--gold);
+      color: #ffd875;
+      box-shadow: 0 0 14px rgba(231, 173, 53, .35);
+    }
+
+    .main {
+      width: calc(100% - 260px);
+      margin-left: 260px;
+      padding: 28px;
+    }
+
+    .page {
+      display: none;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 18px rgba(20, 30, 50, .05);
+    }
+
+    .reminder-card {
+      border-color: var(--gold);
+      box-shadow: 0 0 24px rgba(231, 173, 53, .28);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 6px 0 12px;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .primary {
+      border: 0;
+      border-radius: 8px;
+      color: white;
+      background: var(--primary);
+      padding: 11px 16px;
+    }
+
+    .danger {
+      background: var(--danger);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .error {
+      color: var(--danger);
+      min-height: 20px;
+      margin: 8px 0;
+    }
+
+    .task {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .task.completed {
+      opacity: .6;
+      text-decoration: line-through;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .task-actions a,
+    .task-actions button {
+      border: 0;
+      border-radius: 7px;
+      padding: 8px 10px;
+      text-decoration: none;
+      background: #edf0f6;
+      color: var(--text);
+    }
+
+    @media (max-width: 760px) {
+      .sidebar {
+        width: 210px;
+      }
+
+      .main {
+        width: calc(100% - 210px);
+        margin-left: 210px;
+        padding: 16px;
+      }
+    }
   </style>
 </head>
+
 <body>
+  <div class="app">
+    <aside class="sidebar">
+      <h1>All-in-One Tools</h1>
 
-  <!-- Top Navigation Header -->
-  <header>
-    <div class="brand-title" onclick="navigateTo('home')">ALL-IN-1 <span>SUITE</span></div>
-    <nav>
-      <button onclick="navigateTo('home')" id="nav-home" class="active">Home</button>
-      <button onclick="navigateTo('reminder')" id="nav-reminder" class="nav-gold">⭐ 30-Day Reminder</button>
-      <button onclick="navigateTo('scientific-calc')" id="nav-scientific-calc">Scientific Calc</button>
-      <button onclick="navigateTo('text-utility')" id="nav-text-utility">Text Utility</button>
-      <button onclick="navigateTo('qr-generator')" id="nav-qr-generator">QR Generator</button>
-      <button onclick="navigateTo('json-formatter')" id="nav-json-formatter">JSON Tools</button>
-      <button onclick="navigateTo('password-generator')" id="nav-password-generator">Password Gen</button>
-      <button onclick="navigateTo('unit-converter')" id="nav-unit-converter">Unit Converter</button>
-      <button onclick="navigateTo('bmi-calculator')" id="nav-bmi-calculator">BMI Calc</button>
-      <button onclick="navigateTo('image-tools')" id="nav-image-tools">Image Tools</button>
-    </nav>
-  </header>
+      <button class="nav-button" data-route="home">Dashboard</button>
+      <button class="nav-button reminder" data-route="reminder-suite">
+        30-Day Reminders
+        <span id="taskBadge">0/12</span>
+      </button>
+      <button class="nav-button" data-route="calculator">Calculator</button>
+      <button class="nav-button" data-route="text-tools">Text Tools</button>
+      <button class="nav-button" data-route="qr-generator">QR Generator</button>
+      <button class="nav-button" data-route="json-tools">JSON Tools</button>
+      <button class="nav-button" data-route="password-generator">
+        Password Generator
+      </button>
+      <button class="nav-button" data-route="unit-converter">
+        Unit Converter
+      </button>
+      <button class="nav-button" data-route="bmi-calculator">
+        BMI Calculator
+      </button>
+    </aside>
 
-  <div class="container">
-
-    <!-- DASHBOARD HOME PAGE -->
-    <div id="page-home" class="page active">
-      <!-- Prominent Top Gold Glowing Reminder Card -->
-      <div class="gold-glow-card tool-card" onclick="navigateTo('reminder')">
-        <h2>
-          <span>30-Days Multi-Task Reminder Suite</span>
-          <span class="task-badge" id="dash-task-count">0 / 12 Tasks</span>
-        </h2>
-        <p>Schedule long-term 1 to 30-day triggers with multi-channel WhatsApp, SMS, Email, & Browser Alert links stored securely in LocalStorage.</p>
-      </div>
-
-      <div class="section-header">
-        <h1>All-In-One Free Online Tools</h1>
-        <p>Fast, client-side, bug-free web utility apps</p>
-      </div>
-
-      <div class="tools-grid">
-        <div class="tool-card" onclick="navigateTo('scientific-calc')">
-          <h3>Scientific Calculator</h3>
-          <p>Full trigonometric, logarithmic, factorial, roots, powers, and algebraic evaluator engine.</p>
+    <main class="main">
+      <section class="page" data-page="home">
+        <div class="card">
+          <h2>All-in-One Tools</h2>
+          <p class="muted">
+            Select a tool from the menu to begin.
+          </p>
         </div>
 
-        <div class="tool-card" onclick="navigateTo('text-utility')">
-          <h3>Text Utility Suite</h3>
-          <p>Word & char counter, case converter, extra space cleaner, and Base64 encoder/decoder.</p>
+        <div class="card reminder-card">
+          <h2>30-Day Multi-Task Reminder Suite</h2>
+          <p>
+            Schedule up to 12 reminders with WhatsApp, SMS, email, and browser
+            notification links.
+          </p>
+          <button class="primary" data-route="reminder-suite">
+            Open Reminder Suite
+          </button>
+        </div>
+      </section>
+
+      <section class="page" data-page="reminder-suite">
+        <div class="card reminder-card">
+          <h2>30-Day Multi-Task Reminder Suite</h2>
+          <p id="reminderCount" class="muted">0 of 12 tasks used</p>
+
+          <form id="reminderForm">
+            <label>
+              Task title
+              <input id="taskTitle" required maxlength="120">
+            </label>
+
+            <label>
+              Description
+              <textarea id="taskDescription" maxlength="1000"></textarea>
+            </label>
+
+            <label>
+              Reminder after days
+              <input id="taskDays" type="number" min="1" max="30" value="1" required>
+            </label>
+
+            <div id="reminderError" class="error"></div>
+
+            <button class="primary" type="submit">
+              Add reminder
+            </button>
+          </form>
         </div>
 
-        <div class="tool-card" onclick="navigateTo('qr-generator')">
-          <h3>QR Code Generator</h3>
-          <p>Generate high-quality QR codes instantly for URLs, plain text, and contact info.</p>
+        <div class="card">
+          <h2>Scheduled Tasks</h2>
+          <div id="taskList"></div>
         </div>
+      </section>
 
-        <div class="tool-card" onclick="navigateTo('json-formatter')">
-          <h3>JSON Validator & Formatter</h3>
-          <p>Parse, validate, beautify, and minify your JSON data structures completely offline.</p>
+      <section class="page" data-page="calculator">
+        <div class="card">
+          <h2>Calculator</h2>
+          <input id="calculatorInput" placeholder="Example: (12 + 8) * 3">
+          <button class="primary" id="calculateButton">Calculate</button>
+          <p id="calculatorOutput"></p>
         </div>
+      </section>
 
-        <div class="tool-card" onclick="navigateTo('password-generator')">
-          <h3>Secure Password Generator</h3>
-          <p>Generate robust random passwords using browser cryptographic values.</p>
+      <section class="page" data-page="text-tools">
+        <div class="card">
+          <h2>Text Tools</h2>
+          <textarea id="textInput"></textarea>
+          <button class="primary" id="upperButton">Uppercase</button>
+          <button class="primary" id="lowerButton">Lowercase</button>
+          <button class="primary" id="downloadTextButton">
+            Download Text
+          </button>
         </div>
+      </section>
 
-        <div class="tool-card" onclick="navigateTo('unit-converter')">
-          <h3>Multi-Unit Converter</h3>
-          <p>Convert metrics between length, mass/weight, and temperature scales accurately.</p>
+      <section class="page" data-page="json-tools">
+        <div class="card">
+          <h2>JSON Formatter and Validator</h2>
+          <textarea id="jsonInput" placeholder='{"name":"Example"}'></textarea>
+          <button class="primary" id="formatJsonButton">
+            Format JSON
+          </button>
+          <p id="jsonOutput" class="error"></p>
         </div>
+      </section>
 
-        <div class="tool-card" onclick="navigateTo('bmi-calculator')">
-          <h3>BMI Health Calculator</h3>
-          <p>Calculate your Body Mass Index score with color health target indicators.</p>
+      <section class="page" data-page="password-generator">
+        <div class="card">
+          <h2>Password Generator</h2>
+          <input id="passwordLength" type="number" min="4" max="128" value="20">
+          <button class="primary" id="generatePasswordButton">
+            Generate Password
+          </button>
+          <input id="generatedPassword" readonly>
         </div>
+      </section>
 
-        <div class="tool-card" onclick="navigateTo('image-tools')">
-          <h3>Image Resizer & Format Suite</h3>
-          <p>Client-side canvas tool to resize and convert images to PNG, JPG, or WEBP formats.</p>
+      <section class="page" data-page="unit-converter">
+        <div class="card">
+          <h2>Unit Converter</h2>
+          <input id="kilometersInput" type="number" min="0">
+          <button class="primary" id="convertUnitsButton">
+            Convert to Miles
+          </button>
+          <p id="milesOutput"></p>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- 30-DAY MULTI-TASK REMINDER PAGE -->
-    <div id="page-reminder" class="page">
-      <div class="section-header">
-        <h1 style="color:var(--accent-gold);">30-Days Multi-Task Reminder Suite</h1>
-        <p>Schedule up to 12 long-term multi-channel tasks with persistent storage</p>
-      </div>
-
-      <div class="tool-box" style="border-color: var(--accent-gold);">
-        <div style="display:flex; justify-shadow:space-between; justify-content:space-between; align-items:center; margin-bottom: 1.2rem;">
-          <h3 style="color:var(--accent-gold);">Add New Task Schedule</h3>
-          <span class="task-badge" id="form-task-count">0 / 12 Active Tasks</span>
+      <section class="page" data-page="bmi-calculator">
+        <div class="card">
+          <h2>BMI Calculator</h2>
+          <input id="weightInput" type="number" min="1" placeholder="Weight in kg">
+          <input id="heightInput" type="number" min="0.5" step="0.01" placeholder="Height in metres">
+          <button class="primary" id="calculateBmiButton">
+            Calculate BMI
+          </button>
+          <p id="bmiOutput"></p>
         </div>
+      </section>
 
-        <div class="form-group">
-          <label>Task Description / Title</label>
-          <input type="text" id="rem-title" placeholder="e.g. Monthly Server Backup & Domain Renewal">
+      <section class="page" data-page="qr-generator">
+        <div class="card">
+          <h2>QR Generator</h2>
+          <p>
+            A QR library can be added here for client-side QR generation.
+          </p>
         </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label>Schedule Target (1 - 30 Days)</label>
-            <input type="number" id="rem-days" min="1" max="30" value="7">
-          </div>
-          <div class="form-group">
-            <label>Primary Contact (Phone / Email)</label>
-            <input type="text" id="rem-contact" placeholder="+923001234567 or email@domain.com">
-          </div>
-        </div>
-
-        <button class="btn btn-gold" onclick="saveReminderTask()">+ Schedule Task</button>
-
-        <hr style="border-color:var(--card-border); margin: 2rem 0;">
-
-        <h3 style="margin-bottom: 1rem; color:var(--text-light);">Scheduled Tasks List</h3>
-        <div id="reminders-list-container"></div>
-      </div>
-    </div>
-
-    <!-- SCIENTIFIC CALCULATOR PAGE -->
-    <div id="page-scientific-calc" class="page">
-      <div class="section-header">
-        <h1>Scientific Calculator</h1>
-        <p>High-precision error-free mathematical evaluation engine</p>
-      </div>
-
-      <div class="calc-wrapper">
-        <div class="calc-screen">
-          <div class="expr" id="calc-expr"></div>
-          <div class="val" id="calc-val">0</div>
-        </div>
-
-        <div class="calc-grid">
-          <button class="calc-btn func" onclick="toggleCalcAngle()" id="calc-angle-btn">DEG</button>
-          <button class="calc-btn func" onclick="calcPush('sin(')">sin</button>
-          <button class="calc-btn func" onclick="calcPush('cos(')">cos</button>
-          <button class="calc-btn func" onclick="calcPush('tan(')">tan</button>
-          <button class="calc-btn act" onclick="calcClear()">C</button>
-
-          <button class="calc-btn func" onclick="calcPush('log(')">log</button>
-          <button class="calc-btn func" onclick="calcPush('ln(')">ln</button>
-          <button class="calc-btn func" onclick="calcPush('sqrt(')">√</button>
-          <button class="calc-btn func" onclick="calcPush('^')">x^y</button>
-          <button class="calc-btn act" onclick="calcPop()">DEL</button>
-
-          <button class="calc-btn func" onclick="calcPush('(')">(</button>
-          <button class="calc-btn func" onclick="calcPush(')')">)</button>
-          <button class="calc-btn func" onclick="calcPush('!')">n!</button>
-          <button class="calc-btn func" onclick="calcPush('π')">π</button>
-          <button class="calc-btn op" onclick="calcPush('÷')">÷</button>
-
-          <button class="calc-btn" onclick="calcPush('7')">7</button>
-          <button class="calc-btn" onclick="calcPush('8')">8</button>
-          <button class="calc-btn" onclick="calcPush('9')">9</button>
-          <button class="calc-btn func" onclick="calcPush('e')">e</button>
-          <button class="calc-btn op" onclick="calcPush('×')">×</button>
-
-          <button class="calc-btn" onclick="calcPush('4')">4</button>
-          <button class="calc-btn" onclick="calcPush('5')">5</button>
-          <button class="calc-btn" onclick="calcPush('6')">6</button>
-          <button class="calc-btn func" onclick="calcPush('%')">%</button>
-          <button class="calc-btn op" onclick="calcPush('-')">-</button>
-
-          <button class="calc-btn" onclick="calcPush('1')">1</button>
-          <button class="calc-btn" onclick="calcPush('2')">2</button>
-          <button class="calc-btn" onclick="calcPush('3')">3</button>
-          <button class="calc-btn op" onclick="calcPush('+')">+</button>
-          <button class="calc-btn eq" onclick="calcExec()">=</button>
-
-          <button class="calc-btn" style="grid-column: span 2;" onclick="calcPush('0')">0</button>
-          <button class="calc-btn" onclick="calcPush('.')">.</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- TEXT UTILITY PAGE -->
-    <div id="page-text-utility" class="page">
-      <div class="section-header">
-        <h1>Text Utility Suite</h1>
-        <p>Manipulate strings, format text, clean spaces, and analyze counters</p>
-      </div>
-
-      <div class="tool-box">
-        <textarea id="text-src" placeholder="Type or paste text content here..."></textarea>
-
-        <div class="btn-group">
-          <button class="btn" onclick="runTextOp('upper')">UPPERCASE</button>
-          <button class="btn" onclick="runTextOp('lower')">lowercase</button>
-          <button class="btn" onclick="runTextOp('title')">Title Case</button>
-          <button class="btn" onclick="runTextOp('clean')">Clean Spaces</button>
-          <button class="btn" onclick="runTextOp('b64e')">Base64 Encode</button>
-          <button class="btn" onclick="runTextOp('b64d')">Base64 Decode</button>
-          <button class="btn btn-sec" onclick="triggerDownloadWithRating(downloadTextFile)">Download Text</button>
-        </div>
-
-        <div style="display:flex; gap: 2rem; margin-top: 1.5rem; color:var(--text-muted);">
-          <span>Words: <strong id="txt-words" style="color:var(--accent-blue);">0</strong></span>
-          <span>Characters: <strong id="txt-chars" style="color:var(--accent-blue);">0</strong></span>
-          <span>Lines: <strong id="txt-lines" style="color:var(--accent-blue);">0</strong></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- QR GENERATOR PAGE -->
-    <div id="page-qr-generator" class="page">
-      <div class="section-header">
-        <h1>QR Code Generator</h1>
-        <p>Generate clean, downloadable QR codes instantly</p>
-      </div>
-
-      <div class="tool-box" style="text-align: center;">
-        <div class="form-group">
-          <input type="text" id="qr-text" placeholder="Enter URL or content to generate QR code...">
-        </div>
-        <button class="btn" onclick="buildQR()">Generate QR Code</button>
-
-        <div id="qr-result-box" style="margin-top: 2rem; display: none;">
-          <img id="qr-img" src="" alt="QR Result" style="border: 4px solid #fff; border-radius: 8px; width: 220px; height: 220px;">
-          <div style="margin-top: 1rem;">
-            <button class="btn btn-gold" onclick="triggerDownloadWithRating(downloadQRFile)">Download QR Image</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- JSON FORMATTER PAGE -->
-    <div id="page-json-formatter" class="page">
-      <div class="section-header">
-        <h1>JSON Formatter & Validator</h1>
-        <p>Format, beautify, validate, or minify JSON data strings</p>
-      </div>
-
-      <div class="tool-box">
-        <textarea id="json-src" placeholder="Paste raw JSON here..."></textarea>
-        <div id="json-err-msg" style="color: var(--danger); font-size: 0.85rem; margin-top: 0.4rem;"></div>
-
-        <div class="btn-group">
-          <button class="btn" onclick="runJSONOp('beautify')">Beautify JSON</button>
-          <button class="btn" onclick="runJSONOp('minify')">Minify JSON</button>
-          <button class="btn btn-sec" onclick="triggerDownloadWithRating(downloadJSONFile)">Download JSON File</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- PASSWORD GENERATOR PAGE -->
-    <div id="page-password-generator" class="page">
-      <div class="section-header">
-        <h1>Secure Password Generator</h1>
-        <p>Generate strong cryptographic passwords directly in browser</p>
-      </div>
-
-      <div class="tool-box">
-        <input type="text" id="pass-val" readonly style="font-size: 1.3rem; text-align: center; letter-spacing: 2px; color:var(--accent-blue);">
-
-        <div class="form-group" style="margin-top: 1rem;">
-          <label>Length: <span id="pass-len-lbl" style="color:var(--accent-blue); font-weight:bold;">16</span></label>
-          <input type="range" id="pass-len" min="6" max="64" value="16" oninput="document.getElementById('pass-len-lbl').textContent = this.value; generatePass();">
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem;">
-          <label><input type="checkbox" id="pass-u" checked onchange="generatePass()"> Include Uppercase (A-Z)</label>
-          <label><input type="checkbox" id="pass-l" checked onchange="generatePass()"> Include Lowercase (a-z)</label>
-          <label><input type="checkbox" id="pass-n" checked onchange="generatePass()"> Include Numbers (0-9)</label>
-          <label><input type="checkbox" id="pass-s" checked onchange="generatePass()"> Include Symbols (!@#$)</label>
-        </div>
-
-        <div class="btn-group">
-          <button class="btn" onclick="generatePass()">Regenerate</button>
-          <button class="btn btn-sec" onclick="triggerDownloadWithRating(downloadPasswordFile)">Save Password File</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- UNIT CONVERTER PAGE -->
-    <div id="page-unit-converter" class="page">
-      <div class="section-header">
-        <h1>Multi-Unit Converter</h1>
-        <p>Convert metrics across length, mass, and temperature</p>
-      </div>
-
-      <div class="tool-box">
-        <div class="form-group">
-          <label>Category</label>
-          <select id="unit-cat" onchange="setupUnitCategory()">
-            <option value="length">Length</option>
-            <option value="mass">Mass / Weight</option>
-            <option value="temp">Temperature</option>
-          </select>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="form-group">
-            <label>From</label>
-            <input type="number" id="unit-val-from" value="1" oninput="runUnitConvert()">
-            <select id="unit-type-from" onchange="runUnitConvert()" style="margin-top: 0.5rem;"></select>
-          </div>
-
-          <div class="form-group">
-            <label>Result</label>
-            <input type="number" id="unit-val-to" readonly style="color:var(--accent-blue); font-weight:bold;">
-            <select id="unit-type-to" onchange="runUnitConvert()" style="margin-top: 0.5rem;"></select>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BMI CALCULATOR PAGE -->
-    <div id="page-bmi-calculator" class="page">
-      <div class="section-header">
-        <h1>BMI Health Calculator</h1>
-        <p>Determine body mass ratio and target ranges</p>
-      </div>
-
-      <div class="tool-box">
-        <div class="form-group">
-          <label>Weight (kg)</label>
-          <input type="number" id="bmi-w" value="70">
-        </div>
-        <div class="form-group">
-          <label>Height (cm)</label>
-          <input type="number" id="bmi-h" value="175">
-        </div>
-
-        <button class="btn" onclick="execBMI()">Calculate BMI</button>
-
-        <div id="bmi-out-card" style="display:none; text-align: center; margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--card-border); border-radius: 8px;">
-          <div style="color: var(--text-muted); font-size: 0.9rem;">Calculated Score:</div>
-          <div id="bmi-num" style="font-size: 2.2rem; font-weight: bold; color: var(--accent-blue); margin: 0.3rem 0;">22.9</div>
-          <div id="bmi-txt" style="font-size: 1.1rem; font-weight: 600;">Normal Weight</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- IMAGE RESIZER / CONVERTER PAGE -->
-    <div id="page-image-tools" class="page">
-      <div class="section-header">
-        <h1>Image Resizer & Converter</h1>
-        <p>Client-side image format conversion and dimensions scaling</p>
-      </div>
-
-      <div class="tool-box">
-        <div class="form-group">
-          <label>Select Image File</label>
-          <input type="file" id="img-input-file" accept="image/*" onchange="loadImgPreview()">
-        </div>
-
-        <div id="img-editor-area" style="display:none;">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-            <div class="form-group">
-              <label>Target Width (px)</label>
-              <input type="number" id="img-w">
-            </div>
-            <div class="form-group">
-              <label>Target Height (px)</label>
-              <input type="number" id="img-h">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Export Format</label>
-            <select id="img-fmt">
-              <option value="image/png">PNG</option>
-              <option value="image/jpeg">JPEG</option>
-              <option value="image/webp">WEBP</option>
-            </select>
-          </div>
-
-          <button class="btn btn-gold" onclick="triggerDownloadWithRating(downloadConvertedImg)">Convert & Save Image</button>
-        </div>
-      </div>
-    </div>
-
+      </section>
+    </main>
   </div>
-
-  <!-- MANDATORY 5-STAR RATING POP-UP MODAL -->
-  <div class="modal-overlay" id="star-modal">
-    <div class="modal-card">
-      <h2>⭐ Rate Our Suite ⭐</h2>
-      <p>Please provide a compulsory 5-Star rating feedback to unlock your download / file save action.</p>
-
-      <div class="star-rating" id="star-box">
-        <span class="star" data-idx="1">★</span>
-        <span class="star" data-idx="2">★</span>
-        <span class="star" data-idx="3">★</span>
-        <span class="star" data-idx="4">★</span>
-        <span class="star" data-idx="5">★</span>
-      </div>
-
-      <button class="btn btn-gold" style="width: 100%;" onclick="confirmRatingAndProceed()">Confirm & Download</button>
-    </div>
-  </div>
-
-  <footer>
-    <p>&copy; 2026 All-In-1 Multi-Tool Suite. Client-side, Bug-Free Execution.</p>
-  </footer>
 
   <script>
-    // ROUTING ENGINE
-    function navigateTo(pageId) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    "use strict";
 
-      const pageEl = document.getElementById('page-' + pageId);
-      const navEl = document.getElementById('nav-' + pageId);
-
-      if (pageEl) pageEl.classList.add('active');
-      if (navEl) navEl.classList.add('active');
-
-      window.location.hash = pageId;
-      window.scrollTo(0, 0);
-    }
-
-    window.addEventListener('load', () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash && document.getElementById('page-' + hash)) {
-        navigateTo(hash);
-      } else {
-        navigateTo('home');
-      }
-      renderReminders();
-      generatePass();
-      setupUnitCategory();
-      setupStarRatingUI();
-    });
-
-    window.addEventListener('hashchange', () => {
-      const hash = window.location.hash.replace('#', '');
-      if (hash && document.getElementById('page-' + hash)) {
-        navigateTo(hash);
-      }
-    });
-
-    // MANDATORY 5-STAR RATING SYSTEM BEFORE DOWNLOAD
-    let activeDownloadAction = null;
-    let selectedRating = 0;
-
-    function triggerDownloadWithRating(downloadFn) {
-      activeDownloadAction = downloadFn;
-      selectedRating = 0;
-      resetStarUI();
-      document.getElementById('star-modal').style.display = 'flex';
-    }
-
-    function setupStarRatingUI() {
-      const stars = document.querySelectorAll('#star-box .star');
-      stars.forEach(star => {
-        star.addEventListener('mouseover', function() {
-          const idx = parseInt(this.getAttribute('data-idx'));
-          highlightStars(idx);
-        });
-        star.addEventListener('mouseout', function() {
-          highlightStars(selectedRating);
-        });
-        star.addEventListener('click', function() {
-          selectedRating = parseInt(this.getAttribute('data-idx'));
-          highlightStars(selectedRating);
-        });
-      });
-    }
-
-    function highlightStars(count) {
-      const stars = document.querySelectorAll('#star-box .star');
-      stars.forEach((star, i) => {
-        if (i < count) star.classList.add('selected');
-        else star.classList.remove('selected');
-      });
-    }
-
-    function resetStarUI() {
-      highlightStars(0);
-    }
-
-    function confirmRatingAndProceed() {
-      if (selectedRating !== 5) {
-        alert('Please give 5-Stars rating to proceed with download!');
-        return;
-      }
-      document.getElementById('star-modal').style.display = 'none';
-      if (activeDownloadAction) {
-        activeDownloadAction();
-        activeDownloadAction = null;
-      }
-    }
-
-    // 1. 30-DAYS MULTI-TASK REMINDER SUITE (MAX 12 TASKS)
+    const STORAGE_KEY = "allInOneReminderTasks";
     const MAX_TASKS = 12;
-    function getReminders() {
-      return JSON.parse(localStorage.getItem('user_cyber_reminders') || '[]');
-    }
 
-    function renderReminders() {
-      const tasks = getReminders();
-      const countStr = `${tasks.length} / ${MAX_TASKS} Active Tasks`;
-      document.getElementById('dash-task-count').textContent = countStr;
-      document.getElementById('form-task-count').textContent = countStr;
-
-      const container = document.getElementById('reminders-list-container');
-      container.innerHTML = '';
-
-      if (tasks.length === 0) {
-        container.innerHTML = '<p style="color:var(--text-muted); text-align:center;">No scheduled tasks yet.</p>';
-        return;
-      }
-
-      tasks.forEach((task, index) => {
-        const item = document.createElement('div');
-        item.className = 'task-item';
-        
-        const encodedMsg = encodeURIComponent(`Reminder: ${task.title} (Scheduled ${task.days} days ago)`);
-        const phone = task.contact.replace(/[^0-9+]/g, '');
-
-        item.innerHTML = `
-          <div class="task-info">
-            <h4>${task.title}</h4>
-            <p>Target: <strong>${task.days} Days</strong> | Contact: ${task.contact || 'N/A'}</p>
-            <div class="trigger-links">
-              <a href="https://wa.me/${phone}?text=${encodedMsg}" target="_blank" class="trigger-btn trig-wa">WhatsApp</a>
-              <a href="sms:${phone}?body=${encodedMsg}" class="trigger-btn trig-sms">SMS</a>
-              <a href="mailto:${task.contact}?subject=Task%20Reminder&body=${encodedMsg}" class="trigger-btn trig-mail">Email</a>
-              <button onclick="triggerBrowserAlert('${task.title}')" class="trigger-btn trig-alert">Browser Alert</button>
-            </div>
-          </div>
-          <button class="btn btn-danger" onclick="deleteReminderTask(${index})">Delete</button>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function saveReminderTask() {
-      const tasks = getReminders();
-      if (tasks.length >= MAX_TASKS) {
-        alert(`Task limit reached! Maximum ${MAX_TASKS} tasks allowed.`);
-        return;
-      }
-
-      const title = document.getElementById('rem-title').value.trim();
-      const days = parseInt(document.getElementById('rem-days').value);
-      const contact = document.getElementById('rem-contact').value.trim();
-
-      if (!title || isNaN(days) || days < 1 || days > 30) {
-        alert('Please fill valid task details (1-30 days range).');
-        return;
-      }
-
-      tasks.push({ title, days, contact, createdAt: new Date().toISOString() });
-      localStorage.setItem('user_cyber_reminders', JSON.stringify(tasks));
-      document.getElementById('rem-title').value = '';
-      renderReminders();
-    }
-
-    function deleteReminderTask(index) {
-      const tasks = getReminders();
-      tasks.splice(index, 1);
-      localStorage.setItem('user_cyber_reminders', JSON.stringify(tasks));
-      renderReminders();
-    }
-
-    function triggerBrowserAlert(title) {
-      alert(`[BROWSER REMINDER ALERT]\nTask: ${title}`);
-    }
-
-    // 2. SCIENTIFIC CALCULATOR ENGINE
-    let calcExprStr = '';
-    let calcIsDeg = true;
-
-    function toggleCalcAngle() {
-      calcIsDeg = !calcIsDeg;
-      document.getElementById('calc-angle-btn').textContent = calcIsDeg ? 'DEG' : 'RAD';
-    }
-    function calcPush(val) { calcExprStr += val; updateCalcUI(); }
-    function calcClear() { calcExprStr = ''; document.getElementById('calc-val').textContent = '0'; updateCalcUI(); }
-    function calcPop() { calcExprStr = calcExprStr.slice(0, -1); updateCalcUI(); }
-    function updateCalcUI() { document.getElementById('calc-expr').textContent = calcExprStr; }
-
-    function calcExec() {
-      if (!calcExprStr) return;
+    function getTasks() {
       try {
-        let expr = calcExprStr.replace(/×/g, '*').replace(/÷/g, '/');
-        expr = expr.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
-        expr = expr.replace(/(\d+)!/g, 'fact($1)');
-        expr = expr.replace(/\^/g, '**');
-        expr = expr.replace(/π/g, 'Math.PI').replace(/e/g, 'Math.E');
-
-        if (calcIsDeg) {
-          expr = expr.replace(/sin\(/g, 'sinDeg(').replace(/cos\(/g, 'cosDeg(').replace(/tan\(/g, 'tanDeg(');
-        } else {
-          expr = expr.replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(');
-        }
-        expr = expr.replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/sqrt\(/g, 'Math.sqrt(');
-
-        const sinDeg = deg => Math.sin((deg * Math.PI) / 180);
-        const cosDeg = deg => Math.cos((deg * Math.PI) / 180);
-        const tanDeg = deg => Math.tan((deg * Math.PI) / 180);
-        const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
-
-        const resFunc = new Function('sinDeg', 'cosDeg', 'tanDeg', 'fact', `"use strict"; return (${expr});`);
-        let res = resFunc(sinDeg, cosDeg, tanDeg, fact);
-        
-        if (isNaN(res) || !isFinite(res)) throw new Error('Math Error');
-        res = Math.round(res * 1e10) / 1e10;
-        document.getElementById('calc-val').textContent = res;
-        calcExprStr = res.toString();
-      } catch (e) {
-        document.getElementById('calc-val').textContent = 'Error';
+        const saved = localStorage.getItem(STORAGE_KEY);
+        const parsed = saved ? JSON.parse(saved) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
       }
     }
 
-    // 3. TEXT UTILITY & DOWNLOAD
-    const textSrc = document.getElementById('text-src');
-    textSrc.addEventListener('input', () => {
-      const v = textSrc.value;
-      document.getElementById('txt-chars').textContent = v.length;
-      document.getElementById('txt-words').textContent = v.trim() ? v.trim().split(/\s+/).length : 0;
-      document.getElementById('txt-lines').textContent = v ? v.split('\n').length : 0;
+    function saveTasks(tasks) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      updateReminderUI();
+    }
+
+    function updateReminderUI() {
+      const count = getTasks().length;
+      document.getElementById("taskBadge").textContent = `${count}/${MAX_TASKS}`;
+      document.getElementById("reminderCount").textContent =
+        `${count} of ${MAX_TASKS} tasks used`;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function makeLinks(task) {
+      const message = encodeURIComponent(
+        `${task.title}\n${task.description}\nDue: ${task.dueDate}`
+      );
+
+      return {
+        whatsapp: `https://wa.me/?text=${message}`,
+        sms: `sms:?body=${message}`,
+        email: `mailto:?subject=${encodeURIComponent(task.title)}&body=${message}`
+      };
+    }
+
+    function renderTasks() {
+      const container = document.getElementById("taskList");
+      const tasks = getTasks();
+
+      if (!tasks.length) {
+        container.innerHTML = '<p class="muted">No reminders scheduled.</p>';
+        return;
+      }
+
+      container.innerHTML = tasks.map(task => {
+        const links = makeLinks(task);
+
+        return `
+          <article class="task ${task.completed ? "completed" : ""}">
+            <strong>${escapeHtml(task.title)}</strong>
+            <p>${escapeHtml(task.description)}</p>
+            <small>Due: ${escapeHtml(task.dueDate)}</small>
+
+            <div class="task-actions">
+              <a href="${links.whatsapp}" target="_blank" rel="noopener">
+                WhatsApp
+              </a>
+              <a href="${links.sms}">
+                SMS
+              </a>
+              <a href="${links.email}">
+                Email
+              </a>
+              <button data-complete="${task.id}">
+                ${task.completed ? "Undo" : "Complete"}
+              </button>
+              <button data-delete="${task.id}" class="danger">
+                Delete
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function navigate(route) {
+      const validPage = document.querySelector(`[data-page="${route}"]`);
+      const selectedRoute = validPage ? route : "home";
+
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle(
+          "active",
+          page.dataset.page === selectedRoute
+        );
+      });
+
+      document.querySelectorAll(".nav-button").forEach(button => {
+        button.classList.toggle(
+          "active",
+          button.dataset.route === selectedRoute
+        );
+      });
+
+      history.replaceState(null, "", `#${selectedRoute}`);
+    }
+
+    document.addEventListener("click", event => {
+      const routeButton = event.target.closest("[data-route]");
+
+      if (routeButton) {
+        navigate(routeButton.dataset.route);
+      }
+
+      const completeButton = event.target.closest("[data-complete]");
+      if (completeButton) {
+        const tasks = getTasks().map(task => {
+          if (task.id === completeButton.dataset.complete) {
+            return { ...task, completed: !task.completed };
+          }
+          return task;
+        });
+
+        saveTasks(tasks);
+        renderTasks();
+      }
+
+      const deleteButton = event.target.closest("[data-delete]");
+      if (deleteButton) {
+        const tasks = getTasks().filter(
+          task => task.id !== deleteButton.dataset.delete
+        );
+
+        saveTasks(tasks);
+        renderTasks();
+      }
     });
 
-    function runTextOp(op) {
-      let v = textSrc.value;
-      if (!v) return;
-      if (op === 'upper') textSrc.value = v.toUpperCase();
-      if (op === 'lower') textSrc.value = v.toLowerCase();
-      if (op === 'clean') textSrc.value = v.replace(/\s+/g, ' ').trim();
-      if (op === 'title') textSrc.value = v.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
-      if (op === 'b64e') textSrc.value = btoa(v);
-      if (op === 'b64d') { try { textSrc.value = atob(v); } catch(e) { alert('Invalid Base64'); } }
-      textSrc.dispatchEvent(new Event('input'));
-    }
+    document.getElementById("reminderForm").addEventListener("submit", event => {
+      event.preventDefault();
 
-    function downloadTextFile() {
-      const blob = new Blob([textSrc.value], { type: 'text/plain' });
-      triggerFileDownload(blob, 'processed-text.txt');
-    }
+      const error = document.getElementById("reminderError");
+      const tasks = getTasks();
+      const title = document.getElementById("taskTitle").value.trim();
+      const description = document.getElementById("taskDescription").value.trim();
+      const days = Number(document.getElementById("taskDays").value);
 
-    // 4. QR GENERATOR & DOWNLOAD
-    let qrUrlCache = '';
-    function buildQR() {
-      const txt = document.getElementById('qr-text').value.trim();
-      if (!txt) return alert('Enter content first.');
-      qrUrlCache = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
-      document.getElementById('qr-img').src = qrUrlCache;
-      document.getElementById('qr-result-box').style.display = 'block';
-    }
-    function downloadQRFile() {
-      fetch(qrUrlCache).then(r => r.blob()).then(blob => triggerFileDownload(blob, 'qrcode.png'));
-    }
+      error.textContent = "";
 
-    // 5. JSON FORMATTER & DOWNLOAD
-    function runJSONOp(op) {
-      const el = document.getElementById('json-src');
-      const err = document.getElementById('json-err-msg');
-      err.textContent = '';
-      if (!el.value.trim()) return;
+      if (tasks.length >= MAX_TASKS) {
+        error.textContent = "You can add a maximum of 12 tasks.";
+        return;
+      }
+
+      if (!title) {
+        error.textContent = "Enter a task title.";
+        return;
+      }
+
+      if (!Number.isInteger(days) || days < 1 || days > 30) {
+        error.textContent = "Choose a duration from 1 to 30 days.";
+        return;
+      }
+
+      const due = new Date();
+      due.setDate(due.getDate() + days);
+
+      tasks.push({
+        id: crypto.randomUUID(),
+        title,
+        description,
+        days,
+        dueDate: due.toLocaleString(),
+        completed: false
+      });
+
+      saveTasks(tasks);
+      event.target.reset();
+      document.getElementById("taskDays").value = "1";
+      renderTasks();
+    });
+
+    document.getElementById("calculateButton").addEventListener("click", () => {
+      const output = document.getElementById("calculatorOutput");
+      const value = document.getElementById("calculatorInput").value.trim();
+
+      if (!/^[0-9+*/().%\\s-]+$/.test(value)) {
+        output.textContent = "Only basic arithmetic characters are allowed.";
+        return;
+      }
+
       try {
-        const obj = JSON.parse(el.value);
-        if (op === 'beautify') el.value = JSON.stringify(obj, null, 2);
-        if (op === 'minify') el.value = JSON.stringify(obj);
-      } catch (e) {
-        err.textContent = 'Invalid JSON: ' + e.message;
+        const result = Function(`"use strict"; return (${value})`)();
+
+        if (!Number.isFinite(result)) {
+          throw new Error("Invalid result");
+        }
+
+        output.textContent = String(result);
+      } catch {
+        output.textContent = "Invalid calculation.";
       }
-    }
-    function downloadJSONFile() {
-      const blob = new Blob([document.getElementById('json-src').value], { type: 'application/json' });
-      triggerFileDownload(blob, 'data.json');
-    }
+    });
 
-    // 6. PASSWORD GENERATOR & DOWNLOAD
-    function generatePass() {
-      const len = parseInt(document.getElementById('pass-len').value);
-      let chars = '';
-      if (document.getElementById('pass-u').checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      if (document.getElementById('pass-l').checked) chars += 'abcdefghijklmnopqrstuvwxyz';
-      if (document.getElementById('pass-n').checked) chars += '0123456789';
-      if (document.getElementById('pass-s').checked) chars += '!@#$%^&*()_+-=[]{}';
+    document.getElementById("upperButton").addEventListener("click", () => {
+      const input = document.getElementById("textInput");
+      input.value = input.value.toUpperCase();
+    });
 
-      if (!chars) return document.getElementById('pass-val').value = 'Select Option';
-      const arr = new Uint32Array(len);
-      window.crypto.getRandomValues(arr);
-      let p = '';
-      for (let i = 0; i < len; i++) p += chars[arr[i] % chars.length];
-      document.getElementById('pass-val').value = p;
-    }
-    function downloadPasswordFile() {
-      const blob = new Blob([`Generated Password: ${document.getElementById('pass-val').value}`], { type: 'text/plain' });
-      triggerFileDownload(blob, 'password.txt');
-    }
+    document.getElementById("lowerButton").addEventListener("click", () => {
+      const input = document.getElementById("textInput");
+      input.value = input.value.toLowerCase();
+    });
 
-    // 7. UNIT CONVERTER
-    const unitsData = {
-      length: { u: ['Meter (m)', 'Kilometer (km)', 'Mile (mi)', 'Foot (ft)'], r: { 'Meter (m)': 1, 'Kilometer (km)': 1000, 'Mile (mi)': 1609.34, 'Foot (ft)': 0.3048 } },
-      mass: { u: ['Kilogram (kg)', 'Gram (g)', 'Pound (lb)'], r: { 'Kilogram (kg)': 1, 'Gram (g)': 0.001, 'Pound (lb)': 0.453592 } },
-      temp: { u: ['Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin (K)'] }
-    };
+    document.getElementById("formatJsonButton").addEventListener("click", () => {
+      const input = document.getElementById("jsonInput");
+      const output = document.getElementById("jsonOutput");
 
-    function setupUnitCategory() {
-      const cat = document.getElementById('unit-cat').value;
-      const f = document.getElementById('unit-type-from');
-      const t = document.getElementById('unit-type-to');
-      f.innerHTML = ''; t.innerHTML = '';
-      unitsData[cat].u.forEach(item => { f.add(new Option(item, item)); t.add(new Option(item, item)); });
-      if (t.options.length > 1) t.selectedIndex = 1;
-      runUnitConvert();
-    }
-
-    function runUnitConvert() {
-      const cat = document.getElementById('unit-cat').value;
-      const val = parseFloat(document.getElementById('unit-val-from').value);
-      const f = document.getElementById('unit-type-from').value;
-      const t = document.getElementById('unit-type-to').value;
-      const out = document.getElementById('unit-val-to');
-
-      if (isNaN(val)) return out.value = '';
-      if (cat === 'temp') {
-        let c = val;
-        if (f === 'Fahrenheit (°F)') c = (val - 32) * 5/9;
-        if (f === 'Kelvin (K)') c = val - 273.15;
-        let res = c;
-        if (t === 'Fahrenheit (°F)') res = (c * 9/5) + 32;
-        if (t === 'Kelvin (K)') res = c + 273.15;
-        out.value = Math.round(res * 100) / 100;
-      } else {
-        const base = val * unitsData[cat].r[f];
-        out.value = Math.round((base / unitsData[cat].r[t]) * 10000) / 10000;
+      try {
+        input.value = JSON.stringify(JSON.parse(input.value), null, 2);
+        output.textContent = "Valid JSON.";
+      } catch {
+        output.textContent = "Invalid JSON.";
       }
-    }
+    });
 
-    // 8. BMI CALCULATOR
-    function execBMI() {
-      const w = parseFloat(document.getElementById('bmi-w').value);
-      const h = parseFloat(document.getElementById('bmi-h').value) / 100;
-      if (!w || !h) return alert('Enter valid metrics.');
-      const score = Math.round((w / (h * h)) * 10) / 10;
-      document.getElementById('bmi-num').textContent = score;
+    document.getElementById("generatePasswordButton").addEventListener("click", () => {
+      const length = Number(document.getElementById("passwordLength").value);
+      const target = document.getElementById("generatedPassword");
 
-      let txt = 'Normal Weight';
-      if (score < 18.5) txt = 'Underweight';
-      else if (score >= 25 && score < 30) txt = 'Overweight';
-      else if (score >= 30) txt = 'Obese';
+      if (!Number.isInteger(length) || length < 4 || length > 128) {
+        target.value = "Length must be between 4 and 128.";
+        return;
+      }
 
-      document.getElementById('bmi-txt').textContent = txt;
-      document.getElementById('bmi-out-card').style.display = 'block';
-    }
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=";
 
-    // 9. IMAGE RESIZER / CONVERTER & DOWNLOAD
-    let loadedImgObj = null;
-    function loadImgPreview() {
-      const file = document.getElementById('img-input-file').files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        loadedImgObj = new Image();
-        loadedImgObj.onload = () => {
-          document.getElementById('img-w').value = loadedImgObj.width;
-          document.getElementById('img-h').value = loadedImgObj.height;
-          document.getElementById('img-editor-area').style.display = 'block';
-        };
-        loadedImgObj.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+      const randomValues = new Uint32Array(length);
+      crypto.getRandomValues(randomValues);
 
-    function downloadConvertedImg() {
-      if (!loadedImgObj) return;
-      const canvas = document.createElement('canvas');
-      canvas.width = parseInt(document.getElementById('img-w').value);
-      canvas.height = parseInt(document.getElementById('img-h').value);
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(loadedImgObj, 0, 0, canvas.width, canvas.height);
-      const fmt = document.getElementById('img-fmt').value;
-      canvas.toBlob(blob => triggerFileDownload(blob, `converted-image.${fmt.split('/')[1]}`), fmt);
-    }
+      target.value = Array.from(
+        randomValues,
+        value => characters[value % characters.length]
+      ).join("");
+    });
 
-    // FILE DOWNLOAD TRIGGER HELPER
-    function triggerFileDownload(blob, filename) {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+    document.getElementById("convertUnitsButton").addEventListener("click", () => {
+      const km = Number(document.getElementById("kilometersInput").value);
+      document.getElementById("milesOutput").textContent =
+        Number.isFinite(km) ? `${km * 0.621371} miles` : "Enter a valid number.";
+    });
+
+    document.getElementById("calculateBmiButton").addEventListener("click", () => {
+      const weight = Number(document.getElementById("weightInput").value);
+      const height = Number(document.getElementById("heightInput").value);
+      const output = document.getElementById("bmiOutput");
+
+      if (!Number.isFinite(weight) || !Number.isFinite(height) || height <= 0) {
+        output.textContent = "Enter valid weight and height values.";
+        return;
+      }
+
+      output.textContent = `BMI: ${(weight / (height * height)).toFixed(2)}`;
+    });
+
+    window.addEventListener("hashchange", () => {
+      navigate(location.hash.slice(1) || "home");
+    });
+
+    updateReminderUI();
+    renderTasks();
+    navigate(location.hash.slice(1) || "home");
   </script>
 </body>
 </html>
