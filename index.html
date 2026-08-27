@@ -1,46 +1,32 @@
-<!DOCTYPE html>
+import os
+
+html_code = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All-In-1 Cyber Utility Portal</title>
+  <title>All-In-1 Multi-Tool Suite</title>
   <style>
     :root {
-      --bg-dark: #060814;
-      --card-bg: #0d1127;
-      --neon-cyan: #00f3ff;
-      --neon-magenta: #ff007f;
-      --neon-green: #00ff66;
-      --neon-purple: #9d4edd;
-      --text-main: #f8fafc;
+      --bg-dark: #0f172a;
+      --card-dark: #1e293b;
+      --card-border: #334155;
+      --accent-blue: #3b82f6;
+      --accent-purple: #8b5cf6;
+      --accent-gold: #eab308;
+      --text-light: #f8fafc;
       --text-muted: #94a3b8;
-      --border-color: rgba(0, 243, 255, 0.25);
-      --border-glow: 0 0 12px rgba(0, 243, 255, 0.35);
+      --danger: #ef4444;
+      --success: #22c55e;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.05) 0%, transparent 40%);
-    }
-
+    /* Top Navigation */
     header {
-      background-color: rgba(13, 17, 39, 0.85);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-color);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+      background: #111827;
+      border-bottom: 1px solid var(--card-border);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
@@ -48,301 +34,209 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
+    .brand-title { color: var(--accent-blue); font-size: 1.4rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .brand-title span { color: var(--accent-purple); }
 
-    .brand {
-      color: var(--neon-cyan);
-      font-size: 1.5rem;
-      font-weight: 800;
-      text-decoration: none;
-      text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
-      cursor: pointer;
-      letter-spacing: 1px;
-    }
-
-    nav {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
     nav button {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
+      background: #1f2937;
+      border: 1px solid var(--card-border);
+      color: var(--text-light);
       padding: 0.5rem 0.9rem;
       border-radius: 6px;
-      cursor: pointer;
       font-size: 0.85rem;
       font-weight: 600;
-      transition: all 0.25s ease;
-    }
-
-    nav button:hover, nav button.active {
-      background: var(--neon-cyan);
-      color: #060814;
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
-    }
-
-    .container {
-      width: 90%;
-      max-width: 1150px;
-      margin: 2rem auto;
-      flex: 1;
-    }
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .title-section {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    .title-section h1 {
-      font-size: 2.4rem;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-      margin-bottom: 0.5rem;
-    }
-
-    .title-section p {
-      color: var(--text-muted);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.8rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+    }
+    nav button:hover, nav button.active {
+      background: var(--accent-blue);
+      color: #fff;
+      border-color: var(--accent-blue);
+    }
+    nav button.nav-gold {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      background: rgba(234, 179, 8, 0.1);
+    }
+    nav button.nav-gold:hover, nav button.nav-gold.active {
+      background: var(--accent-gold);
+      color: #111;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.6);
+    }
+
+    /* Layout Containers */
+    .container { width: 92%; max-width: 1180px; margin: 2rem auto; flex: 1; }
+    .page { display: none; }
+    .page.active { display: block; }
+    
+    .section-header { text-align: center; margin-bottom: 2rem; }
+    .section-header h1 { font-size: 2.2rem; margin-bottom: 0.4rem; color: var(--text-light); }
+    .section-header p { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* Tool Grid Layout */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    
+    .tool-card {
+      background: var(--card-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-blue);
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+    }
+    .tool-card h3 { color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 1.2rem; }
+    .tool-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.4; }
+
+    /* Standalone Gold Glowing Reminder Card */
+    .gold-glow-card {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 100%);
+      border: 2px solid var(--accent-gold);
+      border-radius: 14px;
+      padding: 1.8rem;
+      box-shadow: 0 0 25px rgba(234, 179, 8, 0.35);
       position: relative;
       overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .gold-glow-card h2 { color: var(--accent-gold); font-size: 1.6rem; margin-bottom: 0.4rem; display: flex; align-items: center; justify-content: space-between; }
+    .gold-glow-card p { color: #cbd5e1; font-size: 0.95rem; }
+    .task-badge {
+      background: var(--accent-gold);
+      color: #111;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
     }
 
-    .card:hover {
-      transform: translateY(-5px);
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-    }
-
-    .card h3 {
-      color: var(--neon-cyan);
-      margin-bottom: 0.6rem;
-      font-size: 1.25rem;
-    }
-
-    .card p {
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-
+    /* Common Form UI */
     .tool-box {
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: var(--card-dark);
+      border: 1px solid var(--card-border);
       border-radius: 12px;
       padding: 2rem;
       max-width: 800px;
       margin: 0 auto;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--neon-cyan);
-    }
-
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; color: var(--text-muted); font-weight: 600; }
     input, select, textarea {
       width: 100%;
       padding: 0.8rem;
-      background-color: #060814;
-      border: 1px solid var(--border-color);
+      background: #0f172a;
+      border: 1px solid var(--card-border);
       border-radius: 8px;
-      color: var(--text-main);
-      font-size: 1rem;
+      color: #fff;
+      font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
     }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent-blue); }
+    textarea { min-height: 140px; resize: vertical; }
 
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-    }
-
-    textarea {
-      min-height: 140px;
-      resize: vertical;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin-top: 1rem;
-    }
-
-    button.btn {
-      background: var(--neon-cyan);
-      color: #060814;
+    .btn-group { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .btn {
+      background: var(--accent-blue);
+      color: #fff;
       border: none;
-      padding: 0.75rem 1.25rem;
+      padding: 0.75rem 1.4rem;
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+      transition: background 0.2s, box-shadow 0.2s;
     }
+    .btn:hover { background: #2563eb; box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); }
+    .btn-gold { background: var(--accent-gold); color: #111; }
+    .btn-gold:hover { background: #ca8a04; box-shadow: 0 0 12px rgba(234, 179, 8, 0.5); }
+    .btn-sec { background: #475569; color: #fff; }
+    .btn-sec:hover { background: #64748b; }
+    .btn-danger { background: var(--danger); }
+    .btn-danger:hover { background: #dc2626; }
 
-    button.btn:hover {
-      background: #38bdf8;
-      box-shadow: 0 0 20px rgba(0, 243, 255, 0.7);
-    }
+    /* Scientific Calculator */
+    .calc-wrapper { max-width: 440px; margin: 0 auto; background: #111827; border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; }
+    .calc-screen { background: #030712; border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem; text-align: right; margin-bottom: 1.2rem; }
+    .calc-screen .expr { color: var(--text-muted); font-size: 0.95rem; min-height: 1.3rem; }
+    .calc-screen .val { color: var(--accent-blue); font-size: 2rem; font-weight: bold; min-height: 2.5rem; word-break: break-all; }
+    .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+    .calc-btn { padding: 0.9rem 0.2rem; font-size: 0.95rem; font-weight: bold; border-radius: 8px; border: 1px solid var(--card-border); background: #1f2937; color: #fff; cursor: pointer; }
+    .calc-btn:hover { border-color: var(--accent-blue); background: #374151; }
+    .calc-btn.op { background: #1e3a8a; color: #60a5fa; }
+    .calc-btn.func { background: #312e81; color: #c084fc; }
+    .calc-btn.act { background: #881337; color: #fda4af; }
+    .calc-btn.eq { background: var(--success); color: #111; grid-column: span 2; font-size: 1.1rem; }
 
-    button.btn-secondary {
-      background: #1e293b;
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      box-shadow: none;
-    }
-
-    button.btn-secondary:hover {
-      border-color: var(--neon-magenta);
-      color: var(--neon-magenta);
-      box-shadow: 0 0 12px rgba(255, 0, 127, 0.4);
-    }
-
-    /* Scientific Calculator Neon Theme */
-    .calc-wrapper {
-      max-width: 440px;
-      margin: 0 auto;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 0 30px rgba(0, 243, 255, 0.15);
-    }
-
-    .calc-screen {
-      background-color: #04050a;
-      border: 1px solid var(--border-color);
+    /* Task Cards */
+    .task-item {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
       border-radius: 10px;
       padding: 1rem;
-      text-align: right;
-      margin-bottom: 1.2rem;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
     }
+    .task-info h4 { color: var(--accent-gold); margin-bottom: 0.2rem; }
+    .task-info p { color: var(--text-muted); font-size: 0.85rem; }
+    .trigger-links { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .trigger-btn { font-size: 0.75rem; padding: 0.3rem 0.6rem; border-radius: 4px; text-decoration: none; color: #fff; font-weight: bold; display: inline-block; }
+    .trig-wa { background: #25d366; }
+    .trig-sms { background: #0284c7; }
+    .trig-mail { background: #ea4335; }
+    .trig-alert { background: #8b5cf6; }
 
-    .calc-screen .expression {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      min-height: 1.3rem;
-      word-wrap: break-word;
+    /* Mandatory 5-Star Rating Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-
-    .calc-screen .display {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--neon-cyan);
-      text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-      min-height: 2.5rem;
-      word-wrap: break-word;
-    }
-
-    .calc-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0.5rem;
-    }
-
-    .calc-btn {
-      padding: 0.9rem 0.2rem;
-      font-size: 0.95rem;
-      font-weight: 700;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background: #10152d;
-      color: var(--text-main);
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .calc-btn:hover {
-      border-color: var(--neon-cyan);
-      box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-    }
-
-    .calc-btn.op {
-      background: #172554;
-      color: var(--neon-cyan);
-      border-color: rgba(0, 243, 255, 0.4);
-    }
-
-    .calc-btn.func {
-      background: #1e1b4b;
-      color: var(--neon-purple);
-      border-color: rgba(157, 78, 221, 0.4);
-    }
-
-    .calc-btn.action {
-      background: #4c0519;
-      color: var(--neon-magenta);
-      border-color: rgba(255, 0, 127, 0.4);
-    }
-
-    .calc-btn.equal {
-      background: var(--neon-green);
-      color: #060814;
-      border: none;
-      grid-column: span 2;
-      box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
-    }
-
-    .calc-btn.equal:hover {
-      box-shadow: 0 0 25px rgba(0, 255, 102, 0.8);
-    }
-
-    footer {
+    .modal-card {
+      background: var(--card-dark);
+      border: 2px solid var(--accent-gold);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 450px;
+      width: 90%;
       text-align: center;
-      padding: 1.5rem;
-      background-color: var(--card-bg);
-      border-top: 1px solid var(--border-color);
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      box-shadow: 0 0 30px rgba(234, 179, 8, 0.4);
     }
+    .modal-card h2 { color: var(--accent-gold); margin-bottom: 0.5rem; }
+    .modal-card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .star-rating { display: flex; justify-content: center; gap: 10px; font-size: 2.5rem; cursor: pointer; margin-bottom: 1.5rem; }
+    .star { color: #475569; transition: color 0.2s; }
+    .star.hovered, .star.selected { color: var(--accent-gold); text-shadow: 0 0 10px rgba(234, 179, 8, 0.8); }
 
-    .alert-error {
-      color: var(--neon-magenta);
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-    }
+    footer { text-align: center; padding: 1.5rem; background: #111827; border-top: 1px solid var(--card-border); color: var(--text-muted); font-size: 0.85rem; }
   </style>
 </head>
 <body>
 
+  <!-- Top Navigation Header -->
   <header>
-    <div class="brand" onclick="navigateTo('home')">ALL-IN-1 CYBER</div>
+    <div class="brand-title" onclick="navigateTo('home')">ALL-IN-1 <span>SUITE</span></div>
     <nav>
       <button onclick="navigateTo('home')" id="nav-home" class="active">Home</button>
+      <button onclick="navigateTo('reminder')" id="nav-reminder" class="nav-gold">⭐ 30-Day Reminder</button>
       <button onclick="navigateTo('scientific-calc')" id="nav-scientific-calc">Scientific Calc</button>
       <button onclick="navigateTo('text-utility')" id="nav-text-utility">Text Utility</button>
       <button onclick="navigateTo('qr-generator')" id="nav-qr-generator">QR Generator</button>
@@ -350,174 +244,210 @@
       <button onclick="navigateTo('password-generator')" id="nav-password-generator">Password Gen</button>
       <button onclick="navigateTo('unit-converter')" id="nav-unit-converter">Unit Converter</button>
       <button onclick="navigateTo('bmi-calculator')" id="nav-bmi-calculator">BMI Calc</button>
+      <button onclick="navigateTo('image-tools')" id="nav-image-tools">Image Tools</button>
     </nav>
   </header>
 
   <div class="container">
 
-    <!-- HOME PAGE -->
+    <!-- DASHBOARD HOME PAGE -->
     <div id="page-home" class="page active">
-      <div class="title-section">
-        <h1>Neon Multi-Utility Suite</h1>
-        <p>100% Client-Side, Zero Latency, Fully Functional Tools</p>
+      <!-- Prominent Top Gold Glowing Reminder Card -->
+      <div class="gold-glow-card tool-card" onclick="navigateTo('reminder')">
+        <h2>
+          <span>30-Days Multi-Task Reminder Suite</span>
+          <span class="task-badge" id="dash-task-count">0 / 12 Tasks</span>
+        </h2>
+        <p>Schedule long-term 1 to 30-day triggers with multi-channel WhatsApp, SMS, Email, & Browser Alert links stored securely in LocalStorage.</p>
       </div>
 
-      <div class="grid">
-        <div class="card" onclick="navigateTo('scientific-calc')">
-          <div>
-            <h3>Scientific Calculator</h3>
-            <p>Full trigonometric, logarithmic, power, factorial, and algebraic math functions.</p>
+      <div class="section-header">
+        <h1>All-In-One Free Online Tools</h1>
+        <p>Fast, client-side, bug-free web utility apps</p>
+      </div>
+
+      <div class="tools-grid">
+        <div class="tool-card" onclick="navigateTo('scientific-calc')">
+          <h3>Scientific Calculator</h3>
+          <p>Full trigonometric, logarithmic, factorial, roots, powers, and algebraic evaluator engine.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('text-utility')">
+          <h3>Text Utility Suite</h3>
+          <p>Word & char counter, case converter, extra space cleaner, and Base64 encoder/decoder.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('qr-generator')">
+          <h3>QR Code Generator</h3>
+          <p>Generate high-quality QR codes instantly for URLs, plain text, and contact info.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('json-formatter')">
+          <h3>JSON Validator & Formatter</h3>
+          <p>Parse, validate, beautify, and minify your JSON data structures completely offline.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('password-generator')">
+          <h3>Secure Password Generator</h3>
+          <p>Generate robust random passwords using browser cryptographic values.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('unit-converter')">
+          <h3>Multi-Unit Converter</h3>
+          <p>Convert metrics between length, mass/weight, and temperature scales accurately.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('bmi-calculator')">
+          <h3>BMI Health Calculator</h3>
+          <p>Calculate your Body Mass Index score with color health target indicators.</p>
+        </div>
+
+        <div class="tool-card" onclick="navigateTo('image-tools')">
+          <h3>Image Resizer & Format Suite</h3>
+          <p>Client-side canvas tool to resize and convert images to PNG, JPG, or WEBP formats.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30-DAY MULTI-TASK REMINDER PAGE -->
+    <div id="page-reminder" class="page">
+      <div class="section-header">
+        <h1 style="color:var(--accent-gold);">30-Days Multi-Task Reminder Suite</h1>
+        <p>Schedule up to 12 long-term multi-channel tasks with persistent storage</p>
+      </div>
+
+      <div class="tool-box" style="border-color: var(--accent-gold);">
+        <div style="display:flex; justify-shadow:space-between; justify-content:space-between; align-items:center; margin-bottom: 1.2rem;">
+          <h3 style="color:var(--accent-gold);">Add New Task Schedule</h3>
+          <span class="task-badge" id="form-task-count">0 / 12 Active Tasks</span>
+        </div>
+
+        <div class="form-group">
+          <label>Task Description / Title</label>
+          <input type="text" id="rem-title" placeholder="e.g. Monthly Server Backup & Domain Renewal">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label>Schedule Target (1 - 30 Days)</label>
+            <input type="number" id="rem-days" min="1" max="30" value="7">
+          </div>
+          <div class="form-group">
+            <label>Primary Contact (Phone / Email)</label>
+            <input type="text" id="rem-contact" placeholder="+923001234567 or email@domain.com">
           </div>
         </div>
 
-        <div class="card" onclick="navigateTo('text-utility')">
-          <div>
-            <h3>Text Utility Suite</h3>
-            <p>Word counter, case transformation, space cleaning, and Base64 encoder/decoder.</p>
-          </div>
-        </div>
+        <button class="btn btn-gold" onclick="saveReminderTask()">+ Schedule Task</button>
 
-        <div class="card" onclick="navigateTo('qr-generator')">
-          <div>
-            <h3>QR Code Generator</h3>
-            <p>Generate clean downloadable QR codes for text, URLs, and data instantly.</p>
-          </div>
-        </div>
+        <hr style="border-color:var(--card-border); margin: 2rem 0;">
 
-        <div class="card" onclick="navigateTo('json-formatter')">
-          <div>
-            <h3>JSON Validator & Formatter</h3>
-            <p>Parse, beautify, minify, and validate JSON data structures without data leaks.</p>
-          </div>
-        </div>
-
-        <div class="card" onclick="navigateTo('password-generator')">
-          <div>
-            <h3>Password Generator</h3>
-            <p>Cryptographically secure password generation with customization controls.</p>
-          </div>
-        </div>
-
-        <div class="card" onclick="navigateTo('unit-converter')">
-          <div>
-            <h3>Unit Converter</h3>
-            <p>Multi-unit conversions for length, mass, and temperature parameters.</p>
-          </div>
-        </div>
-
-        <div class="card" onclick="navigateTo('bmi-calculator')">
-          <div>
-            <h3>BMI Calculator</h3>
-            <p>Calculate Body Mass Index, health categories, and ideal targets.</p>
-          </div>
-        </div>
+        <h3 style="margin-bottom: 1rem; color:var(--text-light);">Scheduled Tasks List</h3>
+        <div id="reminders-list-container"></div>
       </div>
     </div>
 
     <!-- SCIENTIFIC CALCULATOR PAGE -->
     <div id="page-scientific-calc" class="page">
-      <div class="title-section">
+      <div class="section-header">
         <h1>Scientific Calculator</h1>
-        <p>High-Precision Mathematical Engine</p>
+        <p>High-precision error-free mathematical evaluation engine</p>
       </div>
 
       <div class="calc-wrapper">
         <div class="calc-screen">
-          <div class="expression" id="calc-expression"></div>
-          <div class="display" id="calc-display">0</div>
+          <div class="expr" id="calc-expr"></div>
+          <div class="val" id="calc-val">0</div>
         </div>
 
         <div class="calc-grid">
-          <button class="calc-btn func" onclick="toggleAngleMode()" id="angle-mode-btn">DEG</button>
-          <button class="calc-btn func" onclick="calcInput('sin(')">sin</button>
-          <button class="calc-btn func" onclick="calcInput('cos(')">cos</button>
-          <button class="calc-btn func" onclick="calcInput('tan(')">tan</button>
-          <button class="calc-btn action" onclick="calcClear()">C</button>
+          <button class="calc-btn func" onclick="toggleCalcAngle()" id="calc-angle-btn">DEG</button>
+          <button class="calc-btn func" onclick="calcPush('sin(')">sin</button>
+          <button class="calc-btn func" onclick="calcPush('cos(')">cos</button>
+          <button class="calc-btn func" onclick="calcPush('tan(')">tan</button>
+          <button class="calc-btn act" onclick="calcClear()">C</button>
 
-          <button class="calc-btn func" onclick="calcInput('log(')">log</button>
-          <button class="calc-btn func" onclick="calcInput('ln(')">ln</button>
-          <button class="calc-btn func" onclick="calcInput('sqrt(')">√</button>
-          <button class="calc-btn func" onclick="calcInput('^')">x^y</button>
-          <button class="calc-btn action" onclick="calcBackspace()">DEL</button>
+          <button class="calc-btn func" onclick="calcPush('log(')">log</button>
+          <button class="calc-btn func" onclick="calcPush('ln(')">ln</button>
+          <button class="calc-btn func" onclick="calcPush('sqrt(')">√</button>
+          <button class="calc-btn func" onclick="calcPush('^')">x^y</button>
+          <button class="calc-btn act" onclick="calcPop()">DEL</button>
 
-          <button class="calc-btn func" onclick="calcInput('(')">(</button>
-          <button class="calc-btn func" onclick="calcInput(')')">)</button>
-          <button class="calc-btn func" onclick="calcInput('!')">n!</button>
-          <button class="calc-btn func" onclick="calcInput('π')">π</button>
-          <button class="calc-btn op" onclick="calcInput('÷')">÷</button>
+          <button class="calc-btn func" onclick="calcPush('(')">(</button>
+          <button class="calc-btn func" onclick="calcPush(')')">)</button>
+          <button class="calc-btn func" onclick="calcPush('!')">n!</button>
+          <button class="calc-btn func" onclick="calcPush('π')">π</button>
+          <button class="calc-btn op" onclick="calcPush('÷')">÷</button>
 
-          <button class="calc-btn" onclick="calcInput('7')">7</button>
-          <button class="calc-btn" onclick="calcInput('8')">8</button>
-          <button class="calc-btn" onclick="calcInput('9')">9</button>
-          <button class="calc-btn func" onclick="calcInput('e')">e</button>
-          <button class="calc-btn op" onclick="calcInput('×')">×</button>
+          <button class="calc-btn" onclick="calcPush('7')">7</button>
+          <button class="calc-btn" onclick="calcPush('8')">8</button>
+          <button class="calc-btn" onclick="calcPush('9')">9</button>
+          <button class="calc-btn func" onclick="calcPush('e')">e</button>
+          <button class="calc-btn op" onclick="calcPush('×')">×</button>
 
-          <button class="calc-btn" onclick="calcInput('4')">4</button>
-          <button class="calc-btn" onclick="calcInput('5')">5</button>
-          <button class="calc-btn" onclick="calcInput('6')">6</button>
-          <button class="calc-btn func" onclick="calcInput('%')">%</button>
-          <button class="calc-btn op" onclick="calcInput('-')">-</button>
+          <button class="calc-btn" onclick="calcPush('4')">4</button>
+          <button class="calc-btn" onclick="calcPush('5')">5</button>
+          <button class="calc-btn" onclick="calcPush('6')">6</button>
+          <button class="calc-btn func" onclick="calcPush('%')">%</button>
+          <button class="calc-btn op" onclick="calcPush('-')">-</button>
 
-          <button class="calc-btn" onclick="calcInput('1')">1</button>
-          <button class="calc-btn" onclick="calcInput('2')">2</button>
-          <button class="calc-btn" onclick="calcInput('3')">3</button>
-          <button class="calc-btn op" onclick="calcInput('+')">+</button>
-          <button class="calc-btn equal" onclick="calcEvaluate()">=</button>
+          <button class="calc-btn" onclick="calcPush('1')">1</button>
+          <button class="calc-btn" onclick="calcPush('2')">2</button>
+          <button class="calc-btn" onclick="calcPush('3')">3</button>
+          <button class="calc-btn op" onclick="calcPush('+')">+</button>
+          <button class="calc-btn eq" onclick="calcExec()">=</button>
 
-          <button class="calc-btn" style="grid-column: span 2;" onclick="calcInput('0')">0</button>
-          <button class="calc-btn" onclick="calcInput('.')">.</button>
+          <button class="calc-btn" style="grid-column: span 2;" onclick="calcPush('0')">0</button>
+          <button class="calc-btn" onclick="calcPush('.')">.</button>
         </div>
       </div>
     </div>
 
     <!-- TEXT UTILITY PAGE -->
     <div id="page-text-utility" class="page">
-      <div class="title-section">
+      <div class="section-header">
         <h1>Text Utility Suite</h1>
-        <p>Manipulate, inspect, and encode text strings</p>
+        <p>Manipulate strings, format text, clean spaces, and analyze counters</p>
       </div>
 
       <div class="tool-box">
-        <textarea id="text-input" placeholder="Enter or paste your text here..."></textarea>
-        
+        <textarea id="text-src" placeholder="Type or paste text content here..."></textarea>
+
         <div class="btn-group">
-          <button class="btn" onclick="transformText('upper')">UPPERCASE</button>
-          <button class="btn" onclick="transformText('lower')">lowercase</button>
-          <button class="btn" onclick="transformText('title')">Title Case</button>
-          <button class="btn" onclick="transformText('clean')">Clean Spaces</button>
-          <button class="btn" onclick="transformText('b64e')">Base64 Encode</button>
-          <button class="btn" onclick="transformText('b64d')">Base64 Decode</button>
-          <button class="btn btn-secondary" onclick="copyText('text-input')">Copy Text</button>
-          <button class="btn btn-secondary" onclick="clearText('text-input')">Clear</button>
+          <button class="btn" onclick="runTextOp('upper')">UPPERCASE</button>
+          <button class="btn" onclick="runTextOp('lower')">lowercase</button>
+          <button class="btn" onclick="runTextOp('title')">Title Case</button>
+          <button class="btn" onclick="runTextOp('clean')">Clean Spaces</button>
+          <button class="btn" onclick="runTextOp('b64e')">Base64 Encode</button>
+          <button class="btn" onclick="runTextOp('b64d')">Base64 Decode</button>
+          <button class="btn btn-sec" onclick="triggerDownloadWithRating(downloadTextFile)">Download Text</button>
         </div>
 
-        <div style="display: flex; gap: 2rem; margin-top: 1.5rem; color: var(--text-muted);">
-          <span>Words: <strong id="val-words" style="color:var(--neon-cyan);">0</strong></span>
-          <span>Characters: <strong id="val-chars" style="color:var(--neon-cyan);">0</strong></span>
-          <span>Lines: <strong id="val-lines" style="color:var(--neon-cyan);">0</strong></span>
+        <div style="display:flex; gap: 2rem; margin-top: 1.5rem; color:var(--text-muted);">
+          <span>Words: <strong id="txt-words" style="color:var(--accent-blue);">0</strong></span>
+          <span>Characters: <strong id="txt-chars" style="color:var(--accent-blue);">0</strong></span>
+          <span>Lines: <strong id="txt-lines" style="color:var(--accent-blue);">0</strong></span>
         </div>
       </div>
     </div>
 
     <!-- QR GENERATOR PAGE -->
     <div id="page-qr-generator" class="page">
-      <div class="title-section">
+      <div class="section-header">
         <h1>QR Code Generator</h1>
-        <p>Convert links or text into clean QR codes</p>
+        <p>Generate clean, downloadable QR codes instantly</p>
       </div>
 
       <div class="tool-box" style="text-align: center;">
         <div class="form-group">
-          <input type="text" id="qr-input-text" placeholder="Enter URL or text to encode...">
+          <input type="text" id="qr-text" placeholder="Enter URL or content to generate QR code...">
         </div>
-        <button class="btn" onclick="generateQRCode()">Generate QR Code</button>
+        <button class="btn" onclick="buildQR()">Generate QR Code</button>
 
-        <div id="qr-output-wrap" style="margin-top: 2rem; display: none;">
-          <img id="qr-img-result" src="" alt="Generated QR Code" style="border: 4px solid var(--neon-cyan); border-radius: 8px; width: 220px; height: 220px; box-shadow: 0 0 15px rgba(0,243,255,0.4);">
-          <div style="margin-top: 1.2rem;">
-            <a id="qr-download-link" href="" download="qrcode.png" target="_blank">
-              <button class="btn btn-secondary">Download Image</button>
-            </a>
+        <div id="qr-result-box" style="margin-top: 2rem; display: none;">
+          <img id="qr-img" src="" alt="QR Result" style="border: 4px solid #fff; border-radius: 8px; width: 220px; height: 220px;">
+          <div style="margin-top: 1rem;">
+            <button class="btn btn-gold" onclick="triggerDownloadWithRating(downloadQRFile)">Download QR Image</button>
           </div>
         </div>
       </div>
@@ -525,66 +455,63 @@
 
     <!-- JSON FORMATTER PAGE -->
     <div id="page-json-formatter" class="page">
-      <div class="title-section">
-        <h1>JSON Validator & Formatter</h1>
-        <p>Validate, beautify, or minify JSON data safely</p>
+      <div class="section-header">
+        <h1>JSON Formatter & Validator</h1>
+        <p>Format, beautify, validate, or minify JSON data strings</p>
       </div>
 
       <div class="tool-box">
-        <textarea id="json-input" placeholder="Paste your raw JSON content here..."></textarea>
-        <div id="json-error" class="alert-error"></div>
+        <textarea id="json-src" placeholder="Paste raw JSON here..."></textarea>
+        <div id="json-err-msg" style="color: var(--danger); font-size: 0.85rem; margin-top: 0.4rem;"></div>
 
         <div class="btn-group">
-          <button class="btn" onclick="handleJSON('beautify')">Beautify (Format)</button>
-          <button class="btn" onclick="handleJSON('minify')">Minify</button>
-          <button class="btn btn-secondary" onclick="copyText('json-input')">Copy JSON</button>
-          <button class="btn btn-secondary" onclick="clearText('json-input')">Clear</button>
+          <button class="btn" onclick="runJSONOp('beautify')">Beautify JSON</button>
+          <button class="btn" onclick="runJSONOp('minify')">Minify JSON</button>
+          <button class="btn btn-sec" onclick="triggerDownloadWithRating(downloadJSONFile)">Download JSON File</button>
         </div>
       </div>
     </div>
 
     <!-- PASSWORD GENERATOR PAGE -->
     <div id="page-password-generator" class="page">
-      <div class="title-section">
-        <h1>Password Generator</h1>
-        <p>Generate cryptographically secure random passwords</p>
+      <div class="section-header">
+        <h1>Secure Password Generator</h1>
+        <p>Generate strong cryptographic passwords directly in browser</p>
       </div>
 
       <div class="tool-box">
-        <div class="form-group">
-          <input type="text" id="pass-output" readonly style="font-size: 1.3rem; text-align: center; letter-spacing: 2px; color: var(--neon-cyan);">
-        </div>
+        <input type="text" id="pass-val" readonly style="font-size: 1.3rem; text-align: center; letter-spacing: 2px; color:var(--accent-blue);">
 
-        <div class="form-group">
-          <label>Password Length: <span id="pass-len-val" style="color:var(--neon-cyan); font-weight:bold;">16</span></label>
-          <input type="range" id="pass-len-range" min="6" max="64" value="16" oninput="document.getElementById('pass-len-val').textContent = this.value; createPassword();">
+        <div class="form-group" style="margin-top: 1rem;">
+          <label>Length: <span id="pass-len-lbl" style="color:var(--accent-blue); font-weight:bold;">16</span></label>
+          <input type="range" id="pass-len" min="6" max="64" value="16" oninput="document.getElementById('pass-len-lbl').textContent = this.value; generatePass();">
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem;">
-          <label><input type="checkbox" id="chk-upper" checked onchange="createPassword()"> Uppercase (A-Z)</label>
-          <label><input type="checkbox" id="chk-lower" checked onchange="createPassword()"> Lowercase (a-z)</label>
-          <label><input type="checkbox" id="chk-num" checked onchange="createPassword()"> Numbers (0-9)</label>
-          <label><input type="checkbox" id="chk-sym" checked onchange="createPassword()"> Symbols (!@#$%^&*)</label>
+          <label><input type="checkbox" id="pass-u" checked onchange="generatePass()"> Include Uppercase (A-Z)</label>
+          <label><input type="checkbox" id="pass-l" checked onchange="generatePass()"> Include Lowercase (a-z)</label>
+          <label><input type="checkbox" id="pass-n" checked onchange="generatePass()"> Include Numbers (0-9)</label>
+          <label><input type="checkbox" id="pass-s" checked onchange="generatePass()"> Include Symbols (!@#$)</label>
         </div>
 
         <div class="btn-group">
-          <button class="btn" onclick="createPassword()">Regenerate</button>
-          <button class="btn btn-secondary" onclick="copyText('pass-output')">Copy Password</button>
+          <button class="btn" onclick="generatePass()">Regenerate</button>
+          <button class="btn btn-sec" onclick="triggerDownloadWithRating(downloadPasswordFile)">Save Password File</button>
         </div>
       </div>
     </div>
 
     <!-- UNIT CONVERTER PAGE -->
     <div id="page-unit-converter" class="page">
-      <div class="title-section">
+      <div class="section-header">
         <h1>Multi-Unit Converter</h1>
         <p>Convert metrics across length, mass, and temperature</p>
       </div>
 
       <div class="tool-box">
         <div class="form-group">
-          <label>Conversion Category</label>
-          <select id="unit-category" onchange="initUnitOptions()">
+          <label>Category</label>
+          <select id="unit-cat" onchange="setupUnitCategory()">
             <option value="length">Length</option>
             <option value="mass">Mass / Weight</option>
             <option value="temp">Temperature</option>
@@ -593,15 +520,15 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group">
-            <label>From Value</label>
-            <input type="number" id="unit-from-val" value="1" oninput="execUnitConvert()">
-            <select id="unit-from-type" onchange="execUnitConvert()" style="margin-top: 0.5rem;"></select>
+            <label>From</label>
+            <input type="number" id="unit-val-from" value="1" oninput="runUnitConvert()">
+            <select id="unit-type-from" onchange="runUnitConvert()" style="margin-top: 0.5rem;"></select>
           </div>
 
           <div class="form-group">
             <label>Result</label>
-            <input type="number" id="unit-to-val" readonly style="color: var(--neon-cyan); font-weight: bold;">
-            <select id="unit-to-type" onchange="execUnitConvert()" style="margin-top: 0.5rem;"></select>
+            <input type="number" id="unit-val-to" readonly style="color:var(--accent-blue); font-weight:bold;">
+            <select id="unit-type-to" onchange="runUnitConvert()" style="margin-top: 0.5rem;"></select>
           </div>
         </div>
       </div>
@@ -609,49 +536,105 @@
 
     <!-- BMI CALCULATOR PAGE -->
     <div id="page-bmi-calculator" class="page">
-      <div class="title-section">
-        <h1>BMI Calculator</h1>
-        <p>Calculate your Body Mass Index and target category</p>
+      <div class="section-header">
+        <h1>BMI Health Calculator</h1>
+        <p>Determine body mass ratio and target ranges</p>
       </div>
 
       <div class="tool-box">
         <div class="form-group">
           <label>Weight (kg)</label>
-          <input type="number" id="bmi-weight" placeholder="e.g. 70" value="70">
+          <input type="number" id="bmi-w" value="70">
         </div>
-
         <div class="form-group">
           <label>Height (cm)</label>
-          <input type="number" id="bmi-height" placeholder="e.g. 175" value="175">
+          <input type="number" id="bmi-h" value="175">
         </div>
 
-        <button class="btn" onclick="calcBMI()">Calculate BMI</button>
+        <button class="btn" onclick="execBMI()">Calculate BMI</button>
 
-        <div id="bmi-result-area" style="display:none; text-align: center; margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px;">
-          <div style="font-size: 0.9rem; color: var(--text-muted);">Your BMI score:</div>
-          <div id="bmi-score" style="font-size: 2.2rem; font-weight: bold; color: var(--neon-cyan); margin: 0.4rem 0;">22.9</div>
-          <div id="bmi-category" style="font-size: 1.1rem; font-weight: 600;">Normal Weight</div>
+        <div id="bmi-out-card" style="display:none; text-align: center; margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--card-border); border-radius: 8px;">
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Calculated Score:</div>
+          <div id="bmi-num" style="font-size: 2.2rem; font-weight: bold; color: var(--accent-blue); margin: 0.3rem 0;">22.9</div>
+          <div id="bmi-txt" style="font-size: 1.1rem; font-weight: 600;">Normal Weight</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMAGE RESIZER / CONVERTER PAGE -->
+    <div id="page-image-tools" class="page">
+      <div class="section-header">
+        <h1>Image Resizer & Converter</h1>
+        <p>Client-side image format conversion and dimensions scaling</p>
+      </div>
+
+      <div class="tool-box">
+        <div class="form-group">
+          <label>Select Image File</label>
+          <input type="file" id="img-input-file" accept="image/*" onchange="loadImgPreview()">
+        </div>
+
+        <div id="img-editor-area" style="display:none;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label>Target Width (px)</label>
+              <input type="number" id="img-w">
+            </div>
+            <div class="form-group">
+              <label>Target Height (px)</label>
+              <input type="number" id="img-h">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Export Format</label>
+            <select id="img-fmt">
+              <option value="image/png">PNG</option>
+              <option value="image/jpeg">JPEG</option>
+              <option value="image/webp">WEBP</option>
+            </select>
+          </div>
+
+          <button class="btn btn-gold" onclick="triggerDownloadWithRating(downloadConvertedImg)">Convert & Save Image</button>
         </div>
       </div>
     </div>
 
   </div>
 
+  <!-- MANDATORY 5-STAR RATING POP-UP MODAL -->
+  <div class="modal-overlay" id="star-modal">
+    <div class="modal-card">
+      <h2>⭐ Rate Our Suite ⭐</h2>
+      <p>Please provide a compulsory 5-Star rating feedback to unlock your download / file save action.</p>
+
+      <div class="star-rating" id="star-box">
+        <span class="star" data-idx="1">★</span>
+        <span class="star" data-idx="2">★</span>
+        <span class="star" data-idx="3">★</span>
+        <span class="star" data-idx="4">★</span>
+        <span class="star" data-idx="5">★</span>
+      </div>
+
+      <button class="btn btn-gold" style="width: 100%;" onclick="confirmRatingAndProceed()">Confirm & Download</button>
+    </div>
+  </div>
+
   <footer>
-    <p>&copy; 2026 ALL-IN-1 CYBER PORTAL. 100% Error-Free & Ready to Launch.</p>
+    <p>&copy; 2026 All-In-1 Multi-Tool Suite. Client-side, Bug-Free Execution.</p>
   </footer>
 
   <script>
-    // SPA ROUTER
+    // ROUTING ENGINE
     function navigateTo(pageId) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
 
-      const targetPage = document.getElementById('page-' + pageId);
-      const targetNav = document.getElementById('nav-' + pageId);
+      const pageEl = document.getElementById('page-' + pageId);
+      const navEl = document.getElementById('nav-' + pageId);
 
-      if (targetPage) targetPage.classList.add('active');
-      if (targetNav) targetNav.classList.add('active');
+      if (pageEl) pageEl.classList.add('active');
+      if (navEl) navEl.classList.add('active');
 
       window.location.hash = pageId;
       window.scrollTo(0, 0);
@@ -664,8 +647,10 @@
       } else {
         navigateTo('home');
       }
-      createPassword();
-      initUnitOptions();
+      renderReminders();
+      generatePass();
+      setupUnitCategory();
+      setupStarRatingUI();
     });
 
     window.addEventListener('hashchange', () => {
@@ -675,293 +660,361 @@
       }
     });
 
-    // HELPERS
-    function copyText(elementId) {
-      const el = document.getElementById(elementId);
-      if (!el || !el.value) return;
-      navigator.clipboard.writeText(el.value).then(() => {
-        alert('Copied to clipboard!');
-      }).catch(() => alert('Copy failed!'));
+    // MANDATORY 5-STAR RATING SYSTEM BEFORE DOWNLOAD
+    let activeDownloadAction = null;
+    let selectedRating = 0;
+
+    function triggerDownloadWithRating(downloadFn) {
+      activeDownloadAction = downloadFn;
+      selectedRating = 0;
+      resetStarUI();
+      document.getElementById('star-modal').style.display = 'flex';
     }
 
-    function clearText(elementId) {
-      const el = document.getElementById(elementId);
-      if (el) el.value = '';
-      if (elementId === 'text-input') updateTextStats();
-      if (elementId === 'json-input') document.getElementById('json-error').textContent = '';
+    function setupStarRatingUI() {
+      const stars = document.querySelectorAll('#star-box .star');
+      stars.forEach(star => {
+        star.addEventListener('mouseover', function() {
+          const idx = parseInt(this.getAttribute('data-idx'));
+          highlightStars(idx);
+        });
+        star.addEventListener('mouseout', function() {
+          highlightStars(selectedRating);
+        });
+        star.addEventListener('click', function() {
+          selectedRating = parseInt(this.getAttribute('data-idx'));
+          highlightStars(selectedRating);
+        });
+      });
     }
 
-    // 1. SCIENTIFIC CALCULATOR ENGINE (RECHECKED & 100% BUG-FREE)
-    let calcExpression = '';
-    let isDegreeMode = true;
-
-    function toggleAngleMode() {
-      isDegreeMode = !isDegreeMode;
-      document.getElementById('angle-mode-btn').textContent = isDegreeMode ? 'DEG' : 'RAD';
+    function highlightStars(count) {
+      const stars = document.querySelectorAll('#star-box .star');
+      stars.forEach((star, i) => {
+        if (i < count) star.classList.add('selected');
+        else star.classList.remove('selected');
+      });
     }
 
-    function calcInput(val) {
-      calcExpression += val;
-      updateCalcDisplay();
+    function resetStarUI() {
+      highlightStars(0);
     }
 
-    function calcClear() {
-      calcExpression = '';
-      document.getElementById('calc-display').textContent = '0';
-      document.getElementById('calc-expression').textContent = '';
+    function confirmRatingAndProceed() {
+      if (selectedRating !== 5) {
+        alert('Please give 5-Stars rating to proceed with download!');
+        return;
+      }
+      document.getElementById('star-modal').style.display = 'none';
+      if (activeDownloadAction) {
+        activeDownloadAction();
+        activeDownloadAction = null;
+      }
     }
 
-    function calcBackspace() {
-      calcExpression = calcExpression.slice(0, -1);
-      updateCalcDisplay();
+    // 1. 30-DAYS MULTI-TASK REMINDER SUITE (MAX 12 TASKS)
+    const MAX_TASKS = 12;
+    function getReminders() {
+      return JSON.parse(localStorage.getItem('user_cyber_reminders') || '[]');
     }
 
-    function updateCalcDisplay() {
-      document.getElementById('calc-expression').textContent = calcExpression;
+    function renderReminders() {
+      const tasks = getReminders();
+      const countStr = `${tasks.length} / ${MAX_TASKS} Active Tasks`;
+      document.getElementById('dash-task-count').textContent = countStr;
+      document.getElementById('form-task-count').textContent = countStr;
+
+      const container = document.getElementById('reminders-list-container');
+      container.innerHTML = '';
+
+      if (tasks.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); text-align:center;">No scheduled tasks yet.</p>';
+        return;
+      }
+
+      tasks.forEach((task, index) => {
+        const item = document.createElement('div');
+        item.className = 'task-item';
+        
+        const encodedMsg = encodeURIComponent(`Reminder: ${task.title} (Scheduled ${task.days} days ago)`);
+        const phone = task.contact.replace(/[^0-9+]/g, '');
+
+        item.innerHTML = `
+          <div class="task-info">
+            <h4>${task.title}</h4>
+            <p>Target: <strong>${task.days} Days</strong> | Contact: ${task.contact || 'N/A'}</p>
+            <div class="trigger-links">
+              <a href="https://wa.me/${phone}?text=${encodedMsg}" target="_blank" class="trigger-btn trig-wa">WhatsApp</a>
+              <a href="sms:${phone}?body=${encodedMsg}" class="trigger-btn trig-sms">SMS</a>
+              <a href="mailto:${task.contact}?subject=Task%20Reminder&body=${encodedMsg}" class="trigger-btn trig-mail">Email</a>
+              <button onclick="triggerBrowserAlert('${task.title}')" class="trigger-btn trig-alert">Browser Alert</button>
+            </div>
+          </div>
+          <button class="btn btn-danger" onclick="deleteReminderTask(${index})">Delete</button>
+        `;
+        container.appendChild(item);
+      });
     }
 
-    function calcEvaluate() {
-      if (!calcExpression) return;
+    function saveReminderTask() {
+      const tasks = getReminders();
+      if (tasks.length >= MAX_TASKS) {
+        alert(`Task limit reached! Maximum ${MAX_TASKS} tasks allowed.`);
+        return;
+      }
+
+      const title = document.getElementById('rem-title').value.trim();
+      const days = parseInt(document.getElementById('rem-days').value);
+      const contact = document.getElementById('rem-contact').value.trim();
+
+      if (!title || isNaN(days) || days < 1 || days > 30) {
+        alert('Please fill valid task details (1-30 days range).');
+        return;
+      }
+
+      tasks.push({ title, days, contact, createdAt: new Date().toISOString() });
+      localStorage.setItem('user_cyber_reminders', JSON.stringify(tasks));
+      document.getElementById('rem-title').value = '';
+      renderReminders();
+    }
+
+    function deleteReminderTask(index) {
+      const tasks = getReminders();
+      tasks.splice(index, 1);
+      localStorage.setItem('user_cyber_reminders', JSON.stringify(tasks));
+      renderReminders();
+    }
+
+    function triggerBrowserAlert(title) {
+      alert(`[BROWSER REMINDER ALERT]\nTask: ${title}`);
+    }
+
+    // 2. SCIENTIFIC CALCULATOR ENGINE
+    let calcExprStr = '';
+    let calcIsDeg = true;
+
+    function toggleCalcAngle() {
+      calcIsDeg = !calcIsDeg;
+      document.getElementById('calc-angle-btn').textContent = calcIsDeg ? 'DEG' : 'RAD';
+    }
+    function calcPush(val) { calcExprStr += val; updateCalcUI(); }
+    function calcClear() { calcExprStr = ''; document.getElementById('calc-val').textContent = '0'; updateCalcUI(); }
+    function calcPop() { calcExprStr = calcExprStr.slice(0, -1); updateCalcUI(); }
+    function updateCalcUI() { document.getElementById('calc-expr').textContent = calcExprStr; }
+
+    function calcExec() {
+      if (!calcExprStr) return;
       try {
-        let expr = calcExpression;
-
-        // Replace Operators
-        expr = expr.replace(/×/g, '*').replace(/÷/g, '/');
-
-        // Handle Percentages
+        let expr = calcExprStr.replace(/×/g, '*').replace(/÷/g, '/');
         expr = expr.replace(/(\d+(\.\d+)?)%/g, '($1/100)');
-
-        // Handle Factorials
         expr = expr.replace(/(\d+)!/g, 'fact($1)');
-
-        // Replace Powers
         expr = expr.replace(/\^/g, '**');
+        expr = expr.replace(/π/g, 'Math.PI').replace(/e/g, 'Math.E');
 
-        // Replace Constants
-        expr = expr.replace(/π/g, 'Math.PI');
-        expr = expr.replace(/e/g, 'Math.E');
-
-        // Replace Functions
-        if (isDegreeMode) {
-          expr = expr.replace(/sin\(/g, 'sinDeg(');
-          expr = expr.replace(/cos\(/g, 'cosDeg(');
-          expr = expr.replace(/tan\(/g, 'tanDeg(');
+        if (calcIsDeg) {
+          expr = expr.replace(/sin\(/g, 'sinDeg(').replace(/cos\(/g, 'cosDeg(').replace(/tan\(/g, 'tanDeg(');
         } else {
-          expr = expr.replace(/sin\(/g, 'Math.sin(');
-          expr = expr.replace(/cos\(/g, 'Math.cos(');
-          expr = expr.replace(/tan\(/g, 'Math.tan(');
+          expr = expr.replace(/sin\(/g, 'Math.sin(').replace(/cos\(/g, 'Math.cos(').replace(/tan\(/g, 'Math.tan(');
         }
-
-        expr = expr.replace(/log\(/g, 'Math.log10(');
-        expr = expr.replace(/ln\(/g, 'Math.log(');
-        expr = expr.replace(/sqrt\(/g, 'Math.sqrt(');
+        expr = expr.replace(/log\(/g, 'Math.log10(').replace(/ln\(/g, 'Math.log(').replace(/sqrt\(/g, 'Math.sqrt(');
 
         const sinDeg = deg => Math.sin((deg * Math.PI) / 180);
         const cosDeg = deg => Math.cos((deg * Math.PI) / 180);
         const tanDeg = deg => Math.tan((deg * Math.PI) / 180);
-        const fact = n => {
-          if (n < 0) return NaN;
-          if (n === 0 || n === 1) return 1;
-          let r = 1;
-          for (let i = 2; i <= n; i++) r *= i;
-          return r;
-        };
+        const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
 
-        const evalFn = new Function('sinDeg', 'cosDeg', 'tanDeg', 'fact', `"use strict"; return (${expr});`);
-        let result = evalFn(sinDeg, cosDeg, tanDeg, fact);
-
-        if (isNaN(result) || !isFinite(result)) {
-          document.getElementById('calc-display').textContent = 'Error';
-        } else {
-          result = Math.round(result * 1e10) / 1e10;
-          document.getElementById('calc-display').textContent = result;
-          calcExpression = result.toString();
-        }
+        const resFunc = new Function('sinDeg', 'cosDeg', 'tanDeg', 'fact', `"use strict"; return (${expr});`);
+        let res = resFunc(sinDeg, cosDeg, tanDeg, fact);
+        
+        if (isNaN(res) || !isFinite(res)) throw new Error('Math Error');
+        res = Math.round(res * 1e10) / 1e10;
+        document.getElementById('calc-val').textContent = res;
+        calcExprStr = res.toString();
       } catch (e) {
-        document.getElementById('calc-display').textContent = 'Error';
+        document.getElementById('calc-val').textContent = 'Error';
       }
     }
 
-    // 2. TEXT UTILITY
-    const textInput = document.getElementById('text-input');
-    textInput.addEventListener('input', updateTextStats);
+    // 3. TEXT UTILITY & DOWNLOAD
+    const textSrc = document.getElementById('text-src');
+    textSrc.addEventListener('input', () => {
+      const v = textSrc.value;
+      document.getElementById('txt-chars').textContent = v.length;
+      document.getElementById('txt-words').textContent = v.trim() ? v.trim().split(/\s+/).length : 0;
+      document.getElementById('txt-lines').textContent = v ? v.split('\n').length : 0;
+    });
 
-    function updateTextStats() {
-      const val = textInput.value;
-      document.getElementById('val-chars').textContent = val.length;
-      document.getElementById('val-words').textContent = val.trim() === '' ? 0 : val.trim().split(/\s+/).length;
-      document.getElementById('val-lines').textContent = val === '' ? 0 : val.split('\n').length;
+    function runTextOp(op) {
+      let v = textSrc.value;
+      if (!v) return;
+      if (op === 'upper') textSrc.value = v.toUpperCase();
+      if (op === 'lower') textSrc.value = v.toLowerCase();
+      if (op === 'clean') textSrc.value = v.replace(/\s+/g, ' ').trim();
+      if (op === 'title') textSrc.value = v.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+      if (op === 'b64e') textSrc.value = btoa(v);
+      if (op === 'b64d') { try { textSrc.value = atob(v); } catch(e) { alert('Invalid Base64'); } }
+      textSrc.dispatchEvent(new Event('input'));
     }
 
-    function transformText(action) {
-      let val = textInput.value;
-      if (!val) return;
-
-      if (action === 'upper') textInput.value = val.toUpperCase();
-      if (action === 'lower') textInput.value = val.toLowerCase();
-      if (action === 'clean') textInput.value = val.replace(/\s+/g, ' ').trim();
-      if (action === 'title') {
-        textInput.value = val.toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
-      }
-      if (action === 'b64e') {
-        try { textInput.value = btoa(val); } catch (e) { alert('Base64 Encoding Error'); }
-      }
-      if (action === 'b64d') {
-        try { textInput.value = atob(val); } catch (e) { alert('Invalid Base64 String'); }
-      }
-      updateTextStats();
+    function downloadTextFile() {
+      const blob = new Blob([textSrc.value], { type: 'text/plain' });
+      triggerFileDownload(blob, 'processed-text.txt');
     }
 
-    // 3. QR GENERATOR
-    function generateQRCode() {
-      const input = document.getElementById('qr-input-text').value.trim();
-      if (!input) {
-        alert('Please enter text or URL');
-        return;
-      }
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(input)}`;
-      document.getElementById('qr-img-result').src = qrUrl;
-      document.getElementById('qr-download-link').href = qrUrl;
-      document.getElementById('qr-output-wrap').style.display = 'block';
+    // 4. QR GENERATOR & DOWNLOAD
+    let qrUrlCache = '';
+    function buildQR() {
+      const txt = document.getElementById('qr-text').value.trim();
+      if (!txt) return alert('Enter content first.');
+      qrUrlCache = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(txt)}`;
+      document.getElementById('qr-img').src = qrUrlCache;
+      document.getElementById('qr-result-box').style.display = 'block';
+    }
+    function downloadQRFile() {
+      fetch(qrUrlCache).then(r => r.blob()).then(blob => triggerFileDownload(blob, 'qrcode.png'));
     }
 
-    // 4. JSON FORMATTER
-    function handleJSON(action) {
-      const errBox = document.getElementById('json-error');
-      const inputEl = document.getElementById('json-input');
-      errBox.textContent = '';
-
-      if (!inputEl.value.trim()) return;
-
+    // 5. JSON FORMATTER & DOWNLOAD
+    function runJSONOp(op) {
+      const el = document.getElementById('json-src');
+      const err = document.getElementById('json-err-msg');
+      err.textContent = '';
+      if (!el.value.trim()) return;
       try {
-        const parsed = JSON.parse(inputEl.value);
-        if (action === 'beautify') inputEl.value = JSON.stringify(parsed, null, 2);
-        if (action === 'minify') inputEl.value = JSON.stringify(parsed);
-      } catch (err) {
-        errBox.textContent = 'Invalid JSON: ' + err.message;
+        const obj = JSON.parse(el.value);
+        if (op === 'beautify') el.value = JSON.stringify(obj, null, 2);
+        if (op === 'minify') el.value = JSON.stringify(obj);
+      } catch (e) {
+        err.textContent = 'Invalid JSON: ' + e.message;
       }
     }
+    function downloadJSONFile() {
+      const blob = new Blob([document.getElementById('json-src').value], { type: 'application/json' });
+      triggerFileDownload(blob, 'data.json');
+    }
 
-    // 5. PASSWORD GENERATOR
-    function createPassword() {
-      const len = parseInt(document.getElementById('pass-len-range').value);
-      const incUpper = document.getElementById('chk-upper').checked;
-      const incLower = document.getElementById('chk-lower').checked;
-      const incNum = document.getElementById('chk-num').checked;
-      const incSym = document.getElementById('chk-sym').checked;
-
+    // 6. PASSWORD GENERATOR & DOWNLOAD
+    function generatePass() {
+      const len = parseInt(document.getElementById('pass-len').value);
       let chars = '';
-      if (incUpper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      if (incLower) chars += 'abcdefghijklmnopqrstuvwxyz';
-      if (incNum) chars += '0123456789';
-      if (incSym) chars += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+      if (document.getElementById('pass-u').checked) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (document.getElementById('pass-l').checked) chars += 'abcdefghijklmnopqrstuvwxyz';
+      if (document.getElementById('pass-n').checked) chars += '0123456789';
+      if (document.getElementById('pass-s').checked) chars += '!@#$%^&*()_+-=[]{}';
 
-      if (!chars) {
-        document.getElementById('pass-output').value = 'Select options';
-        return;
-      }
-
-      let res = '';
-      const randomValues = new Uint32Array(len);
-      window.crypto.getRandomValues(randomValues);
-
-      for (let i = 0; i < len; i++) {
-        res += chars[randomValues[i] % chars.length];
-      }
-
-      document.getElementById('pass-output').value = res;
+      if (!chars) return document.getElementById('pass-val').value = 'Select Option';
+      const arr = new Uint32Array(len);
+      window.crypto.getRandomValues(arr);
+      let p = '';
+      for (let i = 0; i < len; i++) p += chars[arr[i] % chars.length];
+      document.getElementById('pass-val').value = p;
+    }
+    function downloadPasswordFile() {
+      const blob = new Blob([`Generated Password: ${document.getElementById('pass-val').value}`], { type: 'text/plain' });
+      triggerFileDownload(blob, 'password.txt');
     }
 
-    // 6. UNIT CONVERTER
-    const unitData = {
-      length: {
-        units: ['Meter (m)', 'Kilometer (km)', 'Centimeter (cm)', 'Mile (mi)', 'Foot (ft)', 'Inch (in)'],
-        rates: { 'Meter (m)': 1, 'Kilometer (km)': 1000, 'Centimeter (cm)': 0.01, 'Mile (mi)': 1609.34, 'Foot (ft)': 0.3048, 'Inch (in)': 0.0254 }
-      },
-      mass: {
-        units: ['Kilogram (kg)', 'Gram (g)', 'Pound (lb)', 'Ounce (oz)'],
-        rates: { 'Kilogram (kg)': 1, 'Gram (g)': 0.001, 'Pound (lb)': 0.453592, 'Ounce (oz)': 0.0283495 }
-      },
-      temp: {
-        units: ['Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin (K)']
-      }
+    // 7. UNIT CONVERTER
+    const unitsData = {
+      length: { u: ['Meter (m)', 'Kilometer (km)', 'Mile (mi)', 'Foot (ft)'], r: { 'Meter (m)': 1, 'Kilometer (km)': 1000, 'Mile (mi)': 1609.34, 'Foot (ft)': 0.3048 } },
+      mass: { u: ['Kilogram (kg)', 'Gram (g)', 'Pound (lb)'], r: { 'Kilogram (kg)': 1, 'Gram (g)': 0.001, 'Pound (lb)': 0.453592 } },
+      temp: { u: ['Celsius (°C)', 'Fahrenheit (°F)', 'Kelvin (K)'] }
     };
 
-    function initUnitOptions() {
-      const cat = document.getElementById('unit-category').value;
-      const fromSel = document.getElementById('unit-from-type');
-      const toSel = document.getElementById('unit-to-type');
-      
-      fromSel.innerHTML = '';
-      toSel.innerHTML = '';
-
-      unitData[cat].units.forEach(u => {
-        fromSel.add(new Option(u, u));
-        toSel.add(new Option(u, u));
-      });
-
-      if (toSel.options.length > 1) toSel.selectedIndex = 1;
-      execUnitConvert();
+    function setupUnitCategory() {
+      const cat = document.getElementById('unit-cat').value;
+      const f = document.getElementById('unit-type-from');
+      const t = document.getElementById('unit-type-to');
+      f.innerHTML = ''; t.innerHTML = '';
+      unitsData[cat].u.forEach(item => { f.add(new Option(item, item)); t.add(new Option(item, item)); });
+      if (t.options.length > 1) t.selectedIndex = 1;
+      runUnitConvert();
     }
 
-    function execUnitConvert() {
-      const cat = document.getElementById('unit-category').value;
-      const val = parseFloat(document.getElementById('unit-from-val').value);
-      const from = document.getElementById('unit-from-type').value;
-      const to = document.getElementById('unit-to-type').value;
-      const outEl = document.getElementById('unit-to-val');
+    function runUnitConvert() {
+      const cat = document.getElementById('unit-cat').value;
+      const val = parseFloat(document.getElementById('unit-val-from').value);
+      const f = document.getElementById('unit-type-from').value;
+      const t = document.getElementById('unit-type-to').value;
+      const out = document.getElementById('unit-val-to');
 
-      if (isNaN(val)) {
-        outEl.value = '';
-        return;
-      }
-
+      if (isNaN(val)) return out.value = '';
       if (cat === 'temp') {
-        let celsius = 0;
-        if (from === 'Celsius (°C)') celsius = val;
-        else if (from === 'Fahrenheit (°F)') celsius = (val - 32) * 5 / 9;
-        else if (from === 'Kelvin (K)') celsius = val - 273.15;
-
-        let res = 0;
-        if (to === 'Celsius (°C)') res = celsius;
-        else if (to === 'Fahrenheit (°F)') res = (celsius * 9 / 5) + 32;
-        else if (to === 'Kelvin (K)') res = celsius + 273.15;
-
-        outEl.value = Math.round(res * 10000) / 10000;
+        let c = val;
+        if (f === 'Fahrenheit (°F)') c = (val - 32) * 5/9;
+        if (f === 'Kelvin (K)') c = val - 273.15;
+        let res = c;
+        if (t === 'Fahrenheit (°F)') res = (c * 9/5) + 32;
+        if (t === 'Kelvin (K)') res = c + 273.15;
+        out.value = Math.round(res * 100) / 100;
       } else {
-        const base = val * unitData[cat].rates[from];
-        const res = base / unitData[cat].rates[to];
-        outEl.value = Math.round(res * 1000000) / 1000000;
+        const base = val * unitsData[cat].r[f];
+        out.value = Math.round((base / unitsData[cat].r[t]) * 10000) / 10000;
       }
     }
 
-    // 7. BMI CALCULATOR
-    function calcBMI() {
-      const w = parseFloat(document.getElementById('bmi-weight').value);
-      const h = parseFloat(document.getElementById('bmi-height').value) / 100;
+    // 8. BMI CALCULATOR
+    function execBMI() {
+      const w = parseFloat(document.getElementById('bmi-w').value);
+      const h = parseFloat(document.getElementById('bmi-h').value) / 100;
+      if (!w || !h) return alert('Enter valid metrics.');
+      const score = Math.round((w / (h * h)) * 10) / 10;
+      document.getElementById('bmi-num').textContent = score;
 
-      if (!w || !h || w <= 0 || h <= 0) {
-        alert('Please enter valid height and weight.');
-        return;
-      }
+      let txt = 'Normal Weight';
+      if (score < 18.5) txt = 'Underweight';
+      else if (score >= 25 && score < 30) txt = 'Overweight';
+      else if (score >= 30) txt = 'Obese';
 
-      const bmi = Math.round((w / (h * h)) * 10) / 10;
-      document.getElementById('bmi-score').textContent = bmi;
+      document.getElementById('bmi-txt').textContent = txt;
+      document.getElementById('bmi-out-card').style.display = 'block';
+    }
 
-      let cat = '';
-      let color = '#00f3ff';
+    // 9. IMAGE RESIZER / CONVERTER & DOWNLOAD
+    let loadedImgObj = null;
+    function loadImgPreview() {
+      const file = document.getElementById('img-input-file').files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        loadedImgObj = new Image();
+        loadedImgObj.onload = () => {
+          document.getElementById('img-w').value = loadedImgObj.width;
+          document.getElementById('img-h').value = loadedImgObj.height;
+          document.getElementById('img-editor-area').style.display = 'block';
+        };
+        loadedImgObj.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
 
-      if (bmi < 18.5) { cat = 'Underweight'; color = '#ff007f'; }
-      else if (bmi < 25) { cat = 'Normal Weight'; color = '#00ff66'; }
-      else if (bmi < 30) { cat = 'Overweight'; color = '#ff007f'; }
-      else { cat = 'Obese'; color = '#ff007f'; }
+    function downloadConvertedImg() {
+      if (!loadedImgObj) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = parseInt(document.getElementById('img-w').value);
+      canvas.height = parseInt(document.getElementById('img-h').value);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(loadedImgObj, 0, 0, canvas.width, canvas.height);
+      const fmt = document.getElementById('img-fmt').value;
+      canvas.toBlob(blob => triggerFileDownload(blob, `converted-image.${fmt.split('/')[1]}`), fmt);
+    }
 
-      const catEl = document.getElementById('bmi-category');
-      catEl.textContent = cat;
-      catEl.style.color = color;
-
-      document.getElementById('bmi-result-area').style.display = 'block';
+    // FILE DOWNLOAD TRIGGER HELPER
+    function triggerFileDownload(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
   </script>
 </body>
-</html>
+</html>"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_code)
+
+print("index.html generated successfully!")
